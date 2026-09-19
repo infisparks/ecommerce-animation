@@ -36,26 +36,15 @@ export default function Navbar({ cartCount, onOpenCart, onOpenVideo }: NavbarPro
 
           {/* Brand Logo */}
           <div className="flex items-center justify-center lg:justify-start">
-            <a href="#" className="relative block h-10 sm:h-12 w-32 sm:w-44 transition-transform hover:scale-105 duration-300">
-              {/* Desktop Logo (line-logo or logo) */}
-              <div className="relative w-full h-full flex items-center">
-                <Image
-                  src="/logo/line-logo.png"
-                  alt="Ashren Haute Marketplace"
-                  fill
-                  sizes="(max-width: 768px) 140px, 190px"
-                  className="object-contain drop-shadow-[0_2px_12px_rgba(244,196,99,0.3)] hidden sm:block"
-                  priority
-                />
-                <Image
-                  src="/logo/logo.png"
-                  alt="Ashren Haute Marketplace"
-                  fill
-                  sizes="120px"
-                  className="object-contain drop-shadow-[0_2px_12px_rgba(244,196,99,0.3)] block sm:hidden"
-                  priority
-                />
-              </div>
+            <a href="#" className="relative block h-11 sm:h-13 w-40 sm:w-52 transition-transform hover:scale-105 duration-300">
+              <Image
+                src="/logo/line-logo.png"
+                alt="Ashren Haute Marketplace"
+                fill
+                sizes="(max-width: 768px) 180px, 220px"
+                className="object-contain drop-shadow-[0_2px_15px_rgba(244,196,99,0.35)]"
+                priority
+              />
             </a>
           </div>
 
