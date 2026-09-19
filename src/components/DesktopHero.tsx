@@ -37,7 +37,7 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
   return (
     <div
       onMouseMove={handleMouseMove}
-      className="relative w-full min-h-[calc(100vh-80px)] flex flex-col justify-between px-6 lg:px-12 pb-6 pt-2 select-none overflow-hidden"
+      className="relative w-full min-h-[calc(100vh-80px)] flex flex-col justify-between px-6 lg:px-12 pb-6 pt-2 select-none overflow-hidden font-outfit"
     >
 
 

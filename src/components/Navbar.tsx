@@ -20,15 +20,15 @@ export default function Navbar({ cartCount, onOpenCart, onOpenVideo }: NavbarPro
 
   return (
     <>
-      <header className="relative z-50 w-full px-4 sm:px-6 lg:px-12 pt-4 pb-3">
-        <div className="max-w-[1540px] mx-auto flex items-center justify-between gap-4">
+      <header className="relative z-50 w-full px-3.5 sm:px-6 lg:px-12 pt-2.5 sm:pt-4 pb-1.5 sm:pb-3">
+        <div className="max-w-[1540px] mx-auto flex items-center justify-between gap-3 sm:gap-4">
           
           {/* Mobile Left Hamburger Menu Button */}
           <div className="flex items-center lg:hidden">
             <button
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Open Menu"
-              className="p-2 text-white/90 hover:text-white rounded-lg hover:bg-white/10 transition-colors"
+              className="p-1.5 text-white/90 hover:text-white rounded-lg hover:bg-white/10 transition-colors"
             >
               <Menu className="w-6 h-6" />
             </button>
@@ -36,13 +36,13 @@ export default function Navbar({ cartCount, onOpenCart, onOpenVideo }: NavbarPro
 
           {/* Brand Logo */}
           <div className="flex items-center justify-center lg:justify-start">
-            <a href="#" className="relative block h-11 sm:h-13 w-40 sm:w-52 transition-transform hover:scale-105 duration-300">
+            <a href="#" className="relative block h-10 sm:h-12 w-36 sm:w-48 transition-transform hover:scale-105 duration-300">
               <Image
                 src="/logo/line-logo.png"
                 alt="Ashren Haute Marketplace"
                 fill
                 sizes="(max-width: 768px) 180px, 220px"
-                className="object-contain drop-shadow-[0_2px_15px_rgba(244,196,99,0.35)]"
+                className="object-contain filter brightness-125 contrast-110 drop-shadow-[0_0_15px_rgba(244,196,99,0.6)]"
                 priority
               />
             </a>

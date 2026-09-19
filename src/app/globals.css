@@ -2,22 +2,27 @@
 
 @layer base {
   :root {
-    --font-inter: 'Inter', sans-serif;
+    --font-outfit: 'Outfit', sans-serif;
     --font-playfair: 'Playfair Display', serif;
-    --font-kaushan: 'Kaushan Script', cursive;
+    --font-script: 'Alex Brush', cursive;
+    --font-cinzel: 'Cinzel', serif;
   }
 }
 
-.font-sans {
-  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+.font-outfit, .font-sans {
+  font-family: var(--font-outfit), -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
 .font-serif-luxury {
   font-family: var(--font-playfair), Georgia, serif;
 }
 
+.font-cinzel {
+  font-family: var(--font-cinzel), Georgia, serif;
+}
+
 .font-script {
-  font-family: var(--font-kaushan), 'Dancing Script', 'Caveat', cursive;
+  font-family: var(--font-script), 'Alex Brush', 'Dancing Script', 'Caveat', cursive;
 }
 
 /* Gold text gradient */

@@ -1,21 +1,29 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display, Kaushan_Script } from "next/font/google";
+import { Outfit, Playfair_Display, Alex_Brush, Cinzel } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
 });
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
-const kaushan = Kaushan_Script({
-  weight: "400",
-  variable: "--font-kaushan",
+const alexBrush = Alex_Brush({
+  variable: "--font-script",
   subsets: ["latin"],
+  weight: ["400"],
+});
+
+const cinzel = Cinzel({
+  variable: "--font-cinzel",
+  subsets: ["latin"],
+  weight: ["500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -32,9 +40,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${playfair.variable} ${kaushan.variable} h-full antialiased dark`}
+      className={`${outfit.variable} ${playfair.variable} ${alexBrush.variable} ${cinzel.variable} h-full antialiased dark`}
     >
-      <body className="min-h-full bg-[#050608] text-white selection:bg-[#E5A93C] selection:text-black overflow-x-hidden font-sans">
+      <body className="min-h-full bg-[#050608] text-white selection:bg-[#E5A93C] selection:text-black overflow-x-hidden font-outfit">
         {children}
       </body>
     </html>
