@@ -32,13 +32,13 @@ export default function MobileHero({
   const [currentIndex, setCurrentIndex] = useState(0);
   const product = PRODUCTS[currentIndex];
 
-  // Auto-Slide Timer (every 6 seconds on mobile)
+  // Auto-Slide Timer (every 3 seconds on mobile)
   useEffect(() => {
     if (!isLoaded) return;
 
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % PRODUCTS.length);
-    }, 6000);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [isLoaded]);
@@ -211,89 +211,98 @@ export default function MobileHero({
           </AnimatePresence>
         </div>
 
-        {/* 3. RIGHT COLUMN: 3 SHOWCASE CARDS & ROTATION/FPV BADGE */}
+        {/* 3. RIGHT COLUMN: 3 SHOWCASE CARDS & ROTATION/FPV BADGE (Synchronized Motion) */}
         <div className="w-[96px] sm:w-[114px] flex flex-col gap-2.5 items-end z-20 shrink-0">
-          
-          {/* Card 1 */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={isLoaded ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
-            transition={{ duration: 0.6, delay: isLoaded ? 0.35 : 0, type: "spring", damping: 18 }}
-            whileTap={{ scale: 0.92 }}
-            onClick={() => onOpenVideo(`${product.name} Adventure Showcase`, product.category)}
-            className="w-full cursor-pointer relative filter drop-shadow-[0_8px_18px_rgba(0,0,0,0.85)]"
-          >
-            <Image
-              src={product.cards[0]}
-              alt="Showcase 1"
-              width={160}
-              height={90}
-              className="w-full h-auto object-contain"
-            />
-          </motion.div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={product.id + "-mobile-cards"}
+              initial={{ opacity: 0, x: 25 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full flex flex-col gap-2.5 items-end"
+            >
+              {/* Card 1 */}
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.4, delay: 0.05 }}
+                whileTap={{ scale: 0.92 }}
+                onClick={() => onOpenVideo(`${product.name} Adventure Showcase`, product.category)}
+                className="w-full cursor-pointer relative filter drop-shadow-[0_8px_18px_rgba(0,0,0,0.85)]"
+              >
+                <Image
+                  src={product.cards[0]}
+                  alt="Showcase 1"
+                  width={160}
+                  height={90}
+                  className="w-full h-auto object-contain"
+                />
+              </motion.div>
 
-          {/* Card 2 */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={isLoaded ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
-            transition={{ duration: 0.6, delay: isLoaded ? 0.45 : 0, type: "spring", damping: 18 }}
-            whileTap={{ scale: 0.92 }}
-            onClick={() => onOpenVideo(`${product.name} 4K Experience`, "VLOG & EXPLORATION")}
-            className="w-full cursor-pointer relative filter drop-shadow-[0_8px_18px_rgba(0,0,0,0.85)]"
-          >
-            <Image
-              src={product.cards[1]}
-              alt="Showcase 2"
-              width={160}
-              height={90}
-              className="w-full h-auto object-contain"
-            />
-          </motion.div>
+              {/* Card 2 */}
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.4, delay: 0.12 }}
+                whileTap={{ scale: 0.92 }}
+                onClick={() => onOpenVideo(`${product.name} 4K Experience`, "VLOG & EXPLORATION")}
+                className="w-full cursor-pointer relative filter drop-shadow-[0_8px_18px_rgba(0,0,0,0.85)]"
+              >
+                <Image
+                  src={product.cards[1]}
+                  alt="Showcase 2"
+                  width={160}
+                  height={90}
+                  className="w-full h-auto object-contain"
+                />
+              </motion.div>
 
-          {/* Card 3 */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={isLoaded ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
-            transition={{ duration: 0.6, delay: isLoaded ? 0.55 : 0, type: "spring", damping: 18 }}
-            whileTap={{ scale: 0.92 }}
-            onClick={() => onOpenVideo(`${product.name} Master Timelapse`, "CREATIVE TIMELAPSE")}
-            className="w-full cursor-pointer relative filter drop-shadow-[0_8px_18px_rgba(0,0,0,0.85)]"
-          >
-            <Image
-              src={product.cards[2]}
-              alt="Showcase 3"
-              width={160}
-              height={90}
-              className="w-full h-auto object-contain"
-            />
-          </motion.div>
+              {/* Card 3 */}
+              <motion.div
+                initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ duration: 0.4, delay: 0.18 }}
+                whileTap={{ scale: 0.92 }}
+                onClick={() => onOpenVideo(`${product.name} Master Timelapse`, "CREATIVE TIMELAPSE")}
+                className="w-full cursor-pointer relative filter drop-shadow-[0_8px_18px_rgba(0,0,0,0.85)]"
+              >
+                <Image
+                  src={product.cards[2]}
+                  alt="Showcase 3"
+                  width={160}
+                  height={90}
+                  className="w-full h-auto object-contain"
+                />
+              </motion.div>
 
-          {/* 180° / 360° Badge */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={isLoaded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.5, delay: isLoaded ? 0.65 : 0 }}
-            className="px-2 py-1 rounded-full bg-black/80 border border-[#EAA838]/50 backdrop-blur-md flex items-center gap-1 shadow-[0_0_10px_rgba(234,168,56,0.3)]"
-          >
-            <RotateCw className="w-3 h-3 text-[#EAA838]" />
-            <div className="text-[8px] font-bold text-white flex flex-col leading-tight">
-              <span>
-                {product.id === "ashren-t1-drone"
-                  ? "360°"
-                  : product.id === "ashren-aquago-4k"
-                  ? "IPX8"
-                  : "180°"}
-              </span>
-              <span className="text-[6.5px] text-gray-300 font-semibold uppercase">
-                {product.id === "ashren-t1-drone"
-                  ? "FPV"
-                  : product.id === "ashren-aquago-4k"
-                  ? "WATERPROOF"
-                  : "ROTATION"}
-              </span>
-            </div>
-          </motion.div>
-
+              {/* 180° / 360° Badge */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, delay: 0.22 }}
+                className="px-2 py-1 rounded-full bg-black/80 border border-[#EAA838]/50 backdrop-blur-md flex items-center gap-1 shadow-[0_0_10px_rgba(234,168,56,0.3)]"
+              >
+                <RotateCw className="w-3 h-3 text-[#EAA838] animate-spin-slow" />
+                <div className="text-[8px] font-bold text-white flex flex-col leading-tight">
+                  <span>
+                    {product.id === "ashren-t1-drone"
+                      ? "360°"
+                      : product.id === "ashren-aquago-4k"
+                      ? "IPX8"
+                      : "180°"}
+                  </span>
+                  <span className="text-[6.5px] text-gray-300 font-semibold uppercase">
+                    {product.id === "ashren-t1-drone"
+                      ? "FPV"
+                      : product.id === "ashren-aquago-4k"
+                      ? "WATERPROOF"
+                      : "ROTATION"}
+                  </span>
+                </div>
+              </motion.div>
+            </motion.div>
+          </AnimatePresence>
         </div>
 
       </div>

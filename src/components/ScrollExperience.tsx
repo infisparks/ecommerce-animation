@@ -217,15 +217,15 @@ export default function ScrollExperience({
               Every millimeter of Ashren hardware is calibrated for cinematic excellence. From multi-layer nano-coated optical lenses to brushless mechanical gimbal motors responding in 0.002 seconds.
             </p>
 
-            {/* Quick Stat Counter Pods */}
-            <div className="grid grid-cols-2 gap-4 pt-3">
-              <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
-                <p className="text-2xl sm:text-3xl font-black text-white">0.002s</p>
-                <p className="text-[11px] text-gray-400 uppercase tracking-wide mt-1">Motor Latency</p>
+            {/* Quick Stat Counter Pods (Single Row Balanced) */}
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-3">
+              <div className="p-3.5 sm:p-4 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-md">
+                <p className="text-xl sm:text-2xl lg:text-3xl font-black text-white whitespace-nowrap">0.002s</p>
+                <p className="text-[10px] sm:text-[11px] text-gray-300 font-semibold uppercase tracking-wider mt-1 whitespace-nowrap">Motor Latency</p>
               </div>
-              <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/10">
-                <p className="text-2xl sm:text-3xl font-black text-[#F4C463]">120 Mbps</p>
-                <p className="text-[11px] text-gray-400 uppercase tracking-wide mt-1">Bitrate Clarity</p>
+              <div className="p-3.5 sm:p-4 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-md">
+                <p className="text-xl sm:text-2xl lg:text-3xl font-black text-[#F4C463] whitespace-nowrap">120 Mbps</p>
+                <p className="text-[10px] sm:text-[11px] text-[#EAA838] font-semibold uppercase tracking-wider mt-1 whitespace-nowrap">Bitrate Clarity</p>
               </div>
             </div>
           </motion.div>
@@ -583,14 +583,14 @@ export default function ScrollExperience({
             Order today and enjoy Complimentary Express Delivery across India, 2-Year Full Hardware Warranty, and 30-Day Money-Back Guarantee.
           </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-4 pt-2">
+          <div className="w-full flex items-center justify-center pt-2">
             <button
               onClick={() => onShopNow(PRODUCTS[0])}
-              className="px-8 py-4 rounded-full bg-gold-gradient hover:bg-gold-gradient-hover text-black font-extrabold text-sm tracking-wide shadow-[0_0_30px_rgba(234,168,56,0.6)] flex items-center gap-2 transition-transform hover:scale-105"
+              className="w-full sm:w-auto max-w-md px-5 sm:px-8 py-3.5 sm:py-4 rounded-full bg-gold-gradient hover:bg-gold-gradient-hover text-black font-extrabold text-xs sm:text-sm tracking-wide shadow-[0_4px_30px_rgba(234,168,56,0.6)] flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95 whitespace-nowrap"
             >
-              <ShoppingBag className="w-4 h-4" />
-              <span>Shop Complete Ashren Range</span>
-              <span>➔</span>
+              <ShoppingBag className="w-4 h-4 shrink-0" />
+              <span className="whitespace-nowrap">Shop Complete Ashren Range</span>
+              <span className="shrink-0">➔</span>
             </button>
           </div>
 

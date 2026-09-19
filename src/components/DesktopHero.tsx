@@ -40,7 +40,7 @@ export default function DesktopHero({
 
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % PRODUCTS.length);
-    }, 6000);
+    }, 3000);
 
     return () => clearInterval(interval);
   }, [isLoaded, isPaused]);
