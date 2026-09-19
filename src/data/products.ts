@@ -75,7 +75,7 @@ export const PRODUCTS: ProductItem[] = [
     cards: [
       "/card/drone/card1.png",
       "/card/drone/card2.png",
-      "/card/camera/card3.png",
+      "/card/drone/card3.png",
     ],
     mobileSpecs: [
       { id: "4k", title: "4K", subtitle: "HDR Video", icon: "4k" },
