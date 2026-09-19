@@ -1,44 +1,88 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion";
 import {
   ShoppingBag,
   Play,
   RotateCw,
   Feather,
+  BatteryCharging,
   ShieldCheck,
   Truck,
   RotateCcw,
   Headphones,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
+import { PRODUCTS, ProductItem } from "@/data/products";
 
 interface DesktopHeroProps {
-  onShopNow: () => void;
+  onShopNow: (product: ProductItem) => void;
   onOpenVideo: (title?: string, category?: string) => void;
+  isLoaded?: boolean;
 }
 
-export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps) {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+export default function DesktopHero({
+  onShopNow,
+  onOpenVideo,
+  isLoaded = true,
+}: DesktopHeroProps) {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  const product = PRODUCTS[currentIndex];
+
+  // Auto-Slide Timer (every 6 seconds)
+  useEffect(() => {
+    if (!isLoaded || isPaused) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % PRODUCTS.length);
+    }, 6000);
+
+    return () => clearInterval(interval);
+  }, [isLoaded, isPaused]);
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev + 1) % PRODUCTS.length);
+  };
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev - 1 + PRODUCTS.length) % PRODUCTS.length);
+  };
+
+  // Direct GPU Motion Values (0 React re-renders on mousemove)
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-12, 12]), { stiffness: 120, damping: 22 });
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [12, -12]), { stiffness: 120, damping: 22 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const { clientX, clientY, currentTarget } = e;
     const { width, height, left, top } = currentTarget.getBoundingClientRect();
-    const x = (clientX - left) / width - 0.5;
-    const y = (clientY - top) / height - 0.5;
-    setMousePos({ x, y });
+    mouseX.set((clientX - left) / width - 0.5);
+    mouseY.set((clientY - top) / height - 0.5);
+  };
+
+  const handleMouseLeave = () => {
+    mouseX.set(0);
+    mouseY.set(0);
+    setIsPaused(false);
   };
 
   return (
     <div
       onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={handleMouseLeave}
       className="relative w-full min-h-[calc(100vh-80px)] flex flex-col justify-between px-6 lg:px-12 pb-6 pt-2 select-none overflow-hidden font-outfit"
     >
       {/* Top Right Tagline */}
       <motion.div
         initial={{ opacity: 0, x: 30 }}
-        animate={{ opacity: 1, x: 0 }}
+        animate={isLoaded ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
         transition={{ duration: 0.8, delay: 0.2 }}
         className="w-full flex justify-end items-center max-w-[1540px] mx-auto z-10 pt-1"
       >
@@ -51,7 +95,7 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
           </p>
           <motion.div
             initial={{ width: 0 }}
-            animate={{ width: 32 }}
+            animate={isLoaded ? { width: 32 } : { width: 0 }}
             transition={{ duration: 0.6, delay: 0.5 }}
             className="h-[2px] bg-[#EAA838] ml-auto mt-1 rounded-full shadow-[0_0_8px_#EAA838]"
           />
@@ -64,47 +108,42 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
         {/* ================= LEFT COLUMN: HERO TEXT & CTAs ================= */}
         <div className="col-span-12 lg:col-span-5 flex flex-col justify-center z-20">
           
-          {/* Eyebrow */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="flex items-center gap-2 mb-3"
-          >
-            <span className="text-xs tracking-[0.35em] text-gray-300 font-semibold uppercase">
-              Capture • Create • Explore
-            </span>
-          </motion.div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={product.id}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.5 }}
+            >
+              {/* Eyebrow */}
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-xs tracking-[0.35em] text-gray-300 font-semibold uppercase">
+                  {product.eyebrow}
+                </span>
+              </div>
 
-          {/* Main Title */}
-          <motion.div
-            initial={{ opacity: 0, y: 25 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="space-y-1 mb-4"
-          >
-            <h1 className="text-4xl sm:text-5xl xl:text-6xl font-extrabold tracking-tight text-white leading-none">
-              Your Story
-            </h1>
-            <h2 className="text-4xl sm:text-5xl xl:text-6xl font-serif-luxury italic font-normal text-gold-shimmer leading-tight drop-shadow-[0_4px_25px_rgba(244,196,99,0.4)]">
-              Anywhere
-            </h2>
-          </motion.div>
+              {/* Main Title */}
+              <div className="space-y-1 mb-4">
+                <h1 className="text-4xl sm:text-5xl xl:text-6xl font-extrabold tracking-tight text-white leading-none">
+                  {product.headline}
+                </h1>
+                <h2 className="text-4xl sm:text-5xl xl:text-6xl font-serif-luxury italic font-normal text-gold-shimmer leading-tight drop-shadow-[0_4px_25px_rgba(244,196,99,0.4)]">
+                  {product.headlineHighlight}
+                </h2>
+              </div>
 
-          {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="text-sm xl:text-base text-gray-300 max-w-md font-normal leading-relaxed mb-6"
-          >
-            Ashren brings you premium gadgets for creators, travelers and everyday adventurers.
-          </motion.p>
+              {/* Subtitle */}
+              <p className="text-sm xl:text-base text-gray-300 max-w-md font-normal leading-relaxed mb-6">
+                {product.subtitle}
+              </p>
+            </motion.div>
+          </AnimatePresence>
 
           {/* CTA Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.7, delay: 0.4 }}
             className="flex flex-wrap items-center gap-4 mb-8"
           >
@@ -112,11 +151,11 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              onClick={onShopNow}
+              onClick={() => onShopNow(product)}
               className="relative group px-7 py-3.5 rounded-full bg-gold-gradient hover:bg-gold-gradient-hover text-black font-extrabold text-sm tracking-wide flex items-center gap-2.5 shadow-[0_0_30px_rgba(234,168,56,0.5)] transition-all"
             >
               <ShoppingBag className="w-4 h-4 text-black group-hover:rotate-12 transition-transform" />
-              <span>Shop Now</span>
+              <span>Shop Now (₹{product.price.toLocaleString("en-IN")})</span>
               <span className="text-base group-hover:translate-x-1 transition-transform">➔</span>
             </motion.button>
 
@@ -124,7 +163,7 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
             <motion.button
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              onClick={() => onOpenVideo("Ashren 4K UHD Gimbal Showcase", "CINEMATIC DEMO")}
+              onClick={() => onOpenVideo(`${product.name} Cinematic 4K Showcase`, product.category)}
               className="px-6 py-3.5 rounded-full bg-black/40 hover:bg-white/10 border border-white/20 hover:border-white/40 text-white font-medium text-sm flex items-center gap-2.5 backdrop-blur-md transition-all group"
             >
               <div className="w-5 h-5 rounded-full bg-white/15 flex items-center justify-center group-hover:bg-[#EAA838] group-hover:text-black transition-colors">
@@ -134,53 +173,57 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
             </motion.button>
           </motion.div>
 
-          {/* 4 Feature Badges Grid */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.5 }}
-            className="flex items-center gap-4 sm:gap-6 py-3 border-y border-white/10 max-w-lg mb-6"
-          >
-            {/* 4K ULTRA HD */}
-            <div className="flex flex-col">
-              <span className="text-base sm:text-lg font-extrabold text-white tracking-tight">4K</span>
-              <span className="text-[10px] sm:text-[11px] text-gray-400 font-semibold tracking-wider uppercase">
-                Ultra HD
-              </span>
-            </div>
-            <div className="w-[1px] h-7 bg-white/15" />
+          {/* 4 Feature Badges Grid (Synchronized with product) */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={product.id + "-badges"}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.4 }}
+              className="flex items-center gap-4 sm:gap-6 py-3 border-y border-white/10 max-w-lg mb-6"
+            >
+              <div className="flex flex-col">
+                <span className="text-base sm:text-lg font-extrabold text-white tracking-tight">{product.badge1.value}</span>
+                <span className="text-[10px] sm:text-[11px] text-gray-400 font-semibold tracking-wider uppercase">
+                  {product.badge1.label}
+                </span>
+              </div>
+              <div className="w-[1px] h-7 bg-white/15" />
 
-            {/* 180° ROTATION */}
-            <div className="flex flex-col">
-              <span className="text-base sm:text-lg font-extrabold text-white tracking-tight">180°</span>
-              <span className="text-[10px] sm:text-[11px] text-gray-400 font-semibold tracking-wider uppercase">
-                Rotation
-              </span>
-            </div>
-            <div className="w-[1px] h-7 bg-white/15" />
+              <div className="flex flex-col">
+                <span className="text-base sm:text-lg font-extrabold text-white tracking-tight">{product.badge2.value}</span>
+                <span className="text-[10px] sm:text-[11px] text-gray-400 font-semibold tracking-wider uppercase">
+                  {product.badge2.label}
+                </span>
+              </div>
+              <div className="w-[1px] h-7 bg-white/15" />
 
-            {/* AI STABILIZATION */}
-            <div className="flex flex-col">
-              <span className="text-base sm:text-lg font-extrabold text-white tracking-tight">AI</span>
-              <span className="text-[10px] sm:text-[11px] text-gray-400 font-semibold tracking-wider uppercase">
-                Stabilization
-              </span>
-            </div>
-            <div className="w-[1px] h-7 bg-white/15" />
+              <div className="flex flex-col">
+                <span className="text-base sm:text-lg font-extrabold text-white tracking-tight">{product.badge3.value}</span>
+                <span className="text-[10px] sm:text-[11px] text-gray-400 font-semibold tracking-wider uppercase">
+                  {product.badge3.label}
+                </span>
+              </div>
+              <div className="w-[1px] h-7 bg-white/15" />
 
-            {/* LIGHTWEIGHT */}
-            <div className="flex flex-col items-start">
-              <Feather className="w-5 h-5 text-[#EAA838] mb-0.5" />
-              <span className="text-[10px] sm:text-[11px] text-gray-400 font-semibold tracking-wider uppercase">
-                Lightweight
-              </span>
-            </div>
-          </motion.div>
+              <div className="flex flex-col items-start">
+                {product.badge4.iconType === "battery" ? (
+                  <BatteryCharging className="w-5 h-5 text-[#EAA838] mb-0.5" />
+                ) : (
+                  <Feather className="w-5 h-5 text-[#EAA838] mb-0.5" />
+                )}
+                <span className="text-[10px] sm:text-[11px] text-gray-400 font-semibold tracking-wider uppercase">
+                  {product.badge4.label}
+                </span>
+              </div>
+            </motion.div>
+          </AnimatePresence>
 
           {/* Social Proof */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
             transition={{ duration: 0.7, delay: 0.6 }}
             className="flex items-center gap-3"
           >
@@ -191,6 +234,7 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
                   src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&auto=format&fit=crop&q=80"
                   alt="Creator"
                   fill
+                  sizes="32px"
                   className="object-cover"
                 />
               </div>
@@ -199,6 +243,7 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
                   src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&auto=format&fit=crop&q=80"
                   alt="Creator"
                   fill
+                  sizes="32px"
                   className="object-cover"
                 />
               </div>
@@ -207,6 +252,7 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
                   src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&auto=format&fit=crop&q=80"
                   alt="Creator"
                   fill
+                  sizes="32px"
                   className="object-cover"
                 />
               </div>
@@ -227,81 +273,106 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
           </motion.div>
         </div>
 
-        {/* ================= CENTER / RIGHT VISUAL HERO: CAMERA & CARDS ================= */}
+        {/* ================= CENTER / RIGHT VISUAL HERO: PRODUCT & CARDS ================= */}
         <div className="col-span-12 lg:col-span-7 relative h-[480px] xl:h-[540px] flex items-center justify-center">
           
           {/* Animated Glowing Orbital Rings */}
           <motion.div
             initial={{ scale: 0.4, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
+            animate={isLoaded ? { scale: 1, opacity: 1 } : { scale: 0.4, opacity: 0 }}
             transition={{ duration: 1.2, delay: 0.3 }}
             className="absolute w-[440px] h-[440px] xl:w-[500px] xl:h-[500px] rounded-full border border-[#EAA838]/25 animate-orbit-spin pointer-events-none"
           >
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-[#FFF] shadow-[0_0_20px_#FFF,0_0_35px_#EAA838]" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-[#FFF] shadow-[0_0_15px_#FFF,0_0_25px_#EAA838]" />
           </motion.div>
 
           <motion.div
             initial={{ scale: 0.4, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
+            animate={isLoaded ? { scale: 1, opacity: 1 } : { scale: 0.4, opacity: 0 }}
             transition={{ duration: 1.2, delay: 0.4 }}
             className="absolute w-[360px] h-[360px] xl:w-[420px] xl:h-[420px] rounded-full border border-[#EAA838]/35 animate-orbit-spin-reverse pointer-events-none"
           >
-            <div className="absolute bottom-4 right-10 w-2.5 h-2.5 rounded-full bg-[#FFF1C5] shadow-[0_0_15px_#FFF1C5]" />
+            <div className="absolute bottom-4 right-10 w-2.5 h-2.5 rounded-full bg-[#FFF1C5] shadow-[0_0_12px_#FFF1C5]" />
           </motion.div>
 
-          {/* Central Camera with Smooth Floating Animation & Gyro Parallax */}
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0, y: 40 }}
-            animate={{ scale: 1, opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            style={{
-              transform: `perspective(1000px) rotateY(${mousePos.x * 12}deg) rotateX(${-mousePos.y * 12}deg)`,
-            }}
-            className="relative z-20 w-[240px] sm:w-[280px] xl:w-[320px] h-[400px] sm:h-[440px] xl:h-[500px] shrink-0"
+          {/* Previous / Next Arrow Controls */}
+          <button
+            onClick={handlePrev}
+            aria-label="Previous Product"
+            className="absolute left-2 xl:-left-2 z-40 p-2.5 rounded-full bg-black/60 border border-white/20 text-white/80 hover:text-white hover:border-[#EAA838] hover:bg-[#EAA838]/20 transition-all backdrop-blur-md shadow-lg"
           >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button
+            onClick={handleNext}
+            aria-label="Next Product"
+            className="absolute right-2 xl:right-0 z-40 p-2.5 rounded-full bg-black/60 border border-white/20 text-white/80 hover:text-white hover:border-[#EAA838] hover:bg-[#EAA838]/20 transition-all backdrop-blur-md shadow-lg"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
+
+          {/* Central Sliding Product with Direct GPU Gyro Parallax */}
+          <AnimatePresence mode="wait">
             <motion.div
-              animate={{
-                y: [0, -12, 0],
-                rotate: [0, 0.8, 0],
+              key={product.id}
+              initial={{ scale: 0.8, opacity: 0, x: 40 }}
+              animate={{ scale: 1, opacity: 1, x: 0 }}
+              exit={{ scale: 0.8, opacity: 0, x: -40 }}
+              transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+              style={{
+                rotateX,
+                rotateY,
+                transformPerspective: 1000,
               }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className="relative w-full h-full"
+              className="relative z-20 w-[270px] sm:w-[310px] xl:w-[360px] h-[400px] sm:h-[440px] xl:h-[500px] shrink-0 will-change-transform flex items-center justify-center"
             >
-              <Image
-                src="/camera/camera.png"
-                alt="Ashren 4K Pocket Gimbal Camera"
-                fill
-                priority
-                sizes="(max-width: 768px) 240px, (max-width: 1200px) 280px, 320px"
-                className="object-contain drop-shadow-[0_15px_40px_rgba(0,0,0,0.85)] filter brightness-105"
-              />
+              <motion.div
+                animate={{
+                  y: [0, -10, 0],
+                }}
+                transition={{
+                  duration: 5,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="relative w-full h-full"
+              >
+                <Image
+                  src={product.image}
+                  alt={product.name}
+                  fill
+                  priority
+                  sizes="(max-width: 768px) 270px, (max-width: 1200px) 310px, 360px"
+                  className="object-contain drop-shadow-[0_15px_40px_rgba(0,0,0,0.85)] filter brightness-105"
+                />
+              </motion.div>
+
+              {/* Glowing Golden Light Swirl Aura at Base */}
+              <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-64 h-24 bg-[#EAA838]/20 blur-2xl rounded-full -z-10" />
             </motion.div>
+          </AnimatePresence>
 
-            {/* Glowing Golden Light Swirl Aura at Base */}
-            <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-64 h-24 bg-[#EAA838]/25 blur-3xl rounded-full -z-10" />
-          </motion.div>
+          {/* Top Script Text (Synchronized with product) */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={product.id + "-script"}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              transition={{ duration: 0.5 }}
+              className="absolute top-2 xl:top-6 right-24 xl:right-32 z-30 pointer-events-none"
+            >
+              <p className="font-script text-3xl xl:text-4xl text-gold-shimmer drop-shadow-[0_2px_12px_rgba(234,168,56,0.6)] transform -rotate-6">
+                {product.scriptTop} <br />
+                <span className="ml-4">{product.scriptSub}</span>
+              </p>
+            </motion.div>
+          </AnimatePresence>
 
-          {/* Top Script Text: "Small Camera Big Possibilities" */}
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-            className="absolute top-2 xl:top-6 right-24 xl:right-32 z-30 pointer-events-none"
-          >
-            <p className="font-script text-3xl xl:text-4xl text-gold-shimmer drop-shadow-[0_2px_12px_rgba(234,168,56,0.6)] transform -rotate-6">
-              Small Camera <br />
-              <span className="ml-4">Big Possibilities</span>
-            </p>
-          </motion.div>
-
-          {/* 180° Rotation Indicator Badge next to camera head */}
+          {/* 180° / 360° Indicator Badge next to product head */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
+            animate={isLoaded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
             transition={{ duration: 0.6, delay: 0.6 }}
             className="absolute top-24 xl:top-28 right-1/4 translate-x-8 z-20"
           >
@@ -311,7 +382,9 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
               className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black/70 border border-[#EAA838]/50 backdrop-blur-md shadow-[0_0_15px_rgba(234,168,56,0.35)] cursor-pointer"
             >
               <RotateCw className="w-3.5 h-3.5 text-[#EAA838]" />
-              <span className="text-[10px] font-bold text-white tracking-wider">180° ROTATION</span>
+              <span className="text-[10px] font-bold text-white tracking-wider uppercase">
+                {product.id === "ashren-t1-drone" ? "360° FPV" : "180° ROTATION"}
+              </span>
             </motion.div>
           </motion.div>
 
@@ -320,11 +393,11 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
           {/* LEFT CARD: TRAVEL (card1.png) */}
           <motion.div
             initial={{ opacity: 0, x: -60, rotate: -4 }}
-            animate={{ opacity: 1, x: 0, rotate: 0 }}
+            animate={isLoaded ? { opacity: 1, x: 0, rotate: 0 } : { opacity: 0, x: -60, rotate: -4 }}
             transition={{ duration: 0.9, delay: 0.4, type: "spring", damping: 20 }}
             whileHover={{ scale: 1.08, zIndex: 40 }}
-            onClick={() => onOpenVideo("Mountain Hiking in High Alpine 4K", "TRAVEL ADVENTURE")}
-            className="absolute left-0 xl:left-4 top-1/3 -translate-y-8 z-10 w-44 sm:w-52 xl:w-60 cursor-pointer group"
+            onClick={() => onOpenVideo("Mountain Alpine 4K Expedition", "TRAVEL ADVENTURE")}
+            className="absolute left-0 xl:left-4 top-1/3 -translate-y-8 z-10 w-44 sm:w-52 xl:w-60 cursor-pointer group will-change-transform"
           >
             <div className="relative rounded-2xl overflow-hidden border border-white/20 group-hover:border-[#EAA838] transition-all shadow-2xl group-hover:shadow-[0_0_30px_rgba(234,168,56,0.5)]">
               <Image
@@ -345,11 +418,11 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
           {/* RIGHT TOP CARD: VLOG (card2.png) */}
           <motion.div
             initial={{ opacity: 0, x: 60, rotate: 4 }}
-            animate={{ opacity: 1, x: 0, rotate: 0 }}
+            animate={isLoaded ? { opacity: 1, x: 0, rotate: 0 } : { opacity: 0, x: 60, rotate: 4 }}
             transition={{ duration: 0.9, delay: 0.5, type: "spring", damping: 20 }}
             whileHover={{ scale: 1.08, zIndex: 40 }}
             onClick={() => onOpenVideo("Underwater Coral Reef Scuba 4K Vlog", "VLOG & EXPLORATION")}
-            className="absolute right-0 xl:right-4 top-10 xl:top-14 z-10 w-44 sm:w-52 xl:w-60 cursor-pointer group"
+            className="absolute right-0 xl:right-4 top-10 xl:top-14 z-10 w-44 sm:w-52 xl:w-60 cursor-pointer group will-change-transform"
           >
             <div className="relative rounded-2xl overflow-hidden border border-white/20 group-hover:border-[#EAA838] transition-all shadow-2xl group-hover:shadow-[0_0_30px_rgba(234,168,56,0.5)]">
               <Image
@@ -370,11 +443,11 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
           {/* RIGHT BOTTOM CARD: CREATE (card3.png) */}
           <motion.div
             initial={{ opacity: 0, x: 60, y: 30 }}
-            animate={{ opacity: 1, x: 0, y: 0 }}
+            animate={isLoaded ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x: 60, y: 30 }}
             transition={{ duration: 0.9, delay: 0.6, type: "spring", damping: 20 }}
             whileHover={{ scale: 1.08, zIndex: 40 }}
-            onClick={() => onOpenVideo("Futuristic Cityscape Night Time Lapse 4K", "CREATIVE TIMELAPSE")}
-            className="absolute right-4 xl:right-12 bottom-12 xl:bottom-14 z-10 w-44 sm:w-52 xl:w-56 cursor-pointer group"
+            onClick={() => onOpenVideo("Futuristic Cityscape Aerial Night 4K", "CREATIVE TIMELAPSE")}
+            className="absolute right-4 xl:right-12 bottom-12 xl:bottom-14 z-10 w-44 sm:w-52 xl:w-56 cursor-pointer group will-change-transform"
           >
             <div className="relative rounded-2xl overflow-hidden border border-white/20 group-hover:border-[#EAA838] transition-all shadow-2xl group-hover:shadow-[0_0_30px_rgba(234,168,56,0.5)]">
               <Image
@@ -392,10 +465,10 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
             </div>
           </motion.div>
 
-          {/* Right Floating Badge: "Adventure in 4K" + 4K Circular Badge */}
+          {/* Right Floating Badge: "Adventure in 4K" */}
           <motion.div
             initial={{ opacity: 0, scale: 0.7 }}
-            animate={{ opacity: 1, scale: 1 }}
+            animate={isLoaded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.7 }}
             transition={{ duration: 0.7, delay: 0.7 }}
             className="absolute bottom-6 right-1/4 translate-x-12 z-20 flex flex-col items-center"
           >
@@ -413,7 +486,7 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
           {/* Far Right Tagline: "Explore Without Limits" */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
+            animate={isLoaded ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
             transition={{ duration: 0.8, delay: 0.8 }}
             className="absolute bottom-4 right-0 z-20 text-right hidden xl:block"
           >
@@ -429,10 +502,10 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
         </div>
       </div>
 
-      {/* ================= BOTTOM BAR / VALUE PROPOSITIONS ================= */}
+      {/* ================= BOTTOM BAR: VALUE PROPS & CAROUSEL DOTS ================= */}
       <motion.div
         initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
+        animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
         transition={{ duration: 0.8, delay: 0.6 }}
         className="relative max-w-[1540px] w-full mx-auto z-10 pt-4 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4"
       >
@@ -487,12 +560,24 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
           </div>
         </div>
 
-        {/* Center/Right: Scroll to Explore mouse animation */}
-        <div className="flex flex-col items-center gap-1 text-[10px] text-gray-400 uppercase tracking-widest">
-          <span>Scroll to Explore</span>
-          <div className="w-4 h-7 rounded-full border border-white/30 flex items-start justify-center p-1">
-            <div className="w-1 h-1.5 rounded-full bg-[#EAA838] animate-scroll-bounce" />
-          </div>
+        {/* Center/Right: Product Slide Switcher Dots */}
+        <div className="flex items-center gap-2.5">
+          {PRODUCTS.map((prod, idx) => {
+            const isActive = currentIndex === idx;
+            return (
+              <button
+                key={prod.id}
+                onClick={() => setCurrentIndex(idx)}
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold transition-all ${
+                  isActive
+                    ? "bg-[#EAA838] text-black shadow-[0_0_12px_#EAA838]"
+                    : "bg-white/10 text-gray-400 hover:text-white"
+                }`}
+              >
+                <span>{prod.headline}</span>
+              </button>
+            );
+          })}
         </div>
       </motion.div>
     </div>

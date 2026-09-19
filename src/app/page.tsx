@@ -11,7 +11,10 @@ import SplashScreen from "@/components/SplashScreen";
 import { CheckCircle2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
+import { PRODUCTS, ProductItem } from "@/data/products";
+
 export default function HomePage() {
+  const [isLoaded, setIsLoaded] = useState(false);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [videoModalInfo, setVideoModalInfo] = useState({
     title: "Ashren 4K Ultra HD Gimbal Showcase",
@@ -29,7 +32,7 @@ export default function HomePage() {
       variant: "Midnight Onyx • 128GB Bundle",
       price: 24999,
       quantity: 1,
-      image: "/camera/camera.png",
+      image: "/product/camera.png",
     },
   ]);
 
@@ -42,12 +45,13 @@ export default function HomePage() {
     setIsVideoModalOpen(true);
   };
 
-  const handleShopNow = () => {
+  const handleShopNow = (product?: ProductItem) => {
+    const target = product || PRODUCTS[0];
     setCartItems((prev) => {
-      const exists = prev.find((item) => item.id === "ashren-4k-camera");
+      const exists = prev.find((item) => item.id === target.id);
       if (exists) {
         return prev.map((item) =>
-          item.id === "ashren-4k-camera"
+          item.id === target.id
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
@@ -55,17 +59,17 @@ export default function HomePage() {
       return [
         ...prev,
         {
-          id: "ashren-4k-camera",
-          name: "Ashren 4K Pocket Gimbal Camera",
-          variant: "Midnight Onyx • 128GB Bundle",
-          price: 24999,
+          id: target.id,
+          name: target.name,
+          variant: target.variant,
+          price: target.price,
           quantity: 1,
-          image: "/camera/camera.png",
+          image: target.image,
         },
       ];
     });
 
-    setToastMessage("Added Ashren 4K Gimbal Camera to your cart!");
+    setToastMessage(`Added ${target.name} to your cart!`);
     setTimeout(() => setToastMessage(null), 3500);
     setIsCartOpen(true);
   };
@@ -89,10 +93,10 @@ export default function HomePage() {
   };
 
   return (
-    <main className="relative min-h-screen text-white flex flex-col justify-between overflow-x-hidden">
+    <main className="relative min-h-screen text-white flex flex-col justify-between overflow-x-hidden font-outfit">
       
       {/* Luxury Splash Screen on Page Reload */}
-      <SplashScreen />
+      <SplashScreen onComplete={() => setIsLoaded(true)} minDuration={1800} />
 
       {/* Global Background Images (Responsive: Desktop vs Mobile) */}
       <div className="fixed inset-0 -z-30 pointer-events-none overflow-hidden">
@@ -144,6 +148,7 @@ export default function HomePage() {
         cartCount={totalCartCount}
         onOpenCart={() => setIsCartOpen(true)}
         onOpenVideo={() => handleOpenVideo()}
+        isLoaded={isLoaded}
       />
 
       {/* Responsive View Switcher: Desktop layout for lg+ screens, Mobile layout for <lg screens */}
@@ -153,6 +158,7 @@ export default function HomePage() {
           <DesktopHero
             onShopNow={handleShopNow}
             onOpenVideo={handleOpenVideo}
+            isLoaded={isLoaded}
           />
         </div>
 
@@ -161,6 +167,7 @@ export default function HomePage() {
           <MobileHero
             onShopNow={handleShopNow}
             onOpenVideo={handleOpenVideo}
+            isLoaded={isLoaded}
           />
         </div>
       </div>

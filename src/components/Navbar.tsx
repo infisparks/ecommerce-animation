@@ -9,9 +9,15 @@ interface NavbarProps {
   cartCount: number;
   onOpenCart: () => void;
   onOpenVideo: () => void;
+  isLoaded?: boolean;
 }
 
-export default function Navbar({ cartCount, onOpenCart, onOpenVideo }: NavbarProps) {
+export default function Navbar({
+  cartCount,
+  onOpenCart,
+  onOpenVideo,
+  isLoaded = true,
+}: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeNav, setActiveNav] = useState("Home");
@@ -22,7 +28,7 @@ export default function Navbar({ cartCount, onOpenCart, onOpenVideo }: NavbarPro
     <>
       <motion.header
         initial={{ y: -40, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
+        animate={isLoaded ? { y: 0, opacity: 1 } : { y: -40, opacity: 0 }}
         transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
         className="relative z-50 w-full px-3.5 sm:px-6 lg:px-12 pt-2.5 sm:pt-4 pb-1.5 sm:pb-3"
       >
@@ -67,8 +73,8 @@ export default function Navbar({ cartCount, onOpenCart, onOpenVideo }: NavbarPro
                 <motion.button
                   key={item}
                   initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.1 + idx * 0.05 }}
+                  animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
+                  transition={{ duration: 0.5, delay: isLoaded ? 0.1 + idx * 0.05 : 0 }}
                   onClick={() => setActiveNav(item)}
                   className={`relative px-3.5 py-1.5 text-sm tracking-wide font-medium transition-colors ${
                     isActive ? "text-white font-semibold" : "text-gray-300 hover:text-white"
@@ -93,8 +99,8 @@ export default function Navbar({ cartCount, onOpenCart, onOpenVideo }: NavbarPro
             {/* Search Input Bar (Desktop) */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
+              animate={isLoaded ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.6, delay: isLoaded ? 0.3 : 0 }}
               className="relative hidden md:flex items-center"
             >
               <div className="relative flex items-center w-60 lg:w-72 xl:w-80 rounded-full bg-[#10131A]/70 border border-white/15 px-3.5 py-1.5 focus-within:border-[#EAA838]/60 focus-within:ring-1 focus-within:ring-[#EAA838]/40 transition-all backdrop-blur-md">
@@ -142,7 +148,7 @@ export default function Navbar({ cartCount, onOpenCart, onOpenVideo }: NavbarPro
                 <ShoppingBag className="w-5 h-5 group-hover:rotate-6 transition-transform" />
                 <motion.span
                   initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
+                  animate={isLoaded ? { scale: 1 } : { scale: 0 }}
                   transition={{ type: "spring", stiffness: 500, damping: 25 }}
                   className="absolute 0 top-0.5 right-0.5 flex items-center justify-center min-w-[17px] h-[17px] px-1 text-[10px] font-bold text-black bg-[#EAA838] rounded-full shadow-[0_0_10px_#EAA838]"
                 >
