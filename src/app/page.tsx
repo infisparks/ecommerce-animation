@@ -5,6 +5,7 @@ import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import DesktopHero from "@/components/DesktopHero";
 import MobileHero from "@/components/MobileHero";
+import ScrollExperience from "@/components/ScrollExperience";
 import VideoModal from "@/components/VideoModal";
 import CartDrawer from "@/components/CartDrawer";
 import SplashScreen from "@/components/SplashScreen";
@@ -93,7 +94,7 @@ export default function HomePage() {
   };
 
   return (
-    <main className="relative min-h-screen text-white flex flex-col justify-between overflow-x-hidden font-outfit">
+    <main className="relative min-h-screen text-white flex flex-col justify-between overflow-x-hidden font-sans">
       
       {/* Luxury Splash Screen on Page Reload */}
       <SplashScreen onComplete={() => setIsLoaded(true)} minDuration={1800} />
@@ -171,6 +172,12 @@ export default function HomePage() {
           />
         </div>
       </div>
+
+      {/* Luxury Animated Scroll Experience */}
+      <ScrollExperience
+        onShopNow={handleShopNow}
+        onOpenVideo={handleOpenVideo}
+      />
 
       {/* Modals & Drawers */}
       <VideoModal
