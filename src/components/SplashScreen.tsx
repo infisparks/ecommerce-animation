@@ -11,7 +11,7 @@ interface SplashScreenProps {
 
 export default function SplashScreen({
   onComplete,
-  minDuration = 2200,
+  minDuration = 2400,
 }: SplashScreenProps) {
   const [isVisible, setIsVisible] = useState(true);
 
@@ -32,7 +32,7 @@ export default function SplashScreen({
           initial={{ opacity: 1 }}
           exit={{
             opacity: 0,
-            scale: 1.06,
+            scale: 1.05,
             filter: "blur(12px)",
             transition: { duration: 0.85, ease: [0.76, 0, 0.24, 1] },
           }}
@@ -56,18 +56,24 @@ export default function SplashScreen({
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-[#FFF] shadow-[0_0_20px_#FFF,0_0_35px_#EAA838]" />
           </motion.div>
 
-          {/* Logo Container with Shine Effect */}
+          {/* Logo Container */}
           <div className="relative flex flex-col items-center z-10">
-            {/* Logo Image */}
+            
+            {/* Logo Image & Alpha-Masked Shine Layer */}
             <motion.div
               initial={{ scale: 0.75, opacity: 0, y: 25 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
+              animate={{
+                scale: 1,
+                opacity: 1,
+                y: 0,
+              }}
               transition={{
-                duration: 1.1,
+                duration: 1,
                 ease: [0.16, 1, 0.3, 1],
               }}
-              className="relative w-44 sm:w-56 h-44 sm:h-56 overflow-hidden flex items-center justify-center drop-shadow-[0_0_35px_rgba(244,196,99,0.55)]"
+              className="relative w-44 sm:w-56 h-44 sm:h-56 flex items-center justify-center drop-shadow-[0_0_30px_rgba(244,196,99,0.5)]"
             >
+              {/* Base Logo */}
               <Image
                 src="/logo/logo.png"
                 alt="Ashren Logo"
@@ -77,25 +83,62 @@ export default function SplashScreen({
                 className="object-contain filter brightness-110"
               />
 
-              {/* Sweeping Light Shine Beam */}
+              {/* 
+                ALPHA-MASKED SHINE LAYER:
+                The shine beam is strictly clipped using mask-image so it renders ONLY
+                inside the solid pixels of logo.png with ZERO light in the transparent background!
+              */}
+              <div
+                style={{
+                  WebkitMaskImage: "url('/logo/logo.png')",
+                  maskImage: "url('/logo/logo.png')",
+                  WebkitMaskSize: "contain",
+                  maskSize: "contain",
+                  WebkitMaskRepeat: "no-repeat",
+                  maskRepeat: "no-repeat",
+                  WebkitMaskPosition: "center",
+                  maskPosition: "center",
+                }}
+                className="absolute inset-0 pointer-events-none z-20 overflow-hidden"
+              >
+                <motion.div
+                  initial={{ x: "-120%" }}
+                  animate={{
+                    x: ["-120%", "220%"],
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    delay: 0.4,
+                    repeat: Infinity,
+                    repeatDelay: 1.1,
+                    ease: "easeInOut",
+                  }}
+                  className="w-full h-full bg-gradient-to-r from-transparent via-white/90 to-transparent transform -skew-x-25 mix-blend-overlay"
+                />
+              </div>
+
+              {/* Secondary Golden Glow Pulse strictly on logo contours */}
               <motion.div
-                initial={{ x: "-150%", opacity: 0 }}
                 animate={{
-                  x: ["-150%", "200%"],
-                  opacity: [0, 0.85, 0],
+                  opacity: [0.4, 1, 0.4],
+                  scale: [0.99, 1.01, 0.99],
                 }}
                 transition={{
-                  duration: 1.4,
-                  delay: 0.5,
+                  duration: 2.5,
                   repeat: Infinity,
-                  repeatDelay: 1.2,
                   ease: "easeInOut",
                 }}
                 style={{
-                  background:
-                    "linear-gradient(105deg, transparent 20%, rgba(255, 255, 255, 0.8) 50%, transparent 80%)",
+                  WebkitMaskImage: "url('/logo/logo.png')",
+                  maskImage: "url('/logo/logo.png')",
+                  WebkitMaskSize: "contain",
+                  maskSize: "contain",
+                  WebkitMaskRepeat: "no-repeat",
+                  maskRepeat: "no-repeat",
+                  WebkitMaskPosition: "center",
+                  maskPosition: "center",
                 }}
-                className="absolute inset-y-0 w-full transform -skew-x-25 pointer-events-none"
+                className="absolute inset-0 pointer-events-none z-10 bg-gradient-to-t from-[#EAA838]/40 to-transparent"
               />
             </motion.div>
 
@@ -125,6 +168,7 @@ export default function SplashScreen({
                 />
               </div>
             </motion.div>
+
           </div>
         </motion.div>
       )}
