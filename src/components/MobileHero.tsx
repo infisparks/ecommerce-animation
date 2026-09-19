@@ -44,18 +44,18 @@ export default function MobileHero({
   }, [isLoaded]);
 
   return (
-    <div className="relative w-full flex flex-col px-3 sm:px-5 pt-0 pb-8 select-none overflow-hidden font-outfit">
+    <div className="relative w-full flex flex-col px-3 sm:px-5 pt-0 pb-8 select-none overflow-hidden font-sans">
       
       {/* ================= TOP HEADER SCRIPT TEXT & TAGLINE ================= */}
       <div className="w-full flex items-start justify-between z-10 pt-0 pb-1">
         {/* Left Script */}
         <motion.div
           initial={{ opacity: 0, x: -30, rotate: -10 }}
-          animate={isLoaded ? { opacity: 1, x: 0, rotate: -6 } : { opacity: 0, x: -30, rotate: -10 }}
+          animate={isLoaded ? { opacity: 1, x: 0, rotate: -4 } : { opacity: 0, x: -30, rotate: -10 }}
           transition={{ duration: 0.8, delay: 0.1 }}
           className="flex flex-col"
         >
-          <p className="font-script text-2xl sm:text-3xl text-gold-shimmer leading-tight drop-shadow-[0_2px_10px_rgba(234,168,56,0.6)]">
+          <p className="font-serif-luxury italic text-2xl sm:text-3xl text-gold-shimmer leading-tight drop-shadow-[0_2px_10px_rgba(234,168,56,0.5)] font-normal tracking-wide">
             Capture <br />
             More <br />
             Live Bolder
@@ -69,20 +69,20 @@ export default function MobileHero({
           transition={{ duration: 0.8, delay: 0.15 }}
           className="text-right"
         >
-          <p className="text-[9px] sm:text-[10px] tracking-[0.2em] text-gray-100 font-extrabold uppercase">
+          <p className="text-[9px] sm:text-[10px] tracking-[0.25em] text-gray-200 font-semibold uppercase">
             Compact
           </p>
-          <p className="text-[9px] sm:text-[10px] tracking-[0.2em] text-gray-100 font-extrabold uppercase">
+          <p className="text-[9px] sm:text-[10px] tracking-[0.25em] text-gray-200 font-semibold uppercase">
             Powerful
           </p>
-          <p className="text-[9px] sm:text-[10px] tracking-[0.2em] text-gray-300 font-semibold uppercase">
+          <p className="text-[9px] sm:text-[10px] tracking-[0.25em] text-gray-400 font-normal uppercase">
             Everywhere
           </p>
           <motion.div
             initial={{ width: 0 }}
             animate={isLoaded ? { width: 28 } : { width: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
-            className="h-[2px] bg-[#EAA838] ml-auto mt-0.5 rounded-full shadow-[0_0_8px_#EAA838]"
+            className="h-[2px] bg-[#EAA838] ml-auto mt-1 rounded-full shadow-[0_0_8px_#EAA838]"
           />
           
           <AnimatePresence mode="wait">
@@ -92,7 +92,7 @@ export default function MobileHero({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -5 }}
               transition={{ duration: 0.4 }}
-              className="font-script text-lg sm:text-xl text-gold-shimmer transform -rotate-6 mt-2 leading-tight drop-shadow-[0_2px_8px_rgba(234,168,56,0.5)]"
+              className="font-serif-luxury italic text-lg sm:text-xl text-gold-shimmer transform -rotate-4 mt-2 leading-tight drop-shadow-[0_2px_8px_rgba(234,168,56,0.4)] font-normal tracking-wide"
             >
               {product.scriptTop} <br />
               {product.scriptSub}
@@ -105,7 +105,7 @@ export default function MobileHero({
       <div className="relative w-full flex items-center justify-between my-1 z-10 min-h-[380px] sm:min-h-[420px]">
         
         {/* 1. LEFT COLUMN: 5 SPECS BADGES */}
-        <div className="w-[82px] sm:w-[94px] flex flex-col gap-3 z-20 shrink-0">
+        <div className="w-[88px] sm:w-[100px] flex flex-col gap-3 z-20 shrink-0">
           <AnimatePresence mode="wait">
             <motion.div
               key={product.id + "-mobile-specs"}
@@ -117,7 +117,7 @@ export default function MobileHero({
             >
               {product.mobileSpecs.map((badge, idx) => (
                 <div key={badge.id} className="flex items-center gap-2">
-                  <div className="w-8 h-8 rounded-full border border-white/30 bg-black/60 backdrop-blur-md flex items-center justify-center text-[10px] font-black text-white shadow-[0_0_10px_rgba(255,255,255,0.15)] shrink-0">
+                  <div className="w-8 h-8 rounded-full border border-white/25 bg-black/60 backdrop-blur-md flex items-center justify-center text-[10px] font-bold text-white shadow-[0_0_10px_rgba(255,255,255,0.1)] shrink-0">
                     {badge.icon === "4k" ? (
                       "4K"
                     ) : badge.icon === "video" ? (
@@ -132,9 +132,9 @@ export default function MobileHero({
                       <Feather className="w-3.5 h-3.5 text-[#EAA838]" />
                     )}
                   </div>
-                  <div className="flex flex-col leading-none">
-                    <span className="text-[10px] sm:text-[11px] font-extrabold text-white">{badge.title}</span>
-                    <span className="text-[7.5px] sm:text-[8px] text-gray-300 uppercase tracking-tight font-medium">
+                  <div className="flex flex-col leading-tight">
+                    <span className="text-[10px] sm:text-[11px] font-semibold text-white tracking-wide">{badge.title}</span>
+                    <span className="text-[7.5px] sm:text-[8px] text-gray-300 uppercase tracking-wider font-normal">
                       {badge.subtitle}
                     </span>
                   </div>
@@ -299,7 +299,7 @@ export default function MobileHero({
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.95 }}
           onClick={() => onShopNow(product)}
-          className="w-full max-w-[320px] py-3.5 rounded-full bg-gold-gradient text-black font-extrabold text-sm shadow-[0_0_30px_rgba(234,168,56,0.55)] flex items-center justify-center gap-2 transition-transform"
+          className="w-full max-w-[320px] py-3.5 rounded-full bg-gold-gradient text-black font-semibold text-sm tracking-wide shadow-[0_0_25px_rgba(234,168,56,0.45)] flex items-center justify-center gap-2 transition-transform"
         >
           <ShoppingBag className="w-4 h-4 text-black" />
           <span>Shop {product.headline} (₹{product.price.toLocaleString("en-IN")})</span>
@@ -312,10 +312,10 @@ export default function MobileHero({
             <button
               key={prod.id}
               onClick={() => setCurrentIndex(idx)}
-              className={`px-3 py-1 text-[11px] font-bold transition-all rounded-full ${
+              className={`px-3.5 py-1 text-xs font-medium tracking-wide transition-all rounded-full ${
                 currentIndex === idx
                   ? "bg-[#EAA838] text-black shadow-[0_0_8px_#EAA838]"
-                  : "bg-white/20 text-gray-300"
+                  : "bg-white/15 text-gray-300 hover:bg-white/25"
               }`}
             >
               {prod.headline}
@@ -324,7 +324,7 @@ export default function MobileHero({
         </div>
 
         {/* Scroll Down Indicator */}
-        <div className="flex flex-col items-center gap-0.5 text-[9px] text-gray-300 uppercase tracking-widest pt-1">
+        <div className="flex flex-col items-center gap-0.5 text-[9px] text-gray-300 uppercase tracking-[0.25em] font-medium pt-1">
           <span>Scroll Down</span>
           <ChevronDown className="w-3.5 h-3.5 text-[#EAA838] animate-bounce" />
         </div>
@@ -368,7 +368,7 @@ export default function MobileHero({
       >
         
         {/* Eyebrow */}
-        <p className="text-[10px] tracking-[0.3em] text-gray-200 font-semibold uppercase">
+        <p className="text-[10px] tracking-[0.3em] text-gray-300 font-medium uppercase">
           Capture • Create • Explore
         </p>
 
@@ -382,10 +382,10 @@ export default function MobileHero({
             transition={{ duration: 0.4 }}
             className="space-y-0.5"
           >
-            <h2 className="text-3xl font-extrabold text-white tracking-tight">
+            <h2 className="text-3xl font-bold text-white tracking-tight">
               {product.headline}
             </h2>
-            <h3 className="text-3xl font-serif-luxury italic text-gold-shimmer drop-shadow-[0_2px_20px_rgba(244,196,99,0.5)]">
+            <h3 className="text-3xl font-serif-luxury italic font-normal text-gold-shimmer drop-shadow-[0_2px_20px_rgba(244,196,99,0.5)]">
               {product.headlineHighlight}
             </h3>
           </motion.div>
@@ -405,8 +405,8 @@ export default function MobileHero({
             className="p-3 rounded-xl bg-white/[0.05] border border-white/15 backdrop-blur-md flex flex-col items-center text-center shadow-lg"
           >
             <Diamond className="w-4 h-4 text-[#EAA838] mb-1" />
-            <p className="text-xs font-bold text-white">Premium Gadgets</p>
-            <p className="text-[9px] text-gray-300">Curated for You</p>
+            <p className="text-xs font-semibold text-white">Premium Gadgets</p>
+            <p className="text-[9px] text-gray-400">Curated for You</p>
           </motion.div>
 
           {/* 100% Secure Payment */}
@@ -415,8 +415,8 @@ export default function MobileHero({
             className="p-3 rounded-xl bg-white/[0.05] border border-white/15 backdrop-blur-md flex flex-col items-center text-center shadow-lg"
           >
             <ShieldCheck className="w-4 h-4 text-[#EAA838] mb-1" />
-            <p className="text-xs font-bold text-white">100% Secure Payment</p>
-            <p className="text-[9px] text-gray-300">Shop with Confidence</p>
+            <p className="text-xs font-semibold text-white">100% Secure Payment</p>
+            <p className="text-[9px] text-gray-400">Shop with Confidence</p>
           </motion.div>
 
           {/* Free Shipping Across India */}
@@ -425,8 +425,8 @@ export default function MobileHero({
             className="p-3 rounded-xl bg-white/[0.05] border border-white/15 backdrop-blur-md flex flex-col items-center text-center shadow-lg"
           >
             <Truck className="w-4 h-4 text-[#EAA838] mb-1" />
-            <p className="text-xs font-bold text-white">Free Shipping Across India</p>
-            <p className="text-[9px] text-gray-300">Fast & Reliable</p>
+            <p className="text-xs font-semibold text-white">Free Shipping Across India</p>
+            <p className="text-[9px] text-gray-400">Fast & Reliable</p>
           </motion.div>
 
           {/* Dedicated Support */}
@@ -435,8 +435,8 @@ export default function MobileHero({
             className="p-3 rounded-xl bg-white/[0.05] border border-white/15 backdrop-blur-md flex flex-col items-center text-center shadow-lg"
           >
             <Headphones className="w-4 h-4 text-[#EAA838] mb-1" />
-            <p className="text-xs font-bold text-white">Dedicated Support</p>
-            <p className="text-[9px] text-gray-300">We&apos;re Here to Help</p>
+            <p className="text-xs font-semibold text-white">Dedicated Support</p>
+            <p className="text-[9px] text-gray-400">We&apos;re Here to Help</p>
           </motion.div>
 
         </div>
