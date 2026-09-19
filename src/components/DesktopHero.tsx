@@ -383,7 +383,11 @@ export default function DesktopHero({
             >
               <RotateCw className="w-3.5 h-3.5 text-[#EAA838]" />
               <span className="text-[10px] font-bold text-white tracking-wider uppercase">
-                {product.id === "ashren-t1-drone" ? "360° FPV" : "180° ROTATION"}
+                {product.id === "ashren-t1-drone"
+                  ? "360° FPV"
+                  : product.id === "ashren-aquago-4k"
+                  ? "IPX8 WATERPROOF"
+                  : "180° ROTATION"}
               </span>
             </motion.div>
           </motion.div>

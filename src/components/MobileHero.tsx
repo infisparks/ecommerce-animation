@@ -277,9 +277,19 @@ export default function MobileHero({
           >
             <RotateCw className="w-3 h-3 text-[#EAA838]" />
             <div className="text-[8px] font-bold text-white flex flex-col leading-tight">
-              <span>{product.id === "ashren-t1-drone" ? "360°" : "180°"}</span>
+              <span>
+                {product.id === "ashren-t1-drone"
+                  ? "360°"
+                  : product.id === "ashren-aquago-4k"
+                  ? "IPX8"
+                  : "180°"}
+              </span>
               <span className="text-[6.5px] text-gray-300 font-semibold uppercase">
-                {product.id === "ashren-t1-drone" ? "FPV" : "ROTATION"}
+                {product.id === "ashren-t1-drone"
+                  ? "FPV"
+                  : product.id === "ashren-aquago-4k"
+                  ? "WATERPROOF"
+                  : "ROTATION"}
               </span>
             </div>
           </motion.div>
