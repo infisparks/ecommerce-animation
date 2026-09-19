@@ -323,7 +323,7 @@ export default function ScrollExperience({
         {/* 3 Story Showcase Cards with Natural 3D Cutout Pop-Out */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10 pt-4">
           
-          {/* Card 1: Mountain Alpine Expedition */}
+          {/* Card 1: Camera Card 1 (Mountain Alpine Expedition) */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -338,7 +338,7 @@ export default function ScrollExperience({
             >
               <Image
                 src="/card/camera/card1.png"
-                alt="Travel Showcase"
+                alt="Camera Travel Showcase"
                 width={500}
                 height={280}
                 className="w-full h-auto object-contain"
@@ -366,7 +366,7 @@ export default function ScrollExperience({
             </div>
           </motion.div>
 
-          {/* Card 2: Scuba Diving 4K Vlog */}
+          {/* Card 2: Drone Card 2 (Aerial FPV Flight & Sunset) */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -376,55 +376,12 @@ export default function ScrollExperience({
           >
             {/* 3D Floating Cutout Image */}
             <div
-              onClick={() => onOpenVideo("Underwater Coral Reef Scuba 4K Vlog", "VLOG & EXPLORATION")}
+              onClick={() => onOpenVideo("Sunset Ridge 4K FPV Flight", "AERIAL CINEMATOGRAPHY")}
               className="relative cursor-pointer transition-transform duration-500 group-hover:scale-105 filter drop-shadow-[0_20px_35px_rgba(0,0,0,0.9)] group-hover:drop-shadow-[0_25px_45px_rgba(234,168,56,0.4)] mb-4"
             >
               <Image
-                src="/card/camera/card2.png"
-                alt="Vlog Showcase"
-                width={500}
-                height={280}
-                className="w-full h-auto object-contain"
-              />
-            </div>
-
-            {/* Testimonial Box */}
-            <div className="p-5 rounded-2xl bg-[#0d1017]/80 border border-white/10 backdrop-blur-md space-y-3 shadow-xl">
-              <div className="flex items-center gap-1 text-[#F4C463]">
-                {"★★★★★".split("").map((_, i) => (
-                  <Star key={i} className="w-3.5 h-3.5 fill-current" />
-                ))}
-                <span className="text-xs text-gray-300 font-semibold ml-1.5">4.9</span>
-              </div>
-              <p className="text-xs text-gray-200 italic leading-relaxed">
-                &ldquo;Waterproof straight out of the box. Colors under the Andaman reef popped without needing tedious post-production grading.&rdquo;
-              </p>
-              <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs">
-                <div>
-                  <p className="font-bold text-white">Rhea Sen</p>
-                  <p className="text-[10px] text-gray-400">Travel & Dive Creator</p>
-                </div>
-                <span className="text-[10px] text-[#EAA838] font-bold uppercase tracking-wider">Verified User</span>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Card 3: Aerial Night Drone Cinematic */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-50px" }}
-            transition={{ duration: 0.7, delay: 0.3 }}
-            className="group flex flex-col justify-between"
-          >
-            {/* 3D Floating Cutout Image */}
-            <div
-              onClick={() => onOpenVideo("Cityscape Night 4K Drone Aerial", "CREATIVE TIMELAPSE")}
-              className="relative cursor-pointer transition-transform duration-500 group-hover:scale-105 filter drop-shadow-[0_20px_35px_rgba(0,0,0,0.9)] group-hover:drop-shadow-[0_25px_45px_rgba(234,168,56,0.4)] mb-4"
-            >
-              <Image
-                src="/card/drone/card1.png"
-                alt="Drone Showcase"
+                src="/card/drone/card2.png"
+                alt="Drone Aerial Showcase"
                 width={500}
                 height={280}
                 className="w-full h-auto object-contain"
@@ -446,6 +403,49 @@ export default function ScrollExperience({
                 <div>
                   <p className="font-bold text-white">Devendra Patel</p>
                   <p className="text-[10px] text-gray-400">Cinematographer & VFX Artist</p>
+                </div>
+                <span className="text-[10px] text-[#EAA838] font-bold uppercase tracking-wider">Verified User</span>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Card 3: Camera Card 3 (Cityscape Creative Timelapse) */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.7, delay: 0.3 }}
+            className="group flex flex-col justify-between"
+          >
+            {/* 3D Floating Cutout Image */}
+            <div
+              onClick={() => onOpenVideo("Cityscape Night 4K Vlog & Timelapse", "CREATIVE TIMELAPSE")}
+              className="relative cursor-pointer transition-transform duration-500 group-hover:scale-105 filter drop-shadow-[0_20px_35px_rgba(0,0,0,0.9)] group-hover:drop-shadow-[0_25px_45px_rgba(234,168,56,0.4)] mb-4"
+            >
+              <Image
+                src="/card/camera/card3.png"
+                alt="Camera Create Showcase"
+                width={500}
+                height={280}
+                className="w-full h-auto object-contain"
+              />
+            </div>
+
+            {/* Testimonial Box */}
+            <div className="p-5 rounded-2xl bg-[#0d1017]/80 border border-white/10 backdrop-blur-md space-y-3 shadow-xl">
+              <div className="flex items-center gap-1 text-[#F4C463]">
+                {"★★★★★".split("").map((_, i) => (
+                  <Star key={i} className="w-3.5 h-3.5 fill-current" />
+                ))}
+                <span className="text-xs text-gray-300 font-semibold ml-1.5">4.9</span>
+              </div>
+              <p className="text-xs text-gray-200 italic leading-relaxed">
+                &ldquo;Vibrant color rendering and night stabilization make handheld nighttime street photography a breeze.&rdquo;
+              </p>
+              <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs">
+                <div>
+                  <p className="font-bold text-white">Rhea Sen</p>
+                  <p className="text-[10px] text-gray-400">Travel & Creative Filmmaker</p>
                 </div>
                 <span className="text-[10px] text-[#EAA838] font-bold uppercase tracking-wider">Verified User</span>
               </div>
