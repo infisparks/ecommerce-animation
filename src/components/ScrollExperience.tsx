@@ -46,6 +46,9 @@ export default function ScrollExperience({
       {/* =========================================================================
           SECTION 1: 3D FLAGSHIP COLLECTION SHOWCASE
           ========================================================================= */}
+      {/* =========================================================================
+          SECTION 1: 3D FLAGSHIP COLLECTION SHOWCASE
+          ========================================================================= */}
       <section className="relative">
         {/* Section Header */}
         <motion.div
@@ -53,119 +56,129 @@ export default function ScrollExperience({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.8 }}
-          className="text-center max-w-2xl mx-auto mb-10 sm:mb-16"
+          className="text-center max-w-2xl mx-auto mb-12 sm:mb-16"
         >
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.06] border border-[#EAA838]/40 text-[#F4C463] text-xs font-semibold uppercase tracking-[0.25em] mb-4 backdrop-blur-md shadow-[0_0_15px_rgba(234,168,56,0.2)]">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.06] border border-[#EAA838]/40 text-[#F4C463] text-xs font-semibold uppercase tracking-[0.25em] mb-4 backdrop-blur-md shadow-[0_0_20px_rgba(234,168,56,0.25)]">
             <Sparkles className="w-3.5 h-3.5 text-[#EAA838]" />
             <span>The Flagship Trio</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight">
             Engineered For Every <br />
-            <span className="font-serif-luxury italic font-normal text-gold-shimmer drop-shadow-[0_4px_25px_rgba(244,196,99,0.4)]">
+            <span className="font-serif-luxury italic font-normal text-gold-shimmer drop-shadow-[0_4px_25px_rgba(244,196,99,0.45)]">
               Dimension of Storytelling
             </span>
           </h2>
-          <p className="text-xs sm:text-base text-gray-300 mt-3 sm:mt-4 leading-relaxed max-w-xl mx-auto">
+          <p className="text-xs sm:text-base text-gray-300/90 mt-3 sm:mt-4 leading-relaxed max-w-xl mx-auto">
             Explore our precision-crafted ecosystem designed for creators, adventurers, and filmmakers.
           </p>
         </motion.div>
 
-        {/* Mobile Swipeable Snap Carousel / Desktop 3-Column Grid */}
-        <div className="flex md:grid md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-none">
+        {/* 3 Master Glassmorphic Product Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
           {PRODUCTS.map((prod, index) => (
             <motion.div
               key={prod.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              whileHover={{ y: -6 }}
-              className="w-[85vw] sm:w-[320px] md:w-auto shrink-0 snap-center group relative rounded-3xl p-5 sm:p-6 lg:p-7 bg-[#0d1017]/90 hover:bg-[#111520]/95 border border-white/10 hover:border-[#EAA838]/50 backdrop-blur-xl shadow-2xl transition-all flex flex-col justify-between overflow-hidden"
+              transition={{ duration: 0.6, delay: index * 0.12 }}
+              whileHover={{ y: -8 }}
+              className="group relative rounded-3xl p-6 sm:p-7 bg-gradient-to-b from-[#141824]/90 via-[#0d1017]/95 to-[#080a0f]/98 hover:from-[#191e2e]/95 hover:via-[#10141f]/98 hover:to-[#0a0d14]/100 border border-white/15 hover:border-[#EAA838]/70 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.7)] hover:shadow-[0_25px_60px_rgba(234,168,56,0.28)] transition-all duration-500 flex flex-col justify-between overflow-hidden"
             >
-              {/* Subtle Ambient Radial Highlight */}
-              <div className="absolute top-0 right-0 w-44 h-44 bg-[#EAA838]/10 group-hover:bg-[#EAA838]/15 blur-3xl rounded-full transition-all -z-10 pointer-events-none" />
+              {/* Luxury Top Light Sheen Highlight */}
+              <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none" />
+              
+              {/* Subtle Radial Ambient Core Glow */}
+              <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-52 h-52 bg-[#EAA838]/15 group-hover:bg-[#EAA838]/25 blur-[90px] rounded-full transition-all duration-700 pointer-events-none -z-10" />
 
               <div>
-                {/* Badge Category & Price */}
-                <div className="flex items-center justify-between mb-3 gap-2">
-                  <span className="text-[9px] sm:text-[10px] font-bold tracking-wider uppercase text-[#F4C463] bg-white/5 px-2.5 py-1 rounded-full border border-white/10">
-                    {prod.category}
-                  </span>
-                  <span className="text-sm sm:text-base font-bold text-white">
-                    ₹{prod.price.toLocaleString("en-IN")}
-                  </span>
+                {/* Eyebrow Category & Pricing */}
+                <div className="flex items-center justify-between gap-2 mb-3">
+                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.06] border border-[#EAA838]/30 backdrop-blur-md shadow-sm">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#EAA838] animate-pulse" />
+                    <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#F4C463]">
+                      {prod.category}
+                    </span>
+                  </div>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-[11px] text-gray-400 font-medium line-through opacity-70">
+                      ₹{(prod.price * 1.25).toFixed(0)}
+                    </span>
+                    <span className="text-lg sm:text-xl font-extrabold text-white tracking-tight drop-shadow-sm">
+                      ₹{prod.price.toLocaleString("en-IN")}
+                    </span>
+                  </div>
                 </div>
 
-                {/* Product Title */}
-                <h3 className="text-base sm:text-lg lg:text-xl font-bold text-white tracking-tight group-hover:text-[#FFF1C5] transition-colors line-clamp-1">
+                {/* Product Title & Subtitle */}
+                <h3 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight group-hover:text-[#FFF1C5] transition-colors leading-snug">
                   {prod.name}
                 </h3>
-                <p className="text-xs text-gray-400 mt-1 mb-3 line-clamp-2 leading-relaxed">
+                <p className="text-xs text-gray-300/80 mt-2 mb-4 line-clamp-2 leading-relaxed">
                   {prod.subtitle}
                 </p>
 
-                {/* Floating Product Image Container */}
-                <div className="relative w-full h-44 sm:h-52 lg:h-60 my-2 flex items-center justify-center">
-                  {/* Glowing Orbit Ring */}
-                  <div className="absolute w-36 sm:w-44 h-36 sm:h-44 rounded-full border border-[#EAA838]/20 group-hover:border-[#EAA838]/50 group-hover:scale-105 transition-all duration-500 pointer-events-none" />
+                {/* Hero Product Image Stage */}
+                <div className="relative w-full h-56 sm:h-64 my-4 flex items-center justify-center">
+                  {/* Outer Holographic Halo Orbit Ring */}
+                  <div className="absolute w-44 sm:w-52 h-44 sm:h-52 rounded-full border border-dashed border-[#EAA838]/25 group-hover:border-[#EAA838]/60 group-hover:rotate-45 transition-all duration-700 pointer-events-none" />
                   
+                  {/* Inner Solid Gold Glow Ring */}
+                  <div className="absolute w-36 sm:w-44 h-36 sm:h-44 rounded-full border border-[#EAA838]/30 group-hover:scale-105 transition-all duration-500 pointer-events-none shadow-[0_0_20px_rgba(234,168,56,0.2)]" />
+                  
+                  {/* Bottom Radial Floor Shadow */}
+                  <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-6 bg-black/80 blur-md rounded-full pointer-events-none" />
+
                   <motion.div
-                    whileHover={{ scale: 1.06 }}
+                    whileHover={{ scale: 1.08, y: -4 }}
                     transition={{ duration: 0.4 }}
-                    className="relative w-full h-full"
+                    className="relative w-full h-full will-change-transform"
                   >
                     <Image
                       src={prod.image}
                       alt={prod.name}
                       fill
-                      sizes="(max-width: 768px) 85vw, 33vw"
-                      className="object-contain filter drop-shadow-[0_12px_25px_rgba(0,0,0,0.85)]"
+                      sizes="(max-width: 768px) 100vw, 33vw"
+                      className="object-contain filter drop-shadow-[0_15px_35px_rgba(0,0,0,0.9)] group-hover:drop-shadow-[0_20px_45px_rgba(234,168,56,0.35)] transition-all duration-500"
                     />
                   </motion.div>
                 </div>
 
-                {/* 3 Spec Badges */}
-                <div className="grid grid-cols-3 gap-2 py-3 border-t border-white/10 my-3 text-center">
-                  <div className="p-2 rounded-xl bg-white/[0.03] border border-white/5">
-                    <p className="text-xs font-bold text-white">{prod.badge1.value}</p>
-                    <p className="text-[8px] sm:text-[9px] text-gray-400 uppercase tracking-tight truncate mt-0.5">{prod.badge1.label}</p>
+                {/* Refined Glassmorphic 3-Spec Pods */}
+                <div className="grid grid-cols-3 gap-2.5 my-4">
+                  <div className="p-2.5 sm:p-3 rounded-2xl bg-white/[0.04] group-hover:bg-white/[0.07] border border-white/10 group-hover:border-[#EAA838]/30 transition-all text-center flex flex-col justify-center">
+                    <p className="text-xs sm:text-sm font-extrabold text-white tracking-tight">{prod.badge1.value}</p>
+                    <p className="text-[9px] font-semibold text-[#EAA838] uppercase tracking-wider mt-0.5">{prod.badge1.label}</p>
                   </div>
-                  <div className="p-2 rounded-xl bg-white/[0.03] border border-white/5">
-                    <p className="text-xs font-bold text-white">{prod.badge2.value}</p>
-                    <p className="text-[8px] sm:text-[9px] text-gray-400 uppercase tracking-tight truncate mt-0.5">{prod.badge2.label}</p>
+                  <div className="p-2.5 sm:p-3 rounded-2xl bg-white/[0.04] group-hover:bg-white/[0.07] border border-white/10 group-hover:border-[#EAA838]/30 transition-all text-center flex flex-col justify-center">
+                    <p className="text-xs sm:text-sm font-extrabold text-white tracking-tight">{prod.badge2.value}</p>
+                    <p className="text-[9px] font-semibold text-[#EAA838] uppercase tracking-wider mt-0.5">{prod.badge2.label}</p>
                   </div>
-                  <div className="p-2 rounded-xl bg-white/[0.03] border border-white/5">
-                    <p className="text-xs font-bold text-white">{prod.badge3.value}</p>
-                    <p className="text-[8px] sm:text-[9px] text-gray-400 uppercase tracking-tight truncate mt-0.5">{prod.badge3.label}</p>
+                  <div className="p-2.5 sm:p-3 rounded-2xl bg-white/[0.04] group-hover:bg-white/[0.07] border border-white/10 group-hover:border-[#EAA838]/30 transition-all text-center flex flex-col justify-center">
+                    <p className="text-xs sm:text-sm font-extrabold text-white tracking-tight">{prod.badge3.value}</p>
+                    <p className="text-[9px] font-semibold text-[#EAA838] uppercase tracking-wider mt-0.5">{prod.badge3.label}</p>
                   </div>
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex items-center gap-2.5 pt-1">
+              <div className="flex items-center gap-3 pt-2">
                 <button
                   onClick={() => onShopNow(prod)}
-                  className="flex-1 py-2.5 sm:py-3 px-4 rounded-full bg-gold-gradient hover:bg-gold-gradient-hover text-black font-semibold text-xs tracking-wide shadow-[0_0_15px_rgba(234,168,56,0.3)] flex items-center justify-center gap-1.5 transition-transform group-hover:scale-[1.02]"
+                  className="flex-1 py-3.5 px-5 rounded-2xl bg-gradient-to-r from-[#FADB7F] via-[#EAA838] to-[#C98418] hover:from-[#FFF1C5] hover:via-[#F4C463] hover:to-[#EAA838] text-black font-extrabold text-xs sm:text-sm tracking-wide shadow-[0_4px_25px_rgba(234,168,56,0.4)] hover:shadow-[0_6px_35px_rgba(234,168,56,0.65)] flex items-center justify-center gap-2 transition-all active:scale-95 group/btn"
                 >
-                  <ShoppingBag className="w-3.5 h-3.5" />
+                  <ShoppingBag className="w-4 h-4 text-black group-hover/btn:scale-110 transition-transform" />
                   <span>Add to Cart</span>
                 </button>
                 <button
                   onClick={() => onOpenVideo(`${prod.name} 4K Cinematic Showcase`, prod.category)}
                   aria-label="Play video demo"
-                  className="p-2.5 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white flex items-center justify-center transition-colors"
+                  className="p-3.5 rounded-2xl bg-white/[0.06] hover:bg-[#EAA838] hover:text-black border border-white/20 hover:border-[#EAA838] text-white flex items-center justify-center transition-all shadow-md active:scale-95 group/play"
                 >
-                  <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
+                  <Play className="w-4 h-4 fill-current ml-0.5 group-hover/play:scale-110 transition-transform" />
                 </button>
               </div>
             </motion.div>
-          ))}
-        </div>
-
-        {/* Mobile Swipe Cue */}
-        <div className="flex md:hidden items-center justify-center gap-1.5 pt-3">
-          {PRODUCTS.map((p, i) => (
-            <div key={p.id} className={`h-1.5 rounded-full transition-all ${i === 0 ? "w-6 bg-[#EAA838]" : "w-1.5 bg-white/20"}`} />
           ))}
         </div>
       </section>
