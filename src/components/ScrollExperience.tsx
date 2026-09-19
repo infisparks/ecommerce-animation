@@ -53,7 +53,7 @@ export default function ScrollExperience({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.8 }}
-          className="text-center max-w-2xl mx-auto mb-12 sm:mb-16"
+          className="text-center max-w-2xl mx-auto mb-10 sm:mb-16"
         >
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/[0.06] border border-[#EAA838]/40 text-[#F4C463] text-xs font-semibold uppercase tracking-[0.25em] mb-4 backdrop-blur-md shadow-[0_0_15px_rgba(234,168,56,0.2)]">
             <Sparkles className="w-3.5 h-3.5 text-[#EAA838]" />
@@ -65,13 +65,13 @@ export default function ScrollExperience({
               Dimension of Storytelling
             </span>
           </h2>
-          <p className="text-sm sm:text-base text-gray-300 mt-4 leading-relaxed">
-            From pocket-sized AI gimbal cameras to all-weather underwater gear and autonomous 4K FPV drones, explore our master-crafted creator ecosystem.
+          <p className="text-xs sm:text-base text-gray-300 mt-3 sm:mt-4 leading-relaxed max-w-xl mx-auto">
+            Explore our precision-crafted ecosystem designed for creators, adventurers, and filmmakers.
           </p>
         </motion.div>
 
-        {/* 3 Product Cards Grid (2-column on mobile, 3-column on desktop) */}
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-8">
+        {/* Mobile Swipeable Snap Carousel / Desktop 3-Column Grid */}
+        <div className="flex md:grid md:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-none">
           {PRODUCTS.map((prod, index) => (
             <motion.div
               key={prod.id}
@@ -80,85 +80,92 @@ export default function ScrollExperience({
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               whileHover={{ y: -6 }}
-              className="group relative rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 lg:p-7 bg-gradient-to-b from-white/[0.08] to-white/[0.02] border border-white/15 hover:border-[#EAA838]/60 backdrop-blur-xl shadow-[0_15px_35px_rgba(0,0,0,0.5)] hover:shadow-[0_20px_50px_rgba(234,168,56,0.25)] transition-all flex flex-col justify-between overflow-hidden"
+              className="w-[85vw] sm:w-[320px] md:w-auto shrink-0 snap-center group relative rounded-3xl p-5 sm:p-6 lg:p-7 bg-[#0d1017]/90 hover:bg-[#111520]/95 border border-white/10 hover:border-[#EAA838]/50 backdrop-blur-xl shadow-2xl transition-all flex flex-col justify-between overflow-hidden"
             >
-              {/* Background Ambient Glow */}
-              <div className="absolute top-0 right-0 w-36 sm:w-48 h-36 sm:h-48 bg-[#EAA838]/10 group-hover:bg-[#EAA838]/20 blur-3xl rounded-full transition-all -z-10" />
+              {/* Subtle Ambient Radial Highlight */}
+              <div className="absolute top-0 right-0 w-44 h-44 bg-[#EAA838]/10 group-hover:bg-[#EAA838]/15 blur-3xl rounded-full transition-all -z-10 pointer-events-none" />
 
               <div>
                 {/* Badge Category & Price */}
-                <div className="flex items-center justify-between mb-2.5 sm:mb-4 gap-1">
-                  <span className="text-[7.5px] sm:text-[10px] font-bold tracking-wider uppercase text-[#F4C463] bg-black/50 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full border border-white/10 truncate">
+                <div className="flex items-center justify-between mb-3 gap-2">
+                  <span className="text-[9px] sm:text-[10px] font-bold tracking-wider uppercase text-[#F4C463] bg-white/5 px-2.5 py-1 rounded-full border border-white/10">
                     {prod.category}
                   </span>
-                  <span className="text-xs sm:text-base font-bold text-white shrink-0">
+                  <span className="text-sm sm:text-base font-bold text-white">
                     ₹{prod.price.toLocaleString("en-IN")}
                   </span>
                 </div>
 
                 {/* Product Title */}
-                <h3 className="text-xs sm:text-lg lg:text-xl font-bold text-white tracking-tight group-hover:text-[#FFF1C5] transition-colors line-clamp-1">
+                <h3 className="text-base sm:text-lg lg:text-xl font-bold text-white tracking-tight group-hover:text-[#FFF1C5] transition-colors line-clamp-1">
                   {prod.name}
                 </h3>
-                <p className="hidden sm:block text-xs text-gray-400 mt-1 mb-4 line-clamp-2 leading-relaxed">
+                <p className="text-xs text-gray-400 mt-1 mb-3 line-clamp-2 leading-relaxed">
                   {prod.subtitle}
                 </p>
 
                 {/* Floating Product Image Container */}
-                <div className="relative w-full h-32 sm:h-52 lg:h-64 my-1 sm:my-2 flex items-center justify-center">
-                  {/* Orbit Ring Background */}
-                  <div className="absolute w-28 sm:w-44 h-28 sm:h-44 rounded-full border border-[#EAA838]/20 group-hover:border-[#EAA838]/50 group-hover:scale-110 transition-all duration-700 pointer-events-none" />
+                <div className="relative w-full h-44 sm:h-52 lg:h-60 my-2 flex items-center justify-center">
+                  {/* Glowing Orbit Ring */}
+                  <div className="absolute w-36 sm:w-44 h-36 sm:h-44 rounded-full border border-[#EAA838]/20 group-hover:border-[#EAA838]/50 group-hover:scale-105 transition-all duration-500 pointer-events-none" />
                   
                   <motion.div
-                    whileHover={{ scale: 1.08, rotate: [0, -2, 2, 0] }}
-                    transition={{ duration: 0.5 }}
+                    whileHover={{ scale: 1.06 }}
+                    transition={{ duration: 0.4 }}
                     className="relative w-full h-full"
                   >
                     <Image
                       src={prod.image}
                       alt={prod.name}
                       fill
-                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 33vw"
-                      className="object-contain filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.85)]"
+                      sizes="(max-width: 768px) 85vw, 33vw"
+                      className="object-contain filter drop-shadow-[0_12px_25px_rgba(0,0,0,0.85)]"
                     />
                   </motion.div>
                 </div>
 
-                {/* 3 Spec Pill Badges */}
-                <div className="grid grid-cols-3 gap-1 sm:gap-2 py-2 sm:py-4 border-t border-white/10 my-2 sm:my-4 text-center">
-                  <div className="p-1 sm:p-2 rounded-lg sm:rounded-xl bg-black/40 border border-white/5">
-                    <p className="text-[9px] sm:text-xs font-bold text-white truncate">{prod.badge1.value}</p>
-                    <p className="text-[6.5px] sm:text-[9px] text-gray-400 uppercase tracking-tight truncate">{prod.badge1.label}</p>
+                {/* 3 Spec Badges */}
+                <div className="grid grid-cols-3 gap-2 py-3 border-t border-white/10 my-3 text-center">
+                  <div className="p-2 rounded-xl bg-white/[0.03] border border-white/5">
+                    <p className="text-xs font-bold text-white">{prod.badge1.value}</p>
+                    <p className="text-[8px] sm:text-[9px] text-gray-400 uppercase tracking-tight truncate mt-0.5">{prod.badge1.label}</p>
                   </div>
-                  <div className="p-1 sm:p-2 rounded-lg sm:rounded-xl bg-black/40 border border-white/5">
-                    <p className="text-[9px] sm:text-xs font-bold text-white truncate">{prod.badge2.value}</p>
-                    <p className="text-[6.5px] sm:text-[9px] text-gray-400 uppercase tracking-tight truncate">{prod.badge2.label}</p>
+                  <div className="p-2 rounded-xl bg-white/[0.03] border border-white/5">
+                    <p className="text-xs font-bold text-white">{prod.badge2.value}</p>
+                    <p className="text-[8px] sm:text-[9px] text-gray-400 uppercase tracking-tight truncate mt-0.5">{prod.badge2.label}</p>
                   </div>
-                  <div className="p-1 sm:p-2 rounded-lg sm:rounded-xl bg-black/40 border border-white/5">
-                    <p className="text-[9px] sm:text-xs font-bold text-white truncate">{prod.badge3.value}</p>
-                    <p className="text-[6.5px] sm:text-[9px] text-gray-400 uppercase tracking-tight truncate">{prod.badge3.label}</p>
+                  <div className="p-2 rounded-xl bg-white/[0.03] border border-white/5">
+                    <p className="text-xs font-bold text-white">{prod.badge3.value}</p>
+                    <p className="text-[8px] sm:text-[9px] text-gray-400 uppercase tracking-tight truncate mt-0.5">{prod.badge3.label}</p>
                   </div>
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex items-center gap-1.5 sm:gap-3 pt-1 sm:pt-2">
+              <div className="flex items-center gap-2.5 pt-1">
                 <button
                   onClick={() => onShopNow(prod)}
-                  className="flex-1 py-2 sm:py-3 px-2 sm:px-4 rounded-full bg-gold-gradient hover:bg-gold-gradient-hover text-black font-bold text-[10px] sm:text-xs tracking-tight sm:tracking-wide shadow-[0_0_15px_rgba(234,168,56,0.3)] flex items-center justify-center gap-1 transition-transform group-hover:scale-[1.02]"
+                  className="flex-1 py-2.5 sm:py-3 px-4 rounded-full bg-gold-gradient hover:bg-gold-gradient-hover text-black font-semibold text-xs tracking-wide shadow-[0_0_15px_rgba(234,168,56,0.3)] flex items-center justify-center gap-1.5 transition-transform group-hover:scale-[1.02]"
                 >
-                  <ShoppingBag className="w-3 h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
-                  <span className="truncate">Add to Cart</span>
+                  <ShoppingBag className="w-3.5 h-3.5" />
+                  <span>Add to Cart</span>
                 </button>
                 <button
-                  onClick={() => onOpenVideo(`${prod.name} 4K Cinematic Reel`, prod.category)}
+                  onClick={() => onOpenVideo(`${prod.name} 4K Cinematic Showcase`, prod.category)}
                   aria-label="Play video demo"
-                  className="p-2 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white flex items-center justify-center transition-colors shrink-0"
+                  className="p-2.5 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 text-white flex items-center justify-center transition-colors"
                 >
-                  <Play className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-current ml-0.5" />
+                  <Play className="w-3.5 h-3.5 fill-current ml-0.5" />
                 </button>
               </div>
             </motion.div>
+          ))}
+        </div>
+
+        {/* Mobile Swipe Cue */}
+        <div className="flex md:hidden items-center justify-center gap-1.5 pt-3">
+          {PRODUCTS.map((p, i) => (
+            <div key={p.id} className={`h-1.5 rounded-full transition-all ${i === 0 ? "w-6 bg-[#EAA838]" : "w-1.5 bg-white/20"}`} />
           ))}
         </div>
       </section>
