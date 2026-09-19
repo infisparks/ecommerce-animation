@@ -7,6 +7,7 @@ import DesktopHero from "@/components/DesktopHero";
 import MobileHero from "@/components/MobileHero";
 import VideoModal from "@/components/VideoModal";
 import CartDrawer from "@/components/CartDrawer";
+import SplashScreen from "@/components/SplashScreen";
 import { CheckCircle2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -90,6 +91,9 @@ export default function HomePage() {
   return (
     <main className="relative min-h-screen text-white flex flex-col justify-between overflow-x-hidden">
       
+      {/* Luxury Splash Screen on Page Reload */}
+      <SplashScreen />
+
       {/* Global Background Images (Responsive: Desktop vs Mobile) */}
       <div className="fixed inset-0 -z-30 pointer-events-none overflow-hidden">
         {/* Desktop Background */}

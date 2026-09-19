@@ -20,23 +20,34 @@ export default function Navbar({ cartCount, onOpenCart, onOpenVideo }: NavbarPro
 
   return (
     <>
-      <header className="relative z-50 w-full px-3.5 sm:px-6 lg:px-12 pt-2.5 sm:pt-4 pb-1.5 sm:pb-3">
+      <motion.header
+        initial={{ y: -40, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+        className="relative z-50 w-full px-3.5 sm:px-6 lg:px-12 pt-2.5 sm:pt-4 pb-1.5 sm:pb-3"
+      >
         <div className="max-w-[1540px] mx-auto flex items-center justify-between gap-3 sm:gap-4">
           
           {/* Mobile Left Hamburger Menu Button */}
           <div className="flex items-center lg:hidden">
-            <button
+            <motion.button
+              whileTap={{ scale: 0.9 }}
               onClick={() => setMobileMenuOpen(true)}
               aria-label="Open Menu"
               className="p-1.5 text-white/90 hover:text-white rounded-lg hover:bg-white/10 transition-colors"
             >
               <Menu className="w-6 h-6" />
-            </button>
+            </motion.button>
           </div>
 
           {/* Brand Logo */}
           <div className="flex items-center justify-center lg:justify-start">
-            <a href="#" className="relative block h-10 sm:h-12 w-36 sm:w-48 transition-transform hover:scale-105 duration-300">
+            <motion.a
+              href="#"
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.96 }}
+              className="relative block h-10 sm:h-12 w-36 sm:w-48 transition-transform duration-300"
+            >
               <Image
                 src="/logo/line-logo.png"
                 alt="Ashren Haute Marketplace"
@@ -45,16 +56,19 @@ export default function Navbar({ cartCount, onOpenCart, onOpenVideo }: NavbarPro
                 className="object-contain filter brightness-125 contrast-110 drop-shadow-[0_0_15px_rgba(244,196,99,0.6)]"
                 priority
               />
-            </a>
+            </motion.a>
           </div>
 
           {/* Desktop Navigation Links */}
           <nav className="hidden lg:flex items-center gap-1 xl:gap-2">
-            {navLinks.map((item) => {
+            {navLinks.map((item, idx) => {
               const isActive = activeNav === item;
               return (
-                <button
+                <motion.button
                   key={item}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.1 + idx * 0.05 }}
                   onClick={() => setActiveNav(item)}
                   className={`relative px-3.5 py-1.5 text-sm tracking-wide font-medium transition-colors ${
                     isActive ? "text-white font-semibold" : "text-gray-300 hover:text-white"
@@ -64,11 +78,11 @@ export default function Navbar({ cartCount, onOpenCart, onOpenVideo }: NavbarPro
                   {isActive && (
                     <motion.div
                       layoutId="activeNavIndicator"
-                      className="absolute -bottom-1 left-3 right-3 h-[2px] bg-gradient-to-r from-transparent via-[#EAA838] to-transparent shadow-[0_0_8px_#EAA838]"
+                      className="absolute -bottom-1 left-3 right-3 h-[2px] bg-gradient-to-r from-transparent via-[#EAA838] to-transparent shadow-[0_0_10px_#EAA838]"
                       transition={{ type: "spring", stiffness: 380, damping: 30 }}
                     />
                   )}
-                </button>
+                </motion.button>
               );
             })}
           </nav>
@@ -77,7 +91,12 @@ export default function Navbar({ cartCount, onOpenCart, onOpenVideo }: NavbarPro
           <div className="flex items-center gap-2 sm:gap-4">
             
             {/* Search Input Bar (Desktop) */}
-            <div className="relative hidden md:flex items-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="relative hidden md:flex items-center"
+            >
               <div className="relative flex items-center w-60 lg:w-72 xl:w-80 rounded-full bg-[#10131A]/70 border border-white/15 px-3.5 py-1.5 focus-within:border-[#EAA838]/60 focus-within:ring-1 focus-within:ring-[#EAA838]/40 transition-all backdrop-blur-md">
                 <Search className="w-4 h-4 text-gray-400 mr-2 shrink-0" />
                 <input
@@ -88,50 +107,62 @@ export default function Navbar({ cartCount, onOpenCart, onOpenVideo }: NavbarPro
                   className="w-full bg-transparent text-xs sm:text-sm text-white placeholder-gray-400 focus:outline-none"
                 />
               </div>
-            </div>
+            </motion.div>
 
             {/* Action Icons */}
             <div className="flex items-center gap-2 sm:gap-3 text-gray-200">
               {/* Mobile Search Button */}
-              <button
+              <motion.button
+                whileTap={{ scale: 0.9 }}
                 aria-label="Search"
                 className="md:hidden p-2 rounded-full hover:bg-white/10 text-gray-200 hover:text-white transition-colors"
                 onClick={() => setMobileMenuOpen(true)}
               >
                 <Search className="w-5 h-5" />
-              </button>
+              </motion.button>
 
               {/* Wishlist Button */}
-              <button
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
                 aria-label="Wishlist"
                 className="hidden sm:flex p-2 rounded-full hover:bg-white/10 hover:text-red-400 transition-colors"
               >
                 <Heart className="w-5 h-5" />
-              </button>
+              </motion.button>
 
               {/* Cart Button with Count Badge */}
-              <button
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
                 onClick={onOpenCart}
                 aria-label="Shopping Cart"
                 className="relative p-2 rounded-full hover:bg-white/10 hover:text-[#EAA838] transition-all group"
               >
-                <ShoppingBag className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                <span className="absolute 0 top-0.5 right-0.5 flex items-center justify-center min-w-[17px] h-[17px] px-1 text-[10px] font-bold text-black bg-[#EAA838] rounded-full shadow-[0_0_8px_#EAA838]">
+                <ShoppingBag className="w-5 h-5 group-hover:rotate-6 transition-transform" />
+                <motion.span
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ type: "spring", stiffness: 500, damping: 25 }}
+                  className="absolute 0 top-0.5 right-0.5 flex items-center justify-center min-w-[17px] h-[17px] px-1 text-[10px] font-bold text-black bg-[#EAA838] rounded-full shadow-[0_0_10px_#EAA838]"
+                >
                   {cartCount}
-                </span>
-              </button>
+                </motion.span>
+              </motion.button>
 
               {/* Profile Icon */}
-              <button
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
                 aria-label="User Profile"
                 className="p-2 rounded-full hover:bg-white/10 hover:text-white transition-colors"
               >
                 <User className="w-5 h-5" />
-              </button>
+              </motion.button>
             </div>
           </div>
         </div>
-      </header>
+      </motion.header>
 
       {/* Mobile Slide-In Drawer */}
       <AnimatePresence>
@@ -158,7 +189,7 @@ export default function Navbar({ cartCount, onOpenCart, onOpenVideo }: NavbarPro
                       src="/logo/line-logo.png"
                       alt="Ashren Logo"
                       fill
-                      className="object-contain"
+                      className="object-contain filter brightness-125 drop-shadow-[0_0_10px_rgba(244,196,99,0.5)]"
                     />
                   </div>
                   <button

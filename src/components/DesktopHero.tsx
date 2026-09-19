@@ -7,14 +7,11 @@ import {
   ShoppingBag,
   Play,
   RotateCw,
-  Sparkles,
   Feather,
   ShieldCheck,
   Truck,
   RotateCcw,
   Headphones,
-  Star,
-  Tv,
 } from "lucide-react";
 
 interface DesktopHeroProps {
@@ -23,7 +20,6 @@ interface DesktopHeroProps {
 }
 
 export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps) {
-  const [activeCard, setActiveCard] = useState<string | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -39,20 +35,28 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
       onMouseMove={handleMouseMove}
       className="relative w-full min-h-[calc(100vh-80px)] flex flex-col justify-between px-6 lg:px-12 pb-6 pt-2 select-none overflow-hidden font-outfit"
     >
-
-
       {/* Top Right Tagline */}
-      <div className="w-full flex justify-end items-center max-w-[1540px] mx-auto z-10 pt-1">
+      <motion.div
+        initial={{ opacity: 0, x: 30 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+        className="w-full flex justify-end items-center max-w-[1540px] mx-auto z-10 pt-1"
+      >
         <div className="text-right">
-          <p className="text-[11px] sm:text-xs tracking-[0.25em] text-gray-300 font-medium uppercase">
+          <p className="text-[11px] sm:text-xs tracking-[0.25em] text-gray-200 font-bold uppercase">
             Premium Gadgets
           </p>
           <p className="text-[11px] sm:text-xs tracking-[0.25em] text-gray-400 font-normal uppercase">
             For A Bolder Tomorrow
           </p>
-          <div className="w-8 h-[2px] bg-[#EAA838] ml-auto mt-1 rounded-full shadow-[0_0_8px_#EAA838]" />
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: 32 }}
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="h-[2px] bg-[#EAA838] ml-auto mt-1 rounded-full shadow-[0_0_8px_#EAA838]"
+          />
         </div>
-      </div>
+      </motion.div>
 
       {/* Main Hero Container */}
       <div className="relative max-w-[1540px] w-full mx-auto grid grid-cols-12 items-center my-auto py-4 z-10 gap-4">
@@ -64,25 +68,25 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
             className="flex items-center gap-2 mb-3"
           >
-            <span className="text-xs tracking-[0.35em] text-gray-300 font-medium uppercase">
+            <span className="text-xs tracking-[0.35em] text-gray-300 font-semibold uppercase">
               Capture • Create • Explore
             </span>
           </motion.div>
 
           {/* Main Title */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 25 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.1 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
             className="space-y-1 mb-4"
           >
             <h1 className="text-4xl sm:text-5xl xl:text-6xl font-extrabold tracking-tight text-white leading-none">
               Your Story
             </h1>
-            <h2 className="text-4xl sm:text-5xl xl:text-6xl font-serif-luxury italic font-normal text-gold-shimmer leading-tight drop-shadow-[0_4px_25px_rgba(244,196,99,0.35)]">
+            <h2 className="text-4xl sm:text-5xl xl:text-6xl font-serif-luxury italic font-normal text-gold-shimmer leading-tight drop-shadow-[0_4px_25px_rgba(244,196,99,0.4)]">
               Anywhere
             </h2>
           </motion.div>
@@ -91,7 +95,7 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
+            transition={{ duration: 0.7, delay: 0.3 }}
             className="text-sm xl:text-base text-gray-300 max-w-md font-normal leading-relaxed mb-6"
           >
             Ashren brings you premium gadgets for creators, travelers and everyday adventurers.
@@ -101,36 +105,40 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3 }}
+            transition={{ duration: 0.7, delay: 0.4 }}
             className="flex flex-wrap items-center gap-4 mb-8"
           >
             {/* Primary Shop Now Button */}
-            <button
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={onShopNow}
-              className="relative group px-7 py-3 rounded-full bg-gold-gradient hover:bg-gold-gradient-hover text-black font-bold text-sm tracking-wide flex items-center gap-2.5 shadow-[0_0_30px_rgba(234,168,56,0.4)] transition-all transform hover:scale-105 active:scale-95"
+              className="relative group px-7 py-3.5 rounded-full bg-gold-gradient hover:bg-gold-gradient-hover text-black font-extrabold text-sm tracking-wide flex items-center gap-2.5 shadow-[0_0_30px_rgba(234,168,56,0.5)] transition-all"
             >
               <ShoppingBag className="w-4 h-4 text-black group-hover:rotate-12 transition-transform" />
               <span>Shop Now</span>
               <span className="text-base group-hover:translate-x-1 transition-transform">➔</span>
-            </button>
+            </motion.button>
 
             {/* Watch Video Button */}
-            <button
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               onClick={() => onOpenVideo("Ashren 4K UHD Gimbal Showcase", "CINEMATIC DEMO")}
-              className="px-6 py-3 rounded-full bg-black/40 hover:bg-white/10 border border-white/20 hover:border-white/40 text-white font-medium text-sm flex items-center gap-2.5 backdrop-blur-md transition-all group"
+              className="px-6 py-3.5 rounded-full bg-black/40 hover:bg-white/10 border border-white/20 hover:border-white/40 text-white font-medium text-sm flex items-center gap-2.5 backdrop-blur-md transition-all group"
             >
               <div className="w-5 h-5 rounded-full bg-white/15 flex items-center justify-center group-hover:bg-[#EAA838] group-hover:text-black transition-colors">
                 <Play className="w-2.5 h-2.5 fill-current ml-0.5" />
               </div>
               <span>Watch Video</span>
-            </button>
+            </motion.button>
           </motion.div>
 
           {/* 4 Feature Badges Grid */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.4 }}
+            transition={{ duration: 0.7, delay: 0.5 }}
             className="flex items-center gap-4 sm:gap-6 py-3 border-y border-white/10 max-w-lg mb-6"
           >
             {/* 4K ULTRA HD */}
@@ -173,7 +181,7 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.5 }}
+            transition={{ duration: 0.7, delay: 0.6 }}
             className="flex items-center gap-3"
           >
             {/* Creator Avatars */}
@@ -209,7 +217,7 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
               <span className="text-gray-300 font-medium">Trusted by 50,000+ Creators</span>
               <div className="flex items-center gap-1.5 text-[#F4C463]">
                 <div className="flex text-xs">
-                  {"★★★★★".split("").map((star, i) => (
+                  {"★★★★★".split("").map((_, i) => (
                     <span key={i} className="text-[#F4C463]">★</span>
                   ))}
                 </div>
@@ -223,74 +231,102 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
         <div className="col-span-12 lg:col-span-7 relative h-[480px] xl:h-[540px] flex items-center justify-center">
           
           {/* Animated Glowing Orbital Rings */}
-          <div className="absolute w-[440px] h-[440px] xl:w-[500px] xl:h-[500px] rounded-full border border-[#EAA838]/20 animate-orbit-spin pointer-events-none">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-[#EAA838] shadow-[0_0_15px_#EAA838]" />
-          </div>
-          <div className="absolute w-[360px] h-[360px] xl:w-[420px] xl:h-[420px] rounded-full border border-[#EAA838]/30 animate-orbit-spin-reverse pointer-events-none">
-            <div className="absolute bottom-4 right-10 w-2 h-2 rounded-full bg-[#FFF1C5] shadow-[0_0_12px_#FFF1C5]" />
-          </div>
-
-          {/* Central Camera with Floating Animation & Gyro Parallax */}
           <motion.div
-            animate={{
-              y: [0, -12, 0],
-              rotate: [0, 0.8, 0],
-            }}
-            transition={{
-              duration: 5,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
+            initial={{ scale: 0.4, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1.2, delay: 0.3 }}
+            className="absolute w-[440px] h-[440px] xl:w-[500px] xl:h-[500px] rounded-full border border-[#EAA838]/25 animate-orbit-spin pointer-events-none"
+          >
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3.5 h-3.5 rounded-full bg-[#FFF] shadow-[0_0_20px_#FFF,0_0_35px_#EAA838]" />
+          </motion.div>
+
+          <motion.div
+            initial={{ scale: 0.4, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1.2, delay: 0.4 }}
+            className="absolute w-[360px] h-[360px] xl:w-[420px] xl:h-[420px] rounded-full border border-[#EAA838]/35 animate-orbit-spin-reverse pointer-events-none"
+          >
+            <div className="absolute bottom-4 right-10 w-2.5 h-2.5 rounded-full bg-[#FFF1C5] shadow-[0_0_15px_#FFF1C5]" />
+          </motion.div>
+
+          {/* Central Camera with Smooth Floating Animation & Gyro Parallax */}
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0, y: 40 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             style={{
               transform: `perspective(1000px) rotateY(${mousePos.x * 12}deg) rotateX(${-mousePos.y * 12}deg)`,
             }}
             className="relative z-20 w-[240px] sm:w-[280px] xl:w-[320px] h-[400px] sm:h-[440px] xl:h-[500px] shrink-0"
           >
-            <Image
-              src="/camera/camera.png"
-              alt="Ashren 4K Pocket Gimbal Camera"
-              fill
-              priority
-              sizes="(max-width: 768px) 240px, (max-width: 1200px) 280px, 320px"
-              className="object-contain drop-shadow-[0_15px_40px_rgba(0,0,0,0.85)] filter brightness-105"
-            />
+            <motion.div
+              animate={{
+                y: [0, -12, 0],
+                rotate: [0, 0.8, 0],
+              }}
+              transition={{
+                duration: 5,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+              className="relative w-full h-full"
+            >
+              <Image
+                src="/camera/camera.png"
+                alt="Ashren 4K Pocket Gimbal Camera"
+                fill
+                priority
+                sizes="(max-width: 768px) 240px, (max-width: 1200px) 280px, 320px"
+                className="object-contain drop-shadow-[0_15px_40px_rgba(0,0,0,0.85)] filter brightness-105"
+              />
+            </motion.div>
 
             {/* Glowing Golden Light Swirl Aura at Base */}
             <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 w-64 h-24 bg-[#EAA838]/25 blur-3xl rounded-full -z-10" />
           </motion.div>
 
           {/* Top Script Text: "Small Camera Big Possibilities" */}
-          <div className="absolute top-2 xl:top-6 right-24 xl:right-32 z-30 pointer-events-none">
-            <p className="font-script text-2xl xl:text-3xl text-gold-shimmer drop-shadow-[0_2px_12px_rgba(234,168,56,0.5)] transform -rotate-6">
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+            className="absolute top-2 xl:top-6 right-24 xl:right-32 z-30 pointer-events-none"
+          >
+            <p className="font-script text-3xl xl:text-4xl text-gold-shimmer drop-shadow-[0_2px_12px_rgba(234,168,56,0.6)] transform -rotate-6">
               Small Camera <br />
               <span className="ml-4">Big Possibilities</span>
             </p>
-          </div>
+          </motion.div>
 
           {/* 180° Rotation Indicator Badge next to camera head */}
-          <div className="absolute top-24 xl:top-28 right-1/4 translate-x-8 z-20">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
+            className="absolute top-24 xl:top-28 right-1/4 translate-x-8 z-20"
+          >
             <motion.div
               whileHover={{ scale: 1.1, rotate: 180 }}
               transition={{ duration: 0.6 }}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-black/60 border border-[#EAA838]/40 backdrop-blur-md shadow-[0_0_15px_rgba(234,168,56,0.3)] cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black/70 border border-[#EAA838]/50 backdrop-blur-md shadow-[0_0_15px_rgba(234,168,56,0.35)] cursor-pointer"
             >
               <RotateCw className="w-3.5 h-3.5 text-[#EAA838]" />
               <span className="text-[10px] font-bold text-white tracking-wider">180° ROTATION</span>
             </motion.div>
-          </div>
+          </motion.div>
 
           {/* ================= CURVED ARC CARDS ================= */}
           
           {/* LEFT CARD: TRAVEL (card1.png) */}
           <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            initial={{ opacity: 0, x: -60, rotate: -4 }}
+            animate={{ opacity: 1, x: 0, rotate: 0 }}
+            transition={{ duration: 0.9, delay: 0.4, type: "spring", damping: 20 }}
             whileHover={{ scale: 1.08, zIndex: 40 }}
             onClick={() => onOpenVideo("Mountain Hiking in High Alpine 4K", "TRAVEL ADVENTURE")}
             className="absolute left-0 xl:left-4 top-1/3 -translate-y-8 z-10 w-44 sm:w-52 xl:w-60 cursor-pointer group"
           >
-            <div className="relative rounded-2xl overflow-hidden border border-white/20 group-hover:border-[#EAA838] transition-all shadow-2xl group-hover:shadow-[0_0_30px_rgba(234,168,56,0.4)]">
+            <div className="relative rounded-2xl overflow-hidden border border-white/20 group-hover:border-[#EAA838] transition-all shadow-2xl group-hover:shadow-[0_0_30px_rgba(234,168,56,0.5)]">
               <Image
                 src="/card/card1.png"
                 alt="Travel Card"
@@ -308,14 +344,14 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
 
           {/* RIGHT TOP CARD: VLOG (card2.png) */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            initial={{ opacity: 0, x: 60, rotate: 4 }}
+            animate={{ opacity: 1, x: 0, rotate: 0 }}
+            transition={{ duration: 0.9, delay: 0.5, type: "spring", damping: 20 }}
             whileHover={{ scale: 1.08, zIndex: 40 }}
             onClick={() => onOpenVideo("Underwater Coral Reef Scuba 4K Vlog", "VLOG & EXPLORATION")}
             className="absolute right-0 xl:right-4 top-10 xl:top-14 z-10 w-44 sm:w-52 xl:w-60 cursor-pointer group"
           >
-            <div className="relative rounded-2xl overflow-hidden border border-white/20 group-hover:border-[#EAA838] transition-all shadow-2xl group-hover:shadow-[0_0_30px_rgba(234,168,56,0.4)]">
+            <div className="relative rounded-2xl overflow-hidden border border-white/20 group-hover:border-[#EAA838] transition-all shadow-2xl group-hover:shadow-[0_0_30px_rgba(234,168,56,0.5)]">
               <Image
                 src="/card/card2.png"
                 alt="Vlog Card"
@@ -333,14 +369,14 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
 
           {/* RIGHT BOTTOM CARD: CREATE (card3.png) */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
+            initial={{ opacity: 0, x: 60, y: 30 }}
+            animate={{ opacity: 1, x: 0, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.6, type: "spring", damping: 20 }}
             whileHover={{ scale: 1.08, zIndex: 40 }}
             onClick={() => onOpenVideo("Futuristic Cityscape Night Time Lapse 4K", "CREATIVE TIMELAPSE")}
             className="absolute right-4 xl:right-12 bottom-12 xl:bottom-14 z-10 w-44 sm:w-52 xl:w-56 cursor-pointer group"
           >
-            <div className="relative rounded-2xl overflow-hidden border border-white/20 group-hover:border-[#EAA838] transition-all shadow-2xl group-hover:shadow-[0_0_30px_rgba(234,168,56,0.4)]">
+            <div className="relative rounded-2xl overflow-hidden border border-white/20 group-hover:border-[#EAA838] transition-all shadow-2xl group-hover:shadow-[0_0_30px_rgba(234,168,56,0.5)]">
               <Image
                 src="/card/card3.png"
                 alt="Create Card"
@@ -357,35 +393,49 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
           </motion.div>
 
           {/* Right Floating Badge: "Adventure in 4K" + 4K Circular Badge */}
-          <div className="absolute bottom-6 right-1/4 translate-x-12 z-20 flex flex-col items-center">
-            <span className="font-script text-xl xl:text-2xl text-gold-shimmer transform -rotate-12 mb-1">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.7 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.7, delay: 0.7 }}
+            className="absolute bottom-6 right-1/4 translate-x-12 z-20 flex flex-col items-center"
+          >
+            <span className="font-script text-2xl xl:text-3xl text-gold-shimmer transform -rotate-12 mb-1 drop-shadow-[0_2px_10px_rgba(234,168,56,0.5)]">
               Adventure in 4K
             </span>
-            <div className="w-16 h-16 rounded-full border-2 border-[#EAA838] bg-black/70 backdrop-blur-md flex flex-col items-center justify-center p-1 shadow-[0_0_20px_rgba(234,168,56,0.4)]">
+            <div className="w-16 h-16 rounded-full border-2 border-[#EAA838] bg-black/80 backdrop-blur-md flex flex-col items-center justify-center p-1 shadow-[0_0_20px_rgba(234,168,56,0.5)]">
               <span className="text-xs font-black text-white">4K</span>
               <span className="text-[7px] text-[#F4C463] font-bold text-center tracking-tighter">
                 ULTRA HD CLARITY
               </span>
             </div>
-          </div>
+          </motion.div>
 
           {/* Far Right Tagline: "Explore Without Limits" */}
-          <div className="absolute bottom-4 right-0 z-20 text-right hidden xl:block">
-            <p className="font-script text-3xl text-gold-shimmer transform -rotate-12 mb-2">
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="absolute bottom-4 right-0 z-20 text-right hidden xl:block"
+          >
+            <p className="font-script text-4xl text-gold-shimmer transform -rotate-12 mb-2 drop-shadow-[0_2px_12px_rgba(234,168,56,0.6)]">
               Explore Without Limits
             </p>
-            <p className="text-[10px] tracking-[0.2em] text-gray-300 font-bold uppercase">
+            <p className="text-[10px] tracking-[0.2em] text-gray-200 font-bold uppercase">
               Compact. Powerful. Everywhere.
             </p>
             <div className="w-6 h-[2px] bg-[#EAA838] ml-auto mt-1" />
-          </div>
+          </motion.div>
 
         </div>
       </div>
 
       {/* ================= BOTTOM BAR / VALUE PROPOSITIONS ================= */}
-      <div className="relative max-w-[1540px] w-full mx-auto z-10 pt-4 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
-        
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.6 }}
+        className="relative max-w-[1540px] w-full mx-auto z-10 pt-4 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4"
+      >
         {/* Left: Life Looks Better In 4K */}
         <div className="flex items-center gap-2 text-xs">
           <div>
@@ -444,7 +494,7 @@ export default function DesktopHero({ onShopNow, onOpenVideo }: DesktopHeroProps
             <div className="w-1 h-1.5 rounded-full bg-[#EAA838] animate-scroll-bounce" />
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }
