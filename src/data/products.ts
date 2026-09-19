@@ -15,6 +15,7 @@ export interface ProductItem {
   price: number;
   variant: string;
   image: string;
+  cards: [string, string, string];
   mobileSpecs: {
     id: string;
     title: string;
@@ -41,6 +42,11 @@ export const PRODUCTS: ProductItem[] = [
     price: 24999,
     variant: "Midnight Onyx • 128GB Bundle",
     image: "/product/camera.png",
+    cards: [
+      "/card/camera/card1.png",
+      "/card/camera/card2.png",
+      "/card/camera/card3.png",
+    ],
     mobileSpecs: [
       { id: "4k", title: "4K", subtitle: "Ultra HD", icon: "4k" },
       { id: "video", title: "HIGH", subtitle: "Frame Rate", icon: "video" },
@@ -66,6 +72,11 @@ export const PRODUCTS: ProductItem[] = [
     price: 38999,
     variant: "Arctic White • FPV Controller Bundle",
     image: "/product/drone.png",
+    cards: [
+      "/card/drone/card1.png",
+      "/card/drone/card2.png",
+      "/card/camera/card3.png",
+    ],
     mobileSpecs: [
       { id: "4k", title: "4K", subtitle: "HDR Video", icon: "4k" },
       { id: "fpv", title: "FPV", subtitle: "Live Screen", icon: "video" },
@@ -91,6 +102,11 @@ export const PRODUCTS: ProductItem[] = [
     price: 19999,
     variant: "Obsidian Black • Waterproof Explorer Kit",
     image: "/product/camera2.png",
+    cards: [
+      "/card/camera/card2.png",
+      "/card/camera/card1.png",
+      "/card/camera/card3.png",
+    ],
     mobileSpecs: [
       { id: "4k", title: "4K 60", subtitle: "FPS Ultra HD", icon: "4k" },
       { id: "ipx8", title: "IPX8", subtitle: "Waterproof", icon: "video" },

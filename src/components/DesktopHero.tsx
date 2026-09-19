@@ -394,19 +394,19 @@ export default function DesktopHero({
 
           {/* ================= CURVED ARC CARDS ================= */}
           
-          {/* LEFT CARD: TRAVEL (card1.png) */}
+          {/* LEFT CARD: (product.cards[0]) */}
           <motion.div
             initial={{ opacity: 0, x: -60, rotate: -4 }}
             animate={isLoaded ? { opacity: 1, x: 0, rotate: 0 } : { opacity: 0, x: -60, rotate: -4 }}
             transition={{ duration: 0.9, delay: 0.4, type: "spring", damping: 20 }}
             whileHover={{ scale: 1.08, zIndex: 40 }}
-            onClick={() => onOpenVideo("Mountain Alpine 4K Expedition", "TRAVEL ADVENTURE")}
+            onClick={() => onOpenVideo(`${product.name} Adventure Showcase`, product.category)}
             className="absolute left-0 xl:left-4 top-1/3 -translate-y-8 z-10 w-44 sm:w-52 xl:w-60 cursor-pointer group will-change-transform"
           >
             <div className="relative rounded-2xl overflow-hidden border border-white/20 group-hover:border-[#EAA838] transition-all shadow-2xl group-hover:shadow-[0_0_30px_rgba(234,168,56,0.5)]">
               <Image
-                src="/card/card1.png"
-                alt="Travel Card"
+                src={product.cards[0]}
+                alt="Showcase Card 1"
                 width={260}
                 height={160}
                 className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
@@ -419,19 +419,19 @@ export default function DesktopHero({
             </div>
           </motion.div>
 
-          {/* RIGHT TOP CARD: VLOG (card2.png) */}
+          {/* RIGHT TOP CARD: (product.cards[1]) */}
           <motion.div
             initial={{ opacity: 0, x: 60, rotate: 4 }}
             animate={isLoaded ? { opacity: 1, x: 0, rotate: 0 } : { opacity: 0, x: 60, rotate: 4 }}
             transition={{ duration: 0.9, delay: 0.5, type: "spring", damping: 20 }}
             whileHover={{ scale: 1.08, zIndex: 40 }}
-            onClick={() => onOpenVideo("Underwater Coral Reef Scuba 4K Vlog", "VLOG & EXPLORATION")}
+            onClick={() => onOpenVideo(`${product.name} 4K Experience`, "VLOG & EXPLORATION")}
             className="absolute right-0 xl:right-4 top-10 xl:top-14 z-10 w-44 sm:w-52 xl:w-60 cursor-pointer group will-change-transform"
           >
             <div className="relative rounded-2xl overflow-hidden border border-white/20 group-hover:border-[#EAA838] transition-all shadow-2xl group-hover:shadow-[0_0_30px_rgba(234,168,56,0.5)]">
               <Image
-                src="/card/card2.png"
-                alt="Vlog Card"
+                src={product.cards[1]}
+                alt="Showcase Card 2"
                 width={260}
                 height={160}
                 className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
@@ -444,19 +444,19 @@ export default function DesktopHero({
             </div>
           </motion.div>
 
-          {/* RIGHT BOTTOM CARD: CREATE (card3.png) */}
+          {/* RIGHT BOTTOM CARD: (product.cards[2]) */}
           <motion.div
             initial={{ opacity: 0, x: 60, y: 30 }}
             animate={isLoaded ? { opacity: 1, x: 0, y: 0 } : { opacity: 0, x: 60, y: 30 }}
             transition={{ duration: 0.9, delay: 0.6, type: "spring", damping: 20 }}
             whileHover={{ scale: 1.08, zIndex: 40 }}
-            onClick={() => onOpenVideo("Futuristic Cityscape Aerial Night 4K", "CREATIVE TIMELAPSE")}
+            onClick={() => onOpenVideo(`${product.name} Master Timelapse`, "CREATIVE TIMELAPSE")}
             className="absolute right-4 xl:right-12 bottom-12 xl:bottom-14 z-10 w-44 sm:w-52 xl:w-56 cursor-pointer group will-change-transform"
           >
             <div className="relative rounded-2xl overflow-hidden border border-white/20 group-hover:border-[#EAA838] transition-all shadow-2xl group-hover:shadow-[0_0_30px_rgba(234,168,56,0.5)]">
               <Image
-                src="/card/card3.png"
-                alt="Create Card"
+                src={product.cards[2]}
+                alt="Showcase Card 3"
                 width={260}
                 height={160}
                 className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"

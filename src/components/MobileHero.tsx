@@ -214,54 +214,54 @@ export default function MobileHero({
         {/* 3. RIGHT COLUMN: 3 SHOWCASE CARDS & ROTATION/FPV BADGE */}
         <div className="w-[88px] sm:w-[104px] flex flex-col gap-2.5 items-end z-20 shrink-0">
           
-          {/* Travel Card */}
+          {/* Card 1 */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={isLoaded ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
             transition={{ duration: 0.6, delay: isLoaded ? 0.35 : 0, type: "spring", damping: 18 }}
             whileTap={{ scale: 0.92 }}
-            onClick={() => onOpenVideo("Alpine Mountain 4K Showcase", "TRAVEL ADVENTURE")}
+            onClick={() => onOpenVideo(`${product.name} Adventure Showcase`, product.category)}
             className="w-full rounded-lg overflow-hidden border border-white/25 shadow-lg cursor-pointer relative"
           >
             <Image
-              src="/card/card1.png"
-              alt="Travel"
+              src={product.cards[0]}
+              alt="Showcase 1"
               width={140}
               height={80}
               className="w-full h-auto object-cover"
             />
           </motion.div>
 
-          {/* Vlog Card */}
+          {/* Card 2 */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={isLoaded ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
             transition={{ duration: 0.6, delay: isLoaded ? 0.45 : 0, type: "spring", damping: 18 }}
             whileTap={{ scale: 0.92 }}
-            onClick={() => onOpenVideo("Underwater Coral Reef Scuba 4K Vlog", "VLOG & EXPLORATION")}
+            onClick={() => onOpenVideo(`${product.name} 4K Experience`, "VLOG & EXPLORATION")}
             className="w-full rounded-lg overflow-hidden border border-white/25 shadow-lg cursor-pointer relative"
           >
             <Image
-              src="/card/card2.png"
-              alt="Vlog"
+              src={product.cards[1]}
+              alt="Showcase 2"
               width={140}
               height={80}
               className="w-full h-auto object-cover"
             />
           </motion.div>
 
-          {/* Create Card */}
+          {/* Card 3 */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={isLoaded ? { opacity: 1, x: 0 } : { opacity: 0, x: 30 }}
             transition={{ duration: 0.6, delay: isLoaded ? 0.55 : 0, type: "spring", damping: 18 }}
             whileTap={{ scale: 0.92 }}
-            onClick={() => onOpenVideo("Cityscape Night 4K Drone Aerial", "CREATIVE TIMELAPSE")}
+            onClick={() => onOpenVideo(`${product.name} Master Timelapse`, "CREATIVE TIMELAPSE")}
             className="w-full rounded-lg overflow-hidden border border-white/25 shadow-lg cursor-pointer relative"
           >
             <Image
-              src="/card/card3.png"
-              alt="Create"
+              src={product.cards[2]}
+              alt="Showcase 3"
               width={140}
               height={80}
               className="w-full h-auto object-cover"

@@ -329,7 +329,7 @@ export default function ScrollExperience({
               className="relative h-56 sm:h-64 cursor-pointer overflow-hidden"
             >
               <Image
-                src="/card/card1.png"
+                src="/card/camera/card1.png"
                 alt="Travel Showcase"
                 fill
                 sizes="(max-width: 768px) 100vw, 33vw"
@@ -378,7 +378,7 @@ export default function ScrollExperience({
               className="relative h-56 sm:h-64 cursor-pointer overflow-hidden"
             >
               <Image
-                src="/card/card2.png"
+                src="/card/camera/card2.png"
                 alt="Vlog Showcase"
                 fill
                 sizes="(max-width: 768px) 100vw, 33vw"
@@ -427,7 +427,7 @@ export default function ScrollExperience({
               className="relative h-56 sm:h-64 cursor-pointer overflow-hidden"
             >
               <Image
-                src="/card/card3.png"
+                src="/card/drone/card1.png"
                 alt="Drone Showcase"
                 fill
                 sizes="(max-width: 768px) 100vw, 33vw"
