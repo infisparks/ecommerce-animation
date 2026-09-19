@@ -212,7 +212,7 @@ export default function MobileHero({
         </div>
 
         {/* 3. RIGHT COLUMN: 3 SHOWCASE CARDS & ROTATION/FPV BADGE */}
-        <div className="w-[88px] sm:w-[104px] flex flex-col gap-2.5 items-end z-20 shrink-0">
+        <div className="w-[96px] sm:w-[114px] flex flex-col gap-2.5 items-end z-20 shrink-0">
           
           {/* Card 1 */}
           <motion.div
@@ -221,14 +221,14 @@ export default function MobileHero({
             transition={{ duration: 0.6, delay: isLoaded ? 0.35 : 0, type: "spring", damping: 18 }}
             whileTap={{ scale: 0.92 }}
             onClick={() => onOpenVideo(`${product.name} Adventure Showcase`, product.category)}
-            className="w-full rounded-lg overflow-hidden border border-white/25 shadow-lg cursor-pointer relative"
+            className="w-full cursor-pointer relative filter drop-shadow-[0_8px_18px_rgba(0,0,0,0.85)]"
           >
             <Image
               src={product.cards[0]}
               alt="Showcase 1"
-              width={140}
-              height={80}
-              className="w-full h-auto object-cover"
+              width={160}
+              height={90}
+              className="w-full h-auto object-contain"
             />
           </motion.div>
 
@@ -239,14 +239,14 @@ export default function MobileHero({
             transition={{ duration: 0.6, delay: isLoaded ? 0.45 : 0, type: "spring", damping: 18 }}
             whileTap={{ scale: 0.92 }}
             onClick={() => onOpenVideo(`${product.name} 4K Experience`, "VLOG & EXPLORATION")}
-            className="w-full rounded-lg overflow-hidden border border-white/25 shadow-lg cursor-pointer relative"
+            className="w-full cursor-pointer relative filter drop-shadow-[0_8px_18px_rgba(0,0,0,0.85)]"
           >
             <Image
               src={product.cards[1]}
               alt="Showcase 2"
-              width={140}
-              height={80}
-              className="w-full h-auto object-cover"
+              width={160}
+              height={90}
+              className="w-full h-auto object-contain"
             />
           </motion.div>
 
@@ -257,14 +257,14 @@ export default function MobileHero({
             transition={{ duration: 0.6, delay: isLoaded ? 0.55 : 0, type: "spring", damping: 18 }}
             whileTap={{ scale: 0.92 }}
             onClick={() => onOpenVideo(`${product.name} Master Timelapse`, "CREATIVE TIMELAPSE")}
-            className="w-full rounded-lg overflow-hidden border border-white/25 shadow-lg cursor-pointer relative"
+            className="w-full cursor-pointer relative filter drop-shadow-[0_8px_18px_rgba(0,0,0,0.85)]"
           >
             <Image
               src={product.cards[2]}
               alt="Showcase 3"
-              width={140}
-              height={80}
-              className="w-full h-auto object-cover"
+              width={160}
+              height={90}
+              className="w-full h-auto object-contain"
             />
           </motion.div>
 

@@ -320,8 +320,8 @@ export default function ScrollExperience({
           </h2>
         </motion.div>
 
-        {/* 3 Story Showcase Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+        {/* 3 Story Showcase Cards with Natural 3D Cutout Pop-Out */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 sm:gap-10 pt-4">
           
           {/* Card 1: Mountain Alpine Expedition */}
           <motion.div
@@ -329,30 +329,24 @@ export default function ScrollExperience({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.7, delay: 0.1 }}
-            className="group rounded-3xl overflow-hidden border border-white/15 bg-[#0e1017] hover:border-[#EAA838]/60 transition-all shadow-2xl flex flex-col justify-between"
+            className="group flex flex-col justify-between"
           >
+            {/* 3D Floating Cutout Image */}
             <div
               onClick={() => onOpenVideo("Mountain Alpine 4K Expedition", "TRAVEL ADVENTURE")}
-              className="relative h-56 sm:h-64 cursor-pointer overflow-hidden"
+              className="relative cursor-pointer transition-transform duration-500 group-hover:scale-105 filter drop-shadow-[0_20px_35px_rgba(0,0,0,0.9)] group-hover:drop-shadow-[0_25px_45px_rgba(234,168,56,0.4)] mb-4"
             >
               <Image
                 src="/card/camera/card1.png"
                 alt="Travel Showcase"
-                fill
-                sizes="(max-width: 768px) 100vw, 33vw"
-                className="object-cover group-hover:scale-105 transition-transform duration-700"
+                width={500}
+                height={280}
+                className="w-full h-auto object-contain"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-center justify-center">
-                <div className="w-12 h-12 rounded-full bg-[#EAA838] text-black flex items-center justify-center shadow-[0_0_20px_rgba(234,168,56,0.6)] group-hover:scale-110 transition-transform">
-                  <Play className="w-5 h-5 fill-current ml-0.5" />
-                </div>
-              </div>
-              <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/70 border border-white/20 text-[10px] font-bold text-white backdrop-blur-md">
-                4K HDR • 60 FPS
-              </div>
             </div>
 
-            <div className="p-6 space-y-3">
+            {/* Testimonial Box */}
+            <div className="p-5 rounded-2xl bg-[#0d1017]/80 border border-white/10 backdrop-blur-md space-y-3 shadow-xl">
               <div className="flex items-center gap-1 text-[#F4C463]">
                 {"★★★★★".split("").map((_, i) => (
                   <Star key={i} className="w-3.5 h-3.5 fill-current" />
@@ -378,30 +372,24 @@ export default function ScrollExperience({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.7, delay: 0.2 }}
-            className="group rounded-3xl overflow-hidden border border-white/15 bg-[#0e1017] hover:border-[#EAA838]/60 transition-all shadow-2xl flex flex-col justify-between"
+            className="group flex flex-col justify-between"
           >
+            {/* 3D Floating Cutout Image */}
             <div
               onClick={() => onOpenVideo("Underwater Coral Reef Scuba 4K Vlog", "VLOG & EXPLORATION")}
-              className="relative h-56 sm:h-64 cursor-pointer overflow-hidden"
+              className="relative cursor-pointer transition-transform duration-500 group-hover:scale-105 filter drop-shadow-[0_20px_35px_rgba(0,0,0,0.9)] group-hover:drop-shadow-[0_25px_45px_rgba(234,168,56,0.4)] mb-4"
             >
               <Image
                 src="/card/camera/card2.png"
                 alt="Vlog Showcase"
-                fill
-                sizes="(max-width: 768px) 100vw, 33vw"
-                className="object-cover group-hover:scale-105 transition-transform duration-700"
+                width={500}
+                height={280}
+                className="w-full h-auto object-contain"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-center justify-center">
-                <div className="w-12 h-12 rounded-full bg-[#EAA838] text-black flex items-center justify-center shadow-[0_0_20px_rgba(234,168,56,0.6)] group-hover:scale-110 transition-transform">
-                  <Play className="w-5 h-5 fill-current ml-0.5" />
-                </div>
-              </div>
-              <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/70 border border-white/20 text-[10px] font-bold text-white backdrop-blur-md">
-                UNDERWATER • IPX8
-              </div>
             </div>
 
-            <div className="p-6 space-y-3">
+            {/* Testimonial Box */}
+            <div className="p-5 rounded-2xl bg-[#0d1017]/80 border border-white/10 backdrop-blur-md space-y-3 shadow-xl">
               <div className="flex items-center gap-1 text-[#F4C463]">
                 {"★★★★★".split("").map((_, i) => (
                   <Star key={i} className="w-3.5 h-3.5 fill-current" />
@@ -427,30 +415,24 @@ export default function ScrollExperience({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.7, delay: 0.3 }}
-            className="group rounded-3xl overflow-hidden border border-white/15 bg-[#0e1017] hover:border-[#EAA838]/60 transition-all shadow-2xl flex flex-col justify-between"
+            className="group flex flex-col justify-between"
           >
+            {/* 3D Floating Cutout Image */}
             <div
               onClick={() => onOpenVideo("Cityscape Night 4K Drone Aerial", "CREATIVE TIMELAPSE")}
-              className="relative h-56 sm:h-64 cursor-pointer overflow-hidden"
+              className="relative cursor-pointer transition-transform duration-500 group-hover:scale-105 filter drop-shadow-[0_20px_35px_rgba(0,0,0,0.9)] group-hover:drop-shadow-[0_25px_45px_rgba(234,168,56,0.4)] mb-4"
             >
               <Image
                 src="/card/drone/card1.png"
                 alt="Drone Showcase"
-                fill
-                sizes="(max-width: 768px) 100vw, 33vw"
-                className="object-cover group-hover:scale-105 transition-transform duration-700"
+                width={500}
+                height={280}
+                className="w-full h-auto object-contain"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex items-center justify-center">
-                <div className="w-12 h-12 rounded-full bg-[#EAA838] text-black flex items-center justify-center shadow-[0_0_20px_rgba(234,168,56,0.6)] group-hover:scale-110 transition-transform">
-                  <Play className="w-5 h-5 fill-current ml-0.5" />
-                </div>
-              </div>
-              <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-black/70 border border-white/20 text-[10px] font-bold text-white backdrop-blur-md">
-                FPV SCREEN • 45 MIN
-              </div>
             </div>
 
-            <div className="p-6 space-y-3">
+            {/* Testimonial Box */}
+            <div className="p-5 rounded-2xl bg-[#0d1017]/80 border border-white/10 backdrop-blur-md space-y-3 shadow-xl">
               <div className="flex items-center gap-1 text-[#F4C463]">
                 {"★★★★★".split("").map((_, i) => (
                   <Star key={i} className="w-3.5 h-3.5 fill-current" />

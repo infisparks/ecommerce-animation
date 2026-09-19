@@ -392,7 +392,7 @@ export default function DesktopHero({
             </motion.div>
           </motion.div>
 
-          {/* ================= CURVED ARC CARDS ================= */}
+          {/* ================= CURVED ARC CARDS (Natural 3D Cutout Pop-Out) ================= */}
           
           {/* LEFT CARD: (product.cards[0]) */}
           <motion.div
@@ -401,21 +401,16 @@ export default function DesktopHero({
             transition={{ duration: 0.9, delay: 0.4, type: "spring", damping: 20 }}
             whileHover={{ scale: 1.08, zIndex: 40 }}
             onClick={() => onOpenVideo(`${product.name} Adventure Showcase`, product.category)}
-            className="absolute left-0 xl:left-4 top-1/3 -translate-y-8 z-10 w-44 sm:w-52 xl:w-60 cursor-pointer group will-change-transform"
+            className="absolute left-0 xl:left-4 top-1/3 -translate-y-8 z-10 w-48 sm:w-56 xl:w-64 cursor-pointer group will-change-transform"
           >
-            <div className="relative rounded-2xl overflow-hidden border border-white/20 group-hover:border-[#EAA838] transition-all shadow-2xl group-hover:shadow-[0_0_30px_rgba(234,168,56,0.5)]">
+            <div className="relative filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.85)] group-hover:drop-shadow-[0_20px_40px_rgba(234,168,56,0.5)] transition-all">
               <Image
                 src={product.cards[0]}
                 alt="Showcase Card 1"
-                width={260}
-                height={160}
-                className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
+                width={320}
+                height={190}
+                className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <div className="w-10 h-10 rounded-full bg-[#EAA838] text-black flex items-center justify-center shadow-lg">
-                  <Play className="w-4 h-4 fill-current ml-0.5" />
-                </div>
-              </div>
             </div>
           </motion.div>
 
@@ -426,21 +421,16 @@ export default function DesktopHero({
             transition={{ duration: 0.9, delay: 0.5, type: "spring", damping: 20 }}
             whileHover={{ scale: 1.08, zIndex: 40 }}
             onClick={() => onOpenVideo(`${product.name} 4K Experience`, "VLOG & EXPLORATION")}
-            className="absolute right-0 xl:right-4 top-10 xl:top-14 z-10 w-44 sm:w-52 xl:w-60 cursor-pointer group will-change-transform"
+            className="absolute right-0 xl:right-4 top-8 xl:top-12 z-10 w-48 sm:w-56 xl:w-64 cursor-pointer group will-change-transform"
           >
-            <div className="relative rounded-2xl overflow-hidden border border-white/20 group-hover:border-[#EAA838] transition-all shadow-2xl group-hover:shadow-[0_0_30px_rgba(234,168,56,0.5)]">
+            <div className="relative filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.85)] group-hover:drop-shadow-[0_20px_40px_rgba(234,168,56,0.5)] transition-all">
               <Image
                 src={product.cards[1]}
                 alt="Showcase Card 2"
-                width={260}
-                height={160}
-                className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
+                width={320}
+                height={190}
+                className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <div className="w-10 h-10 rounded-full bg-[#EAA838] text-black flex items-center justify-center shadow-lg">
-                  <Play className="w-4 h-4 fill-current ml-0.5" />
-                </div>
-              </div>
             </div>
           </motion.div>
 
@@ -451,21 +441,16 @@ export default function DesktopHero({
             transition={{ duration: 0.9, delay: 0.6, type: "spring", damping: 20 }}
             whileHover={{ scale: 1.08, zIndex: 40 }}
             onClick={() => onOpenVideo(`${product.name} Master Timelapse`, "CREATIVE TIMELAPSE")}
-            className="absolute right-4 xl:right-12 bottom-12 xl:bottom-14 z-10 w-44 sm:w-52 xl:w-56 cursor-pointer group will-change-transform"
+            className="absolute right-4 xl:right-12 bottom-8 xl:bottom-10 z-10 w-48 sm:w-56 xl:w-60 cursor-pointer group will-change-transform"
           >
-            <div className="relative rounded-2xl overflow-hidden border border-white/20 group-hover:border-[#EAA838] transition-all shadow-2xl group-hover:shadow-[0_0_30px_rgba(234,168,56,0.5)]">
+            <div className="relative filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.85)] group-hover:drop-shadow-[0_20px_40px_rgba(234,168,56,0.5)] transition-all">
               <Image
                 src={product.cards[2]}
                 alt="Showcase Card 3"
-                width={260}
-                height={160}
-                className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
+                width={320}
+                height={190}
+                className="w-full h-auto object-contain transition-transform duration-500 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <div className="w-10 h-10 rounded-full bg-[#EAA838] text-black flex items-center justify-center shadow-lg">
-                  <Play className="w-4 h-4 fill-current ml-0.5" />
-                </div>
-              </div>
             </div>
           </motion.div>
 
