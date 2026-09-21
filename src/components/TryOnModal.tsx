@@ -53,7 +53,7 @@ export default function TryOnModal({
   // Sample quick model photos for instant 1-click test
   const samplePhotos = [
     { label: "Sample Model 1", url: "/category/dress-category.jpg" },
-    { label: "Sample Model 2", url: "/product/dress/dress-1.jpeg" },
+    { label: "Sample Model 2", url: "/product/dress/dress-1.png" },
   ];
 
   // Reset state on open/close
