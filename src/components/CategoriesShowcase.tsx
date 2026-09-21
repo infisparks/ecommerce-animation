@@ -50,7 +50,7 @@ export default function CategoriesShowcase() {
       id: "jewelry",
       title: "Royal Necklace",
       subtitle: "Polki & Jewels",
-      image: "/category/dress1.png",
+      image: "/category/nackles.png",
       href: "/dresses",
       glowColor: "rgba(244, 196, 99, 0.5)",
       borderColor: "from-[#FFE6A5] via-[#F4C463] to-[#EAA838]",
