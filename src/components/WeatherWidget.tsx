@@ -4,6 +4,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { useWeather, WeatherTheme } from "@/context/WeatherContext";
 import {
   Sun,
+  Sunrise,
+  Moon,
   CloudRain,
   Snowflake,
   Flame,
@@ -25,6 +27,7 @@ export default function WeatherWidget({ className = "", variant = "pill" }: Weat
     temperature,
     condition,
     conditionLabel,
+    isNight,
     city,
     isLoading,
     isOverride,
@@ -58,6 +61,10 @@ export default function WeatherWidget({ className = "", variant = "pill" }: Weat
 
   const getConditionIcon = (theme: WeatherTheme, sizeClass = "w-3.5 h-3.5") => {
     switch (theme) {
+      case "morning":
+        return <Sunrise className={`${sizeClass} text-amber-300 drop-shadow-[0_0_8px_rgba(252,211,77,0.8)]`} />;
+      case "night":
+        return <Moon className={`${sizeClass} text-indigo-300 drop-shadow-[0_0_8px_rgba(165,180,252,0.8)]`} />;
       case "hot":
         return <Flame className={`${sizeClass} text-orange-400 drop-shadow-[0_0_8px_rgba(251,146,60,0.8)]`} />;
       case "sunny":
@@ -74,9 +81,21 @@ export default function WeatherWidget({ className = "", variant = "pill" }: Weat
   const themeOptions: { key: WeatherTheme | null; label: string; desc: string; icon: React.ReactNode }[] = [
     {
       key: null,
-      label: "Live Weather (Auto)",
-      desc: "Synced with Google / Live Data",
+      label: "Live Time & Weather (Auto)",
+      desc: "Auto-switches Morning / Night & Live forecast",
       icon: <Sparkles className="w-3.5 h-3.5 text-amber-400" />,
+    },
+    {
+      key: "morning",
+      label: "Morning (Day)",
+      desc: "Loads background-morning-mobile.png",
+      icon: <Sunrise className="w-3.5 h-3.5 text-amber-300" />,
+    },
+    {
+      key: "night",
+      label: "Night (Evening)",
+      desc: "Loads background-night-mobile.png",
+      icon: <Moon className="w-3.5 h-3.5 text-indigo-300" />,
     },
     {
       key: "hot",

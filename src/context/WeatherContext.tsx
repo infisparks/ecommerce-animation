@@ -2,13 +2,14 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
 
-export type WeatherTheme = "hot" | "sunny" | "cold" | "rainy" | "snow";
+export type WeatherTheme = "morning" | "night" | "hot" | "sunny" | "cold" | "rainy" | "snow";
 
 export interface WeatherData {
   temperature: number | null;
   weatherCode: number | null;
   condition: WeatherTheme;
   conditionLabel: string;
+  isNight: boolean;
   city: string;
   country: string;
   isLoading: boolean;
@@ -24,7 +25,9 @@ interface WeatherContextType extends WeatherData {
   refreshWeather: () => Promise<void>;
 }
 
-const THEME_BACKGROUNDS: Record<WeatherTheme, string> = {
+export const THEME_BACKGROUNDS: Record<WeatherTheme, string> = {
+  morning: "/background-morning-mobile.png",
+  night: "/background-night-mobile.png",
   hot: "/background-mobile.png",
   sunny: "/background-sunny-mobile.png",
   cold: "/background-cold-mobile.png",
@@ -32,7 +35,9 @@ const THEME_BACKGROUNDS: Record<WeatherTheme, string> = {
   snow: "/background-snow-mobile.png",
 };
 
-const THEME_LABELS: Record<WeatherTheme, string> = {
+export const THEME_LABELS: Record<WeatherTheme, string> = {
+  morning: "Morning",
+  night: "Night",
   hot: "Very Hot",
   sunny: "Sunny & Pleasant",
   cold: "Cold",
@@ -40,11 +45,22 @@ const THEME_LABELS: Record<WeatherTheme, string> = {
   snow: "Snowy",
 };
 
-// Map WMO weather codes and temperature to theme
-function calculateWeatherTheme(weatherCode: number, temperature: number): {
+// Check if current client time is night (6:00 PM to 5:59 AM)
+export function getIsNightTime(isDayCode?: number): boolean {
+  if (isDayCode !== undefined && isDayCode !== null) {
+    return isDayCode === 0;
+  }
+  const hour = new Date().getHours();
+  return hour >= 18 || hour < 6;
+}
+
+// Map WMO weather codes, temperature, and time of day to theme
+function calculateWeatherTheme(weatherCode: number, temperature: number, isDayCode?: number): {
   theme: WeatherTheme;
   label: string;
 } {
+  const isNight = getIsNightTime(isDayCode);
+
   // Snow codes: 71, 73, 75, 77, 85, 86 or temp <= 0°C
   const snowCodes = [71, 73, 75, 77, 85, 86];
   if (snowCodes.includes(weatherCode) || temperature <= 0) {
@@ -57,28 +73,35 @@ function calculateWeatherTheme(weatherCode: number, temperature: number): {
     return { theme: "rainy", label: "Rainy" };
   }
 
-  // Temperature based
-  // Very hot (>= 30°C): user specified "in hot load my background-moible.png on very hot"
-  if (temperature >= 30) {
+  // If it's night time, load the Night theme!
+  if (isNight) {
+    return { theme: "night", label: "Night" };
+  }
+
+  // Extreme Hot (>= 35°C)
+  if (temperature >= 35) {
     return { theme: "hot", label: "Very Hot" };
   }
 
-  // Cold (<= 15°C)
-  if (temperature <= 15) {
+  // Cold (<= 14°C)
+  if (temperature <= 14) {
     return { theme: "cold", label: "Cold" };
   }
 
-  // Sunny / Pleasant (16°C - 29°C)
-  return { theme: "sunny", label: "Sunny" };
+  // Morning / Daytime default
+  return { theme: "morning", label: "Morning" };
 }
 
 const WeatherContext = createContext<WeatherContextType | undefined>(undefined);
 
 export function WeatherProvider({ children }: { children: ReactNode }) {
+  // Instant initial state based on current client hour
+  const initialIsNight = getIsNightTime();
   const [temperature, setTemperature] = useState<number | null>(null);
   const [weatherCode, setWeatherCode] = useState<number | null>(null);
-  const [liveTheme, setLiveTheme] = useState<WeatherTheme>("hot");
-  const [liveLabel, setLiveLabel] = useState<string>("Loading Weather...");
+  const [liveTheme, setLiveTheme] = useState<WeatherTheme>(initialIsNight ? "night" : "morning");
+  const [liveLabel, setLiveLabel] = useState<string>(initialIsNight ? "Night" : "Morning");
+  const [isNight, setIsNight] = useState<boolean>(initialIsNight);
   const [city, setCity] = useState<string>("");
   const [country, setCountry] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -95,11 +118,14 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
 
       const currentTemp = Math.round(weatherData.current.temperature_2m);
       const currentCode = weatherData.current.weather_code;
+      const isDayVal = weatherData.current.is_day;
+      const nightBool = isDayVal === 0;
 
       setTemperature(currentTemp);
       setWeatherCode(currentCode);
+      setIsNight(nightBool);
 
-      const resolved = calculateWeatherTheme(currentCode, currentTemp);
+      const resolved = calculateWeatherTheme(currentCode, currentTemp, isDayVal);
       setLiveTheme(resolved.theme);
       setLiveLabel(resolved.label);
 
@@ -107,11 +133,12 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
       if (countryName) setCountry(countryName);
       setError(null);
     } catch (err: any) {
-      console.warn("Weather fetch failed, falling back to default:", err);
-      // Fallback
-      setTemperature(31);
-      setLiveTheme("hot");
-      setLiveLabel("Very Hot");
+      console.warn("Weather fetch failed, falling back to local time detection:", err);
+      const fallbackNight = getIsNightTime();
+      setTemperature(fallbackNight ? 24 : 29);
+      setIsNight(fallbackNight);
+      setLiveTheme(fallbackNight ? "night" : "morning");
+      setLiveLabel(fallbackNight ? "Night" : "Morning");
       setError(err?.message || "Failed to load weather");
     } finally {
       setIsLoading(false);
@@ -150,7 +177,7 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
           );
         },
         async () => {
-          // Default fallback (e.g. typical warm zone default)
+          // Default fallback
           await fetchWeatherForCoords(28.6139, 77.209, "New Delhi", "India");
         },
         { timeout: 5000 }
@@ -166,7 +193,7 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
 
   const activeTheme = manualOverride || liveTheme;
   const activeLabel = manualOverride ? THEME_LABELS[manualOverride] : liveLabel;
-  const bgMobileImage = THEME_BACKGROUNDS[activeTheme];
+  const bgMobileImage = THEME_BACKGROUNDS[activeTheme] || THEME_BACKGROUNDS[initialIsNight ? "night" : "morning"];
 
   const googleQuery = city ? `${city} weather` : "weather";
   const googleWeatherUrl = `https://www.google.com/search?q=${encodeURIComponent(googleQuery)}`;
@@ -178,6 +205,7 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
         weatherCode,
         condition: activeTheme,
         conditionLabel: activeLabel,
+        isNight,
         city,
         country,
         isLoading,
