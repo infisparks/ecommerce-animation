@@ -15,6 +15,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { PRODUCTS, ProductItem } from "@/data/products";
 import { WeatherProvider, useWeather } from "@/context/WeatherContext";
+import MobileWeatherEffects from "@/components/MobileWeatherEffects";
 
 function HomePageContent() {
   const { bgMobileImage, condition } = useWeather();
@@ -160,6 +161,9 @@ function HomePageContent() {
               />
             </motion.div>
           </AnimatePresence>
+
+          {/* Lightweight Mobile Weather Atmospheric Effects (Zero-lag: Wind for Night, Rain for Rainy, Sun for Morning/Hot/Sunny, Snow for Cold/Snow) */}
+          <MobileWeatherEffects condition={condition} />
         </div>
 
         {/* Subtle cinematic ambient vignette for contrast */}

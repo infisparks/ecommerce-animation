@@ -172,3 +172,111 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #EAA838;
 }
+
+/* =========================================================================
+   LIGHTWEIGHT MOBILE WEATHER ATMOSPHERIC EFFECTS (Zero-lag GPU animations)
+   Only active in mobile views for atmospheric immersion
+   ========================================================================= */
+
+@keyframes mobileWindBreeze {
+  0% {
+    transform: translate3d(-120%, 0, 0);
+    opacity: 0;
+  }
+  25% {
+    opacity: 0.45;
+  }
+  75% {
+    opacity: 0.45;
+  }
+  100% {
+    transform: translate3d(120vw, 20px, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes mobileWindParticle {
+  0% {
+    transform: translate3d(-60px, 0, 0) scale(0.6);
+    opacity: 0;
+  }
+  30% {
+    opacity: 0.8;
+  }
+  70% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translate3d(115vw, 35px, 0) scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes mobileRainDrop {
+  0% {
+    transform: translate3d(0, -60px, 0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.75;
+  }
+  90% {
+    opacity: 0.75;
+  }
+  100% {
+    transform: translate3d(-30px, 105vh, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes mobileSunGlow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.75;
+  }
+}
+
+@keyframes mobileSunRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes mobileSunDust {
+  0% {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translate3d(15px, -50px, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes mobileSnowFlake {
+  0% {
+    transform: translate3d(0, -20px, 0);
+    opacity: 0;
+  }
+  15% {
+    opacity: 0.9;
+  }
+  85% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate3d(var(--sway-x, 25px), 105vh, 0);
+    opacity: 0;
+  }
+}
+
