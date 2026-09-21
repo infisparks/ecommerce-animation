@@ -216,7 +216,7 @@ function SingleDressContent({ dressId }: { dressId: string }) {
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
-              className="relative w-full max-w-[500px] aspect-[3/4] max-h-[580px] lg:max-h-[620px] rounded-3xl overflow-hidden bg-gradient-to-b from-[#141824] to-[#0a0d14] border border-[#EAA838]/40 shadow-[0_20px_60px_rgba(0,0,0,0.85)] group"
+              className="relative w-full max-w-[540px] aspect-square rounded-3xl overflow-hidden bg-gradient-to-b from-[#141824] to-[#0a0d14] border border-[#EAA838]/40 shadow-[0_20px_60px_rgba(0,0,0,0.85)] group"
             >
               {/* Tag Badge */}
               {dress.tag && (
@@ -232,7 +232,7 @@ function SingleDressContent({ dressId }: { dressId: string }) {
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 45vw"
-                className="object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out"
+                className="object-cover group-hover:scale-104 transition-transform duration-700 ease-out"
               />
 
               {/* Subtle Gradient Edge Shadows */}

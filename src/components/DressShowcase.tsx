@@ -200,32 +200,32 @@ export default function DressShowcase({ onAddToCart }: DressShowcaseProps) {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5 lg:gap-6">
           {filteredDresses.map((dress, index) => {
             const wish = !!wishlist[dress.id];
             return (
               <motion.div
                 key={dress.id}
-                initial={{ opacity: 0, y: 25 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-30px" }}
-                transition={{ duration: 0.5, delay: (index % 4) * 0.08 }}
+                transition={{ duration: 0.45, delay: (index % 4) * 0.06 }}
                 onClick={() => router.push(`/dresses/${dress.id}`)}
-                className="group relative rounded-2xl sm:rounded-3xl bg-[#0c0f18]/90 border border-white/15 hover:border-[#EAA838]/70 backdrop-blur-xl shadow-lg hover:shadow-[0_16px_40px_rgba(234,168,56,0.25)] transition-all duration-300 flex flex-col justify-between overflow-hidden cursor-pointer"
+                className="group relative rounded-2xl sm:rounded-3xl p-2 sm:p-2.5 bg-gradient-to-b from-[#151926]/95 via-[#0d1018]/98 to-[#08090e]/100 border border-white/12 hover:border-[#EAA838]/60 backdrop-blur-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)] hover:shadow-[0_16px_45px_rgba(234,168,56,0.22)] transition-all duration-300 flex flex-col justify-between overflow-hidden cursor-pointer"
               >
-                {/* Image Container with 3:4 Aspect Ratio */}
-                <div className="relative aspect-[3/4] w-full overflow-hidden bg-black/40">
+                {/* 1:1 Aspect Ratio Square Image Stage */}
+                <div className="relative aspect-square w-full rounded-xl sm:rounded-2xl overflow-hidden bg-black/50 border border-white/10">
                   <Image
                     src={dress.image}
                     alt={dress.name}
                     fill
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                    className="object-cover object-top group-hover:scale-106 transition-transform duration-700 ease-out"
+                    className="object-cover group-hover:scale-104 transition-transform duration-500 ease-out"
                   />
 
                   {/* Top Left Floating Tag Badge */}
                   {dress.tag && (
-                    <div className="absolute top-2.5 left-2.5 z-10 px-2.5 py-0.5 rounded-full bg-black/75 border border-[#EAA838]/60 backdrop-blur-md text-[8.5px] sm:text-[9.5px] font-bold text-[#F4C463] uppercase tracking-wider shadow-md">
+                    <div className="absolute top-2 left-2 z-10 px-2 sm:px-2.5 py-0.5 rounded-full bg-black/75 border border-[#EAA838]/60 backdrop-blur-md text-[8px] sm:text-[9.5px] font-extrabold text-[#F4C463] uppercase tracking-wider shadow-md">
                       {dress.tag}
                     </div>
                   )}
@@ -234,34 +234,31 @@ export default function DressShowcase({ onAddToCart }: DressShowcaseProps) {
                   <button
                     onClick={(e) => toggleWishlist(e, dress.id)}
                     aria-label="Wishlist"
-                    className="absolute top-2.5 right-2.5 z-10 p-2 rounded-full bg-black/65 hover:bg-black/90 border border-white/20 text-gray-300 hover:text-white backdrop-blur-md transition-all active:scale-90"
+                    className="absolute top-2 right-2 z-10 p-1.5 sm:p-2 rounded-full bg-black/70 hover:bg-black/90 border border-white/20 text-white backdrop-blur-md transition-all active:scale-90 shadow-md"
                   >
-                    <Heart className={`w-3.5 h-3.5 ${wish ? "fill-red-500 text-red-500" : ""}`} />
+                    <Heart className={`w-3.5 h-3.5 ${wish ? "fill-red-500 text-red-500" : "text-gray-200"}`} />
                   </button>
 
-                  {/* Subtle Cinematic Vignette at Base of Image */}
-                  <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-[#0c0f18] via-[#0c0f18]/60 to-transparent pointer-events-none" />
-
                   {/* Quick AI Try-On Hover Drawer */}
-                  <div className="absolute bottom-2 inset-x-2 z-10 opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-300 hidden sm:block pointer-events-none">
-                    <div className="w-full py-2 px-3 rounded-xl bg-black/80 border border-[#EAA838]/70 backdrop-blur-md text-white font-bold text-[11px] flex items-center justify-center gap-1.5 shadow-lg">
-                      <Sparkles className="w-3.5 h-3.5 text-[#EAA838]" />
-                      <span>Try On With AI</span>
-                      <ChevronRight className="w-3.5 h-3.5 text-[#F4C463]" />
+                  <div className="absolute bottom-2 inset-x-2 z-10 opacity-0 group-hover:opacity-100 translate-y-1.5 group-hover:translate-y-0 transition-all duration-300 hidden sm:block pointer-events-none">
+                    <div className="w-full py-1.5 px-2.5 rounded-xl bg-black/85 border border-[#EAA838]/80 backdrop-blur-md text-white font-bold text-[10px] sm:text-[11px] flex items-center justify-center gap-1.5 shadow-xl text-[#F4C463]">
+                      <Sparkles className="w-3 h-3 text-[#EAA838] animate-pulse" />
+                      <span>Virtual Try-On</span>
+                      <ChevronRight className="w-3 h-3" />
                     </div>
                   </div>
                 </div>
 
                 {/* Dress Card Information Section */}
-                <div className="p-3 sm:p-4 flex flex-col justify-between flex-1 space-y-2">
+                <div className="p-2 sm:p-3 flex flex-col justify-between flex-1 space-y-2 mt-1">
                   <div>
                     {/* Category & Rating */}
                     <div className="flex items-center justify-between gap-1 mb-1">
-                      <span className="text-[9.5px] sm:text-[10px] uppercase font-bold text-[#EAA838] tracking-widest truncate max-w-[70%]">
+                      <span className="text-[9px] sm:text-[10px] uppercase font-bold text-[#EAA838] tracking-wider truncate max-w-[68%]">
                         {dress.category}
                       </span>
-                      <div className="flex items-center gap-0.5 text-[10px] text-amber-300 font-bold shrink-0">
-                        <Star className="w-3 h-3 fill-amber-300 text-amber-300" />
+                      <div className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-amber-400/10 border border-amber-400/20 text-[9px] sm:text-[10px] text-[#F4C463] font-bold shrink-0">
+                        <Star className="w-2.5 h-2.5 fill-[#F4C463] text-[#F4C463]" />
                         <span>{dress.rating}</span>
                       </div>
                     </div>
@@ -271,24 +268,24 @@ export default function DressShowcase({ onAddToCart }: DressShowcaseProps) {
                       {dress.name}
                     </h3>
 
-                    {/* Fabric Details */}
-                    <p className="text-[10px] sm:text-[11px] text-gray-400 mt-0.5 line-clamp-1">
-                      {dress.fabric}
+                    {/* Subtitle / Fabric Details */}
+                    <p className="text-[9.5px] sm:text-[11px] text-gray-400 mt-0.5 line-clamp-1">
+                      {dress.subtitle}
                     </p>
                   </div>
 
                   {/* Price & Action Button */}
-                  <div className="pt-2 border-t border-white/10 flex items-center justify-between gap-2">
+                  <div className="pt-2 border-t border-white/10 flex items-center justify-between gap-1.5">
                     <div className="flex flex-col">
-                      <div className="flex items-baseline gap-1.5">
-                        <span className="text-sm sm:text-base font-extrabold text-[#F4C463]">
+                      <div className="flex items-baseline gap-1 sm:gap-1.5">
+                        <span className="text-xs sm:text-base font-extrabold text-[#F4C463] tracking-tight">
                           ₹{dress.price.toLocaleString("en-IN")}
                         </span>
-                        <span className="text-[10px] sm:text-xs text-gray-400 line-through">
+                        <span className="text-[9px] sm:text-xs text-gray-500 line-through">
                           ₹{dress.originalPrice.toLocaleString("en-IN")}
                         </span>
                       </div>
-                      <span className="text-[9px] text-emerald-400 font-bold">
+                      <span className="text-[8.5px] sm:text-[9.5px] text-emerald-400 font-bold">
                         {dress.discount}
                       </span>
                     </div>
@@ -299,7 +296,7 @@ export default function DressShowcase({ onAddToCart }: DressShowcaseProps) {
                       onClick={(e) => handleQuickAdd(e, dress)}
                       aria-label="Add to cart"
                       title="Add to cart"
-                      className="p-2 sm:p-2.5 rounded-xl bg-white/10 hover:bg-[#EAA838] text-gray-200 hover:text-black border border-white/20 hover:border-[#EAA838] transition-all shrink-0 shadow-md"
+                      className="p-1.5 sm:p-2 rounded-xl bg-white/10 hover:bg-[#EAA838] text-gray-200 hover:text-black border border-white/20 hover:border-[#EAA838] transition-all shrink-0 shadow-md"
                     >
                       <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     </motion.button>

@@ -119,14 +119,14 @@ export default function DressDetailModal({
                   </div>
                 )}
 
-                <div className="relative w-full h-[340px] sm:h-[440px] rounded-2xl overflow-hidden shadow-2xl border border-white/10">
+                <div className="relative w-full max-w-[420px] aspect-square rounded-2xl overflow-hidden shadow-2xl border border-white/15 bg-black/40">
                   <Image
                     src={dress.image}
                     alt={dress.name}
                     fill
                     priority
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover object-top hover:scale-105 transition-transform duration-700"
+                    className="object-cover hover:scale-105 transition-transform duration-500"
                   />
                 </div>
               </div>
