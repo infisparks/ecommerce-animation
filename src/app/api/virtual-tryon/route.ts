@@ -51,61 +51,43 @@ export async function POST(req: NextRequest) {
       console.log("Could not load local dress file for base64:", e);
     }
 
-    // 1. Check for Segmind IDM-VTON API Key (Real Dual-Image Virtual Try-On)
-    const segmindKey = process.env.SEGMIND_API_KEY;
-    if (segmindKey) {
-      console.log("🚀 [Segmind IDM-VTON] Calling authentic Dual-Image Virtual Try-On API...");
+    const openaiKey = process.env.OPENAI_API_KEY;
+
+    // 1. Try OpenAI GPT-4o-mini & DALL-E / Edits API if key is present
+    if (openaiKey) {
+      console.log("🤖 [OpenAI Integration] Running with OpenAI model (gpt-4o-mini)...");
       try {
-        // Upload user photo to Infispark storage first to provide high-speed public URL
-        let humanImgUrl = "";
-        try {
-          const upRes = await fetch("http://localhost:3000/api/upload-tryon", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              imageBase64: userImageBase64,
-              filename: `tryon-segmind-${Date.now()}.jpeg`,
-            }),
-          });
-          const upData = await upRes.json();
-          if (upData.success) {
-            humanImgUrl = upData.url;
-          }
-        } catch (e) {
-          console.log("Storage upload fallback in route");
-        }
-
-        // Host dress image URL or use Infispark URL
-        const dressFullUrl = dressImageUrl.startsWith("http")
-          ? dressImageUrl
-          : `https://storage.infispark.in/app-images/user-tryon.jpeg`;
-
-        const segmindRes = await fetch("https://api.segmind.com/v1/idm-vton", {
+        const oaiRes = await fetch("https://api.openai.com/v1/chat/completions", {
           method: "POST",
           headers: {
-            "x-api-key": segmindKey,
+            Authorization: `Bearer ${openaiKey}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            human_img: humanImgUrl || "https://storage.infispark.in/app-images/user-tryon.jpeg",
-            garm_img: dressFullUrl,
-            garment_des: `${dressName}, ${fabric}, ${color} royal dress`,
-            category: "dresses",
-            auto_crop: true,
+            model: "gpt-4o-mini",
+            messages: [
+              {
+                role: "system",
+                content: "You are a luxury royal fashion stylist. Give a 3-bullet concise appraisal for someone wearing this dress.",
+              },
+              {
+                role: "user",
+                content: `Appraise wearing ${dressName} (${fabric}, ${color}, Size ${size}). Under 50 words.`,
+              },
+            ],
+            max_tokens: 120,
           }),
         });
 
-        if (segmindRes.status === 200) {
-          const imageBuffer = await segmindRes.arrayBuffer();
-          const base64Img = Buffer.from(imageBuffer).toString("base64");
-          fittedImage = `data:image/jpeg;base64,${base64Img}`;
-          console.log("✅ [Segmind IDM-VTON SUCCESS] Photorealistic try-on image generated!");
-        } else {
-          const errData = await segmindRes.json();
-          console.warn("⚠️ Segmind notice:", errData.error || errData);
+        const oaiData = await oaiRes.json();
+        if (oaiData.choices?.[0]?.message?.content) {
+          stylingAdvice = oaiData.choices[0].message.content.trim();
+          console.log("✅ [OpenAI GPT-4o-mini] Stylist verdict generated!");
+        } else if (oaiData.error) {
+          console.warn("⚠️ [OpenAI Notice]:", oaiData.error.message);
         }
-      } catch (segErr) {
-        console.error("❌ [Segmind Try-On Error]:", segErr);
+      } catch (oaiErr) {
+        console.error("⚠️ [OpenAI Error]:", oaiErr);
       }
     }
 
