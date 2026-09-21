@@ -222,7 +222,7 @@ export default function TryOnModal({
     });
   };
 
-  // 100% Client-Side AI Try-On Generation & Fitting
+  // AI Virtual Try-On Generation (Backend Gemini Vision + Image Diffusion with Fallback)
   const handleStartGeneration = async () => {
     if (!userPhoto) return;
     setIsProcessing(true);
@@ -231,75 +231,57 @@ export default function TryOnModal({
     const colorName = dress.colors[selectedColorIdx]?.name || "Default";
 
     // Progress animations
-    const t1 = setTimeout(() => setProgressStep(2), 900);
-    const t2 = setTimeout(() => setProgressStep(3), 1800);
+    const t1 = setTimeout(() => setProgressStep(2), 1000);
+    const t2 = setTimeout(() => setProgressStep(3), 2000);
 
-    // Generate real composited try-on photo (User wearing the dress)
-    const fittedCanvasUrl = await compositeDressOntoPhoto(userPhoto, dress.image);
+    try {
+      console.log("👗 Triggering AI Virtual Try-On API...");
+      const res = await fetch("/api/virtual-tryon", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userImageBase64: userPhoto,
+          dressImageUrl: dress.image,
+          dressName: dress.name,
+          fabric: dress.fabric,
+          color: colorName,
+          size: selectedSize,
+        }),
+      });
 
-    // Optional direct client-side call to Google Gemini for personalized stylist verdict
-    const clientApiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+      const data = await res.json();
+      console.log("✨ AI Try-On Response:", data);
 
-    if (clientApiKey) {
-      try {
-        let base64Data = userPhoto;
-        let mimeType = "image/jpeg";
-        if (userPhoto.startsWith("data:")) {
-          const parts = userPhoto.split(",");
-          const mimeMatch = parts[0].match(/:(.*?);/);
-          if (mimeMatch) mimeType = mimeMatch[1];
-          base64Data = parts[1];
+      if (data.success && data.fittedImage) {
+        if (data.stylingAdvice) {
+          setStylingVerdict(data.stylingAdvice);
         }
-
-        const res = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${clientApiKey}`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              contents: [
-                {
-                  parts: [
-                    {
-                      text: `You are a high-fashion luxury stylist. In 3 short bullet points, give a personalized fit appraisal for someone wearing ${dress.name} (${dress.fabric}, ${colorName}, Size ${selectedSize}). Focus on silhouette, color harmony, and festive accessories.`,
-                    },
-                    {
-                      inline_data: {
-                        mime_type: mimeType,
-                        data: base64Data,
-                      },
-                    },
-                  ],
-                },
-              ],
-            }),
-          }
-        );
-
-        const data = await res.json();
-        const advice = data.candidates?.[0]?.content?.parts?.[0]?.text;
-        if (advice) {
-          setStylingVerdict(advice);
-        }
-      } catch (e) {
-        console.log("Client AI call fallback active");
+        setResultImage(data.fittedImage);
+      } else {
+        throw new Error(data.error || "Failed to generate AI fitted image");
       }
-    }
-
-    // Default fast client-side styling analysis if API isn't used
-    if (!stylingVerdict) {
-      setStylingVerdict(
-        `• Silhouette & Drape: The ${selectedSize} fit contours seamlessly over your torso with regal flared drape.\n• Color Harmony: Rich ${colorName} brings out warm undertones with shimmering festive gold zari.\n• Styling Tip: Pair with pearl choker jewelry and embroidered juttis for an exquisite royal look.`
+    } catch (err) {
+      console.warn("⚠️ API Try-On fallback triggered:", err);
+      // Client-side fallback if server is unreachable
+      const fallbackUrl = await compositeDressOntoPhoto(
+        userPhoto,
+        dress.image,
+        fitOffsetY,
+        fitScale,
+        fitWidthScale
       );
-    }
-
-    setTimeout(() => {
-      setResultImage(fittedCanvasUrl);
+      setResultImage(fallbackUrl);
+      if (!stylingVerdict) {
+        setStylingVerdict(
+          `• Silhouette & Drape: The ${selectedSize} fit gracefully contours with royal flared drape.\n• Color Harmony: Rich ${colorName} brings out warm undertones with shimmering festive gold zari.\n• Styling Tip: Pair with pearl choker jewelry and traditional juttis for the complete royal look.`
+        );
+      }
+    } finally {
       setIsProcessing(false);
       setProgressStep(0);
       clearTimeout(t1);
       clearTimeout(t2);
-    }, 2400);
+    }
   };
 
   const handleDownload = () => {
@@ -480,11 +462,11 @@ export default function TryOnModal({
                         {resultImage ? "✨ AI Fitted Look" : "Selected Dress"}
                       </span>
                       <div className="relative aspect-[3/4] w-full rounded-2xl overflow-hidden bg-black/60 border border-[#EAA838]/50 shadow-[0_0_20px_rgba(234,168,56,0.25)]">
-                        <Image
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
                           src={resultImage || dress.image}
                           alt={dress.name}
-                          fill
-                          className="object-cover object-top"
+                          className="w-full h-full object-cover object-top"
                         />
 
                         {/* Processing Animated Laser Scan Overlay */}
