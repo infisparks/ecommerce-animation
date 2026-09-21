@@ -522,9 +522,9 @@ function SingleDressContent({ dressId }: { dressId: string }) {
             </div>
             <Link
               href="/dresses"
-              className="text-xs font-semibold text-[#EAA838] hover:underline flex items-center gap-1"
+              className="text-xs font-semibold text-[#EAA838] hover:text-[#F4C463] flex items-center gap-1 transition-colors"
             >
-              <span>View All 17</span>
+              <span>View All {DRESSES.length}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -535,32 +535,49 @@ function SingleDressContent({ dressId }: { dressId: string }) {
               <Link
                 key={rel.id}
                 href={`/dresses/${rel.id}`}
-                className="group relative rounded-2xl overflow-hidden bg-gradient-to-b from-[#141824] to-[#0c0e14] border border-white/10 hover:border-[#EAA838]/70 transition-all p-2.5 flex flex-col justify-between"
+                className="group relative rounded-2xl sm:rounded-3xl p-2 sm:p-2.5 bg-gradient-to-b from-[#151926]/95 via-[#0d1018]/98 to-[#08090e]/100 border border-white/12 hover:border-[#EAA838]/60 backdrop-blur-2xl shadow-[0_10px_30px_rgba(0,0,0,0.6)] hover:shadow-[0_16px_45px_rgba(234,168,56,0.22)] transition-all duration-300 flex flex-col justify-between overflow-hidden cursor-pointer"
               >
-                <div className="relative aspect-[3/4] w-full rounded-xl overflow-hidden mb-2">
+                {/* 1:1 Aspect Ratio Square Image Stage */}
+                <div className="relative aspect-square w-full rounded-xl sm:rounded-2xl overflow-hidden bg-black/50 border border-white/10">
                   <Image
                     src={rel.image}
                     alt={rel.name}
                     fill
                     sizes="(max-width: 640px) 50vw, 25vw"
-                    className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
+                    className="object-cover group-hover:scale-104 transition-transform duration-500 ease-out"
                   />
                   {rel.tag && (
-                    <span className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-full bg-black/70 text-[8px] font-bold text-[#F4C463] uppercase">
+                    <span className="absolute top-2 left-2 z-10 px-2 py-0.5 rounded-full bg-black/75 border border-[#EAA838]/60 backdrop-blur-md text-[8px] sm:text-[9px] font-extrabold text-[#F4C463] uppercase tracking-wider shadow-md">
                       {rel.tag}
                     </span>
                   )}
                 </div>
-                <div>
-                  <h3 className="text-xs font-bold text-white line-clamp-1 group-hover:text-[#F4C463]">
-                    {rel.name}
-                  </h3>
-                  <div className="flex items-baseline gap-1.5 mt-1">
-                    <span className="text-xs font-extrabold text-[#F4C463]">
-                      ₹{rel.price.toLocaleString("en-IN")}
+
+                {/* Card Info */}
+                <div className="p-2 sm:p-2.5 flex flex-col justify-between flex-1 space-y-1.5 mt-1">
+                  <div>
+                    <span className="text-[8.5px] sm:text-[9.5px] uppercase font-bold text-[#EAA838] tracking-wider truncate block">
+                      {rel.category}
                     </span>
-                    <span className="text-[9px] text-gray-400 line-through">
-                      ₹{rel.originalPrice.toLocaleString("en-IN")}
+                    <h3 className="text-xs sm:text-sm font-bold text-white line-clamp-1 group-hover:text-[#F4C463] transition-colors leading-snug mt-0.5">
+                      {rel.name}
+                    </h3>
+                    <p className="text-[9.5px] sm:text-[10.5px] text-gray-400 line-clamp-1 mt-0.5">
+                      {rel.subtitle}
+                    </p>
+                  </div>
+
+                  <div className="pt-1.5 border-t border-white/10 flex items-baseline justify-between gap-1">
+                    <div className="flex items-baseline gap-1 sm:gap-1.5">
+                      <span className="text-xs sm:text-sm font-extrabold text-[#F4C463] tracking-tight">
+                        ₹{rel.price.toLocaleString("en-IN")}
+                      </span>
+                      <span className="text-[9px] sm:text-xs text-gray-500 line-through">
+                        ₹{rel.originalPrice.toLocaleString("en-IN")}
+                      </span>
+                    </div>
+                    <span className="text-[8px] sm:text-[9px] text-emerald-400 font-bold">
+                      {rel.discount}
                     </span>
                   </div>
                 </div>
