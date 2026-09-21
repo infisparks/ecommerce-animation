@@ -26,8 +26,8 @@ interface WeatherContextType extends WeatherData {
 }
 
 export const THEME_BACKGROUNDS: Record<WeatherTheme, string> = {
-  morning: "/background-morning-mobile.png",
   night: "/background-night-mobile.png",
+  morning: "/background-morning-mobile.png",
   hot: "/background-mobile.png",
   sunny: "/background-sunny-mobile.png",
   cold: "/background-cold-mobile.png",
@@ -36,8 +36,8 @@ export const THEME_BACKGROUNDS: Record<WeatherTheme, string> = {
 };
 
 export const THEME_LABELS: Record<WeatherTheme, string> = {
-  morning: "Morning",
   night: "Night",
+  morning: "Morning",
   hot: "Very Hot",
   sunny: "Sunny & Pleasant",
   cold: "Cold",
@@ -45,46 +45,52 @@ export const THEME_LABELS: Record<WeatherTheme, string> = {
   snow: "Snowy",
 };
 
-// Check if current client time is night (6:00 PM to 5:59 AM)
-export function getIsNightTime(isDayCode?: number): boolean {
-  if (isDayCode !== undefined && isDayCode !== null) {
-    return isDayCode === 0;
-  }
+// Check if current user device local time is night (6:00 PM to 5:59 AM)
+export function getIsNightTime(): boolean {
   const hour = new Date().getHours();
+  // 18 = 6 PM, 0..5 = 12 AM to 5:59 AM
   return hour >= 18 || hour < 6;
 }
 
-// Map WMO weather codes, temperature, and time of day to theme
-function calculateWeatherTheme(weatherCode: number, temperature: number, isDayCode?: number): {
+// Map WMO weather codes, temperature, and local time to theme
+function calculateWeatherTheme(weatherCode: number, temperature: number): {
   theme: WeatherTheme;
   label: string;
 } {
-  const isNight = getIsNightTime(isDayCode);
+  const isNight = getIsNightTime();
 
-  // Snow codes: 71, 73, 75, 77, 85, 86 or temp <= 0°C
+  // If it's night time on the user's phone/device, always prioritize Night wallpaper!
+  if (isNight) {
+    // Check if rainy/snowy during night
+    const rainCodes = [51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82, 95, 96, 99];
+    if (rainCodes.includes(weatherCode)) {
+      return { theme: "rainy", label: "Night • Rainy" };
+    }
+    const snowCodes = [71, 73, 75, 77, 85, 86];
+    if (snowCodes.includes(weatherCode)) {
+      return { theme: "snow", label: "Night • Snowy" };
+    }
+    return { theme: "night", label: "Night" };
+  }
+
+  // Daytime conditions:
   const snowCodes = [71, 73, 75, 77, 85, 86];
   if (snowCodes.includes(weatherCode) || temperature <= 0) {
     return { theme: "snow", label: "Snowy" };
   }
 
-  // Rain codes: 51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82, 95, 96, 99
   const rainCodes = [51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82, 95, 96, 99];
   if (rainCodes.includes(weatherCode)) {
     return { theme: "rainy", label: "Rainy" };
   }
 
-  // If it's night time, load the Night theme!
-  if (isNight) {
-    return { theme: "night", label: "Night" };
-  }
-
-  // Extreme Hot (>= 35°C)
-  if (temperature >= 35) {
+  // Extreme Hot (>= 38°C)
+  if (temperature >= 38) {
     return { theme: "hot", label: "Very Hot" };
   }
 
-  // Cold (<= 14°C)
-  if (temperature <= 14) {
+  // Cold (<= 12°C)
+  if (temperature <= 12) {
     return { theme: "cold", label: "Cold" };
   }
 
@@ -95,37 +101,45 @@ function calculateWeatherTheme(weatherCode: number, temperature: number, isDayCo
 const WeatherContext = createContext<WeatherContextType | undefined>(undefined);
 
 export function WeatherProvider({ children }: { children: ReactNode }) {
-  // Instant initial state based on current client hour
-  const initialIsNight = getIsNightTime();
+  // Always evaluate real-world device clock
+  const [isNight, setIsNight] = useState<boolean>(getIsNightTime());
   const [temperature, setTemperature] = useState<number | null>(null);
   const [weatherCode, setWeatherCode] = useState<number | null>(null);
-  const [liveTheme, setLiveTheme] = useState<WeatherTheme>(initialIsNight ? "night" : "morning");
-  const [liveLabel, setLiveLabel] = useState<string>(initialIsNight ? "Night" : "Morning");
-  const [isNight, setIsNight] = useState<boolean>(initialIsNight);
+  const [liveTheme, setLiveTheme] = useState<WeatherTheme>(getIsNightTime() ? "night" : "morning");
+  const [liveLabel, setLiveLabel] = useState<string>(getIsNightTime() ? "Night" : "Morning");
   const [city, setCity] = useState<string>("");
   const [country, setCountry] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [manualOverride, setManualOverride] = useState<WeatherTheme | null>(null);
 
+  // Sync state on client mount immediately to avoid any hydration mismatch
+  useEffect(() => {
+    const night = getIsNightTime();
+    setIsNight(night);
+    if (!manualOverride) {
+      setLiveTheme(night ? "night" : "morning");
+      setLiveLabel(night ? "Night" : "Morning");
+    }
+  }, [manualOverride]);
+
   const fetchWeatherForCoords = async (lat: number, lon: number, cityName?: string, countryName?: string) => {
     try {
       const weatherRes = await fetch(
-        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,is_day`
+        `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,is_day&timezone=auto`
       );
       if (!weatherRes.ok) throw new Error("Weather service unavailable");
       const weatherData = await weatherRes.json();
 
-      const currentTemp = Math.round(weatherData.current.temperature_2m);
-      const currentCode = weatherData.current.weather_code;
-      const isDayVal = weatherData.current.is_day;
-      const nightBool = isDayVal === 0;
+      const currentTemp = Math.round(weatherData.current?.temperature_2m ?? 24);
+      const currentCode = weatherData.current?.weather_code ?? 0;
+      const nightNow = getIsNightTime();
 
       setTemperature(currentTemp);
       setWeatherCode(currentCode);
-      setIsNight(nightBool);
+      setIsNight(nightNow);
 
-      const resolved = calculateWeatherTheme(currentCode, currentTemp, isDayVal);
+      const resolved = calculateWeatherTheme(currentCode, currentTemp);
       setLiveTheme(resolved.theme);
       setLiveLabel(resolved.label);
 
@@ -133,12 +147,12 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
       if (countryName) setCountry(countryName);
       setError(null);
     } catch (err: any) {
-      console.warn("Weather fetch failed, falling back to local time detection:", err);
-      const fallbackNight = getIsNightTime();
-      setTemperature(fallbackNight ? 24 : 29);
-      setIsNight(fallbackNight);
-      setLiveTheme(fallbackNight ? "night" : "morning");
-      setLiveLabel(fallbackNight ? "Night" : "Morning");
+      console.warn("Weather fetch failed, using local time detection:", err);
+      const nightNow = getIsNightTime();
+      setTemperature(nightNow ? 24 : 29);
+      setIsNight(nightNow);
+      setLiveTheme(nightNow ? "night" : "morning");
+      setLiveLabel(nightNow ? "Night" : "Morning");
       setError(err?.message || "Failed to load weather");
     } finally {
       setIsLoading(false);
@@ -163,7 +177,7 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
         return;
       }
     } catch (e) {
-      console.log("IP lookup timed out or failed, trying geolocation or fallback");
+      console.log("IP lookup timed out, fallback to local timezone");
     }
 
     // 2. Geolocation API fallback
@@ -177,7 +191,7 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
           );
         },
         async () => {
-          // Default fallback
+          // Default fallback (New Delhi)
           await fetchWeatherForCoords(28.6139, 77.209, "New Delhi", "India");
         },
         { timeout: 5000 }
@@ -193,7 +207,7 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
 
   const activeTheme = manualOverride || liveTheme;
   const activeLabel = manualOverride ? THEME_LABELS[manualOverride] : liveLabel;
-  const bgMobileImage = THEME_BACKGROUNDS[activeTheme] || THEME_BACKGROUNDS[initialIsNight ? "night" : "morning"];
+  const bgMobileImage = THEME_BACKGROUNDS[activeTheme] || (isNight ? "/background-night-mobile.png" : "/background-morning-mobile.png");
 
   const googleQuery = city ? `${city} weather` : "weather";
   const googleWeatherUrl = `https://www.google.com/search?q=${encodeURIComponent(googleQuery)}`;
