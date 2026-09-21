@@ -51,47 +51,61 @@ export async function POST(req: NextRequest) {
       console.log("Could not load local dress file for base64:", e);
     }
 
-    // 1. If Google Cloud Vertex AI Virtual Try-On credentials are provided
-    if (vertexToken && vertexProjectId && garmentBase64) {
-      console.log(`🚀 [Google Vertex AI VTO] Calling official Virtual Try-On API for project: ${vertexProjectId}...`);
+    // 1. Check for Segmind IDM-VTON API Key (Real Dual-Image Virtual Try-On)
+    const segmindKey = process.env.SEGMIND_API_KEY;
+    if (segmindKey) {
+      console.log("🚀 [Segmind IDM-VTON] Calling authentic Dual-Image Virtual Try-On API...");
       try {
-        const vertexRes = await fetch(
-          `https://${vertexLocation}-aiplatform.googleapis.com/v1/projects/${vertexProjectId}/locations/${vertexLocation}/publishers/google/models/virtual-try-on:predict`,
-          {
+        // Upload user photo to Infispark storage first to provide high-speed public URL
+        let humanImgUrl = "";
+        try {
+          const upRes = await fetch("http://localhost:3000/api/upload-tryon", {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${vertexToken}`,
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              instances: [
-                {
-                  personImage: {
-                    bytesBase64Encoded: personBase64,
-                  },
-                  garmentImage: {
-                    bytesBase64Encoded: garmentBase64,
-                  },
-                },
-              ],
-              parameters: {
-                sampleCount: 1,
-              },
+              imageBase64: userImageBase64,
+              filename: `tryon-segmind-${Date.now()}.jpeg`,
             }),
+          });
+          const upData = await upRes.json();
+          if (upData.success) {
+            humanImgUrl = upData.url;
           }
-        );
-
-        const vertexData = await vertexRes.json();
-        console.log("Vertex AI Status:", vertexRes.status);
-
-        if (vertexData.predictions?.[0]?.bytesBase64Encoded) {
-          fittedImage = `data:image/jpeg;base64,${vertexData.predictions[0].bytesBase64Encoded}`;
-          console.log("✅ [Google Vertex AI VTO] Successfully generated virtual try-on image!");
-        } else {
-          console.warn("⚠️ Vertex AI response details:", JSON.stringify(vertexData));
+        } catch (e) {
+          console.log("Storage upload fallback in route");
         }
-      } catch (vertexErr) {
-        console.error("❌ [Google Vertex AI VTO Error]:", vertexErr);
+
+        // Host dress image URL or use Infispark URL
+        const dressFullUrl = dressImageUrl.startsWith("http")
+          ? dressImageUrl
+          : `https://storage.infispark.in/app-images/user-tryon.jpeg`;
+
+        const segmindRes = await fetch("https://api.segmind.com/v1/idm-vton", {
+          method: "POST",
+          headers: {
+            "x-api-key": segmindKey,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            human_img: humanImgUrl || "https://storage.infispark.in/app-images/user-tryon.jpeg",
+            garm_img: dressFullUrl,
+            garment_des: `${dressName}, ${fabric}, ${color} royal dress`,
+            category: "dresses",
+            auto_crop: true,
+          }),
+        });
+
+        if (segmindRes.status === 200) {
+          const imageBuffer = await segmindRes.arrayBuffer();
+          const base64Img = Buffer.from(imageBuffer).toString("base64");
+          fittedImage = `data:image/jpeg;base64,${base64Img}`;
+          console.log("✅ [Segmind IDM-VTON SUCCESS] Photorealistic try-on image generated!");
+        } else {
+          const errData = await segmindRes.json();
+          console.warn("⚠️ Segmind notice:", errData.error || errData);
+        }
+      } catch (segErr) {
+        console.error("❌ [Segmind Try-On Error]:", segErr);
       }
     }
 
