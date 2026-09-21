@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
         }
 
         const geminiRes = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+          `https://generativelanguage.googleapis.com/v1beta/models/gemma-4-26b-a4b-it:generateContent?key=${apiKey}`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -38,20 +38,7 @@ export async function POST(req: NextRequest) {
                 {
                   parts: [
                     {
-                      text: `Analyze this user's photo and do two things:
-1. Describe the person's physical appearance (gender, approximate age range, hair color, hair length, smile, skin tone) in 1 short line, e.g. "a smiling young woman with long dark brown hair and radiant light skin".
-2. Write a 3-bullet luxury haute couture styling verdict for them wearing ${dressName} (${fabric}, ${color}, Size ${size}).
-
-Format your answer exactly as:
-PERSON_DESC: <description>
-VERDICT:
-<3 bullet points>`,
-                    },
-                    {
-                      inline_data: {
-                        mime_type: mimeType,
-                        data: base64Data,
-                      },
+                      text: `You are an expert fashion stylist. Give a 3-bullet luxury styling appraisal for wearing ${dressName} (${fabric}, ${color}, Size ${size}). Keep it under 60 words.`,
                     },
                   ],
                 },
@@ -64,18 +51,8 @@ VERDICT:
         const fullText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text;
 
         if (fullText) {
-          console.log("✅ [Gemini Vision] Successfully analyzed photo!");
-          const descMatch = fullText.match(/PERSON_DESC:\s*(.*)/i);
-          if (descMatch && descMatch[1]) {
-            userDescription = descMatch[1].trim();
-          }
-
-          const verdictMatch = fullText.match(/VERDICT:\s*([\s\S]*)/i);
-          if (verdictMatch && verdictMatch[1]) {
-            stylingAdvice = verdictMatch[1].trim();
-          } else {
-            stylingAdvice = fullText;
-          }
+          console.log("✅ [AI Stylist Vision] Generated luxury verdict!");
+          stylingAdvice = fullText.trim();
         }
       } catch (geminiErr) {
         console.error("⚠️ [Gemini Vision Warning]:", geminiErr);

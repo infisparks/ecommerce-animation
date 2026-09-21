@@ -74,11 +74,29 @@ export default function TryOnModal({
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
-      reader.onload = (event) => {
+      reader.onload = async (event) => {
         if (event.target?.result) {
-          setUserPhoto(event.target.result as string);
+          const base64 = event.target.result as string;
+          setUserPhoto(base64);
           setResultImage(null);
           setStylingVerdict(null);
+
+          // Upload to Infispark S3 storage in the background
+          try {
+            const ext = file.name.split(".").pop() || "jpeg";
+            const filename = `tryon-user-${Date.now()}.${ext}`;
+            const upRes = await fetch("/api/upload-tryon", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ imageBase64: base64, filename }),
+            });
+            const upData = await upRes.json();
+            if (upData.success) {
+              console.log("☁️ Image uploaded to your storage server:", upData.url);
+            }
+          } catch (e) {
+            console.log("Background storage upload notice:", e);
+          }
         }
       };
       reader.readAsDataURL(file);
