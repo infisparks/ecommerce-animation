@@ -337,7 +337,7 @@ export default function TryOnModal({
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: "100%", opacity: 0, scale: 0.96 }}
             transition={{ type: "spring", damping: 28, stiffness: 280 }}
-            className="relative w-full max-w-2xl max-h-[92vh] sm:max-h-[88vh] bg-[#0c0e14] border border-[#EAA838]/50 rounded-t-3xl sm:rounded-3xl shadow-[0_25px_80px_rgba(0,0,0,0.95)] overflow-hidden flex flex-col my-auto z-10 text-white"
+            className="relative w-full max-w-2xl lg:max-w-4xl max-h-[92vh] sm:max-h-[88vh] bg-[#0c0e14] border border-[#EAA838]/50 rounded-t-3xl sm:rounded-3xl shadow-[0_25px_80px_rgba(0,0,0,0.95)] overflow-hidden flex flex-col my-auto z-10 text-white"
           >
             {/* Top Light Rim */}
             <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-[#EAA838] to-transparent pointer-events-none" />

@@ -27,6 +27,8 @@ import {
   ArrowRight,
   CheckCircle2,
   Lock,
+  Eye,
+  Sliders,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -41,6 +43,15 @@ function SingleDressContent({ dressId }: { dressId: string }) {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [copied, setCopied] = useState(false);
   const [isTryOnOpen, setIsTryOnOpen] = useState(false);
+  const [isSizeGuideOpen, setIsSizeGuideOpen] = useState(false);
+  const [selectedImageIdx, setSelectedImageIdx] = useState(0);
+
+  // Gallery angles (main dress photo + fallback texture angles)
+  const galleryImages = [
+    { label: "Front Model View", src: dress.image },
+    { label: "Silk & Zari Drape", src: dress.image },
+    { label: "Royal Silhouette", src: "/product/dress/background.png" },
+  ];
 
   // Cart State
   const [isCartOpen, setIsCartOpen] = useState(false);
@@ -120,7 +131,7 @@ function SingleDressContent({ dressId }: { dressId: string }) {
   const relatedDresses = DRESSES.filter((d) => d.id !== dress.id).slice(0, 4);
 
   return (
-    <main className="relative min-h-screen text-white flex flex-col justify-between overflow-x-hidden font-sans pb-24 md:pb-12">
+    <main className="relative min-h-screen text-white flex flex-col justify-between overflow-x-hidden font-sans pb-28 sm:pb-16">
       
       {/* Dress Detail Background Image */}
       <div className="fixed inset-0 -z-20 pointer-events-none overflow-hidden">
@@ -133,7 +144,7 @@ function SingleDressContent({ dressId }: { dressId: string }) {
           className="object-cover object-center scale-[1.01]"
         />
         {/* Cinematic Vignette Overlay for Crisp Contrast and Readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/65 pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/70 pointer-events-none" />
       </div>
 
       {/* Toast Notification */}
@@ -160,7 +171,7 @@ function SingleDressContent({ dressId }: { dressId: string }) {
       />
 
       {/* Top Breadcrumb Bar */}
-      <div className="w-full max-w-[1540px] mx-auto px-4 sm:px-8 lg:px-12 pt-3 pb-3">
+      <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10 pt-4 pb-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs text-gray-400 truncate">
             <Link href="/" className="hover:text-white transition-colors shrink-0">
@@ -195,42 +206,68 @@ function SingleDressContent({ dressId }: { dressId: string }) {
         </div>
       </div>
 
-      {/* Main Product Showcase Section (2-Column Desktop, 1-Column Mobile) */}
-      <div className="w-full max-w-[1540px] mx-auto px-3.5 sm:px-8 lg:px-12 py-4">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+      {/* Main Product Showcase Section (Balanced 2-Column Desktop Grid) */}
+      <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10 py-4">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
           
-          {/* LEFT: Full Portrait Showcase Image (lg:col-span-7) */}
-          <div className="lg:col-span-7 flex flex-col items-center">
+          {/* LEFT: Full Portrait Showcase Image (Sticky on PC desktop: lg:col-span-6 xl:col-span-5) */}
+          <div className="lg:col-span-6 xl:col-span-5 lg:sticky lg:top-24 flex flex-col items-center gap-3">
             <motion.div
-              initial={{ opacity: 0, scale: 0.97 }}
+              initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
-              className="relative w-full aspect-[3/4] sm:aspect-[4/5] max-h-[640px] rounded-3xl overflow-hidden bg-gradient-to-b from-[#141824] to-[#0a0d14] border border-[#EAA838]/40 shadow-[0_20px_60px_rgba(0,0,0,0.8)]"
+              className="relative w-full max-w-[500px] aspect-[3/4] max-h-[580px] lg:max-h-[620px] rounded-3xl overflow-hidden bg-gradient-to-b from-[#141824] to-[#0a0d14] border border-[#EAA838]/40 shadow-[0_20px_60px_rgba(0,0,0,0.85)] group"
             >
               {/* Tag Badge */}
               {dress.tag && (
-                <div className="absolute top-4 left-4 z-20 px-3.5 py-1 rounded-full bg-black/70 border border-[#EAA838]/70 backdrop-blur-md text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#F4C463] shadow-lg">
+                <div className="absolute top-4 left-4 z-20 px-3.5 py-1 rounded-full bg-black/75 border border-[#EAA838]/70 backdrop-blur-md text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#F4C463] shadow-lg">
                   {dress.tag}
                 </div>
               )}
 
               {/* Main Image with Zoom on Hover */}
               <Image
-                src={dress.image}
+                src={galleryImages[selectedImageIdx]?.src || dress.image}
                 alt={dress.name}
                 fill
                 priority
-                sizes="(max-width: 1024px) 100vw, 60vw"
-                className="object-cover object-top hover:scale-105 transition-transform duration-700 ease-out"
+                sizes="(max-width: 1024px) 100vw, 45vw"
+                className="object-cover object-top group-hover:scale-105 transition-transform duration-700 ease-out"
               />
 
               {/* Subtle Gradient Edge Shadows */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 pointer-events-none" />
+
+              {/* Quick AI Try-On Overlay Trigger on Image */}
+              <button
+                onClick={() => setIsTryOnOpen(true)}
+                className="absolute bottom-4 left-4 right-4 z-20 py-2.5 px-3 rounded-2xl bg-black/75 hover:bg-black/90 border border-[#EAA838]/70 backdrop-blur-md text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg transition-all hover:scale-[1.02]"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-[#EAA838] animate-pulse" />
+                <span>Try On With Your Photo (AI Fitting)</span>
+              </button>
             </motion.div>
+
+            {/* Thumbnail Angle Selectors */}
+            <div className="flex items-center gap-2.5 w-full max-w-[500px] justify-center mt-1">
+              {galleryImages.map((img, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setSelectedImageIdx(idx)}
+                  className={`relative w-16 h-16 sm:w-20 sm:h-20 rounded-xl overflow-hidden border-2 transition-all ${
+                    selectedImageIdx === idx
+                      ? "border-[#EAA838] scale-105 shadow-[0_0_12px_rgba(234,168,56,0.4)]"
+                      : "border-white/20 hover:border-white/50 opacity-70 hover:opacity-100"
+                  }`}
+                >
+                  <Image src={img.src} alt={img.label} fill className="object-cover object-top" />
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* RIGHT: Detailed Purchasing & Specification Console (lg:col-span-5) */}
-          <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
+          {/* RIGHT: Detailed Purchasing & Specification Console (lg:col-span-6 xl:col-span-7) */}
+          <div className="lg:col-span-6 xl:col-span-7 flex flex-col justify-between space-y-6">
             <div>
               {/* Category & Rating */}
               <div className="flex items-center justify-between gap-2 mb-2">
@@ -245,13 +282,13 @@ function SingleDressContent({ dressId }: { dressId: string }) {
               </div>
 
               {/* Title & Subtitle */}
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white tracking-tight leading-tight">
+              <h1 className="text-2xl sm:text-3xl lg:text-3xl xl:text-4xl font-extrabold text-white tracking-tight leading-tight">
                 {dress.name}
               </h1>
               <p className="text-sm text-[#F4C463] font-medium mt-1.5">{dress.subtitle}</p>
 
               {/* Pricing Display with Discount */}
-              <div className="flex items-baseline gap-3 my-4 p-4 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-md">
+              <div className="flex flex-wrap items-baseline gap-3 my-4 p-4 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-md">
                 <span className="text-3xl sm:text-4xl font-extrabold text-[#F4C463] tracking-tight">
                   ₹{dress.price.toLocaleString("en-IN")}
                 </span>
@@ -264,12 +301,12 @@ function SingleDressContent({ dressId }: { dressId: string }) {
                 <span className="ml-auto text-[11px] text-gray-400">Inclusive of all taxes</span>
               </div>
 
-              {/* ✨ AI Virtual Try-On Button ✨ */}
+              {/* ✨ AI Virtual Try-On Highlight Card ✨ */}
               <motion.button
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setIsTryOnOpen(true)}
-                className="w-full my-3 py-3 px-4 rounded-2xl bg-gradient-to-r from-[#2A1E0E] via-[#1B150D] to-[#12151f] border border-[#EAA838]/70 hover:border-[#EAA838] text-white font-bold text-xs sm:text-sm flex items-center justify-between shadow-[0_0_20px_rgba(234,168,56,0.3)] hover:shadow-[0_0_30px_rgba(234,168,56,0.5)] transition-all group"
+                className="w-full my-3 py-3.5 px-4 rounded-2xl bg-gradient-to-r from-[#2A1E0E] via-[#1B150D] to-[#12151f] border border-[#EAA838]/70 hover:border-[#EAA838] text-white font-bold text-xs sm:text-sm flex items-center justify-between shadow-[0_0_20px_rgba(234,168,56,0.3)] hover:shadow-[0_0_30px_rgba(234,168,56,0.5)] transition-all group"
               >
                 <div className="flex items-center gap-2.5">
                   <div className="p-2 rounded-xl bg-[#EAA838] text-black shadow-[0_0_12px_#EAA838]">
@@ -279,7 +316,7 @@ function SingleDressContent({ dressId }: { dressId: string }) {
                     <p className="font-extrabold text-white group-hover:text-[#F4C463] transition-colors">
                       Try This Dress on Me
                     </p>
-                    <p className="text-[10px] text-gray-400">
+                    <p className="text-[10px] sm:text-[11px] text-gray-400">
                       Upload from gallery or take a live photo with camera
                     </p>
                   </div>
@@ -292,7 +329,7 @@ function SingleDressContent({ dressId }: { dressId: string }) {
               </motion.button>
 
               {/* Narrative Description */}
-              <p className="text-xs sm:text-sm text-gray-300 leading-relaxed">
+              <p className="text-xs sm:text-sm text-gray-300 leading-relaxed mt-3">
                 {dress.description}
               </p>
 
@@ -327,13 +364,16 @@ function SingleDressContent({ dressId }: { dressId: string }) {
                 </div>
               </div>
 
-              {/* Size Selector */}
+              {/* Size Selector with Size Guide Modal Trigger */}
               <div className="mt-5 pt-4 border-t border-white/10">
                 <div className="flex items-center justify-between mb-2.5">
                   <span className="text-xs font-bold text-gray-200">Select Size</span>
-                  <span className="text-[11px] text-[#EAA838] flex items-center gap-1 cursor-pointer hover:underline">
+                  <button
+                    onClick={() => setIsSizeGuideOpen(true)}
+                    className="text-[11px] text-[#EAA838] flex items-center gap-1 hover:underline cursor-pointer"
+                  >
                     <Info className="w-3 h-3" /> Size Guide
-                  </span>
+                  </button>
                 </div>
                 <div className="grid grid-cols-6 gap-2">
                   {dress.sizes.map((size) => (
@@ -342,7 +382,7 @@ function SingleDressContent({ dressId }: { dressId: string }) {
                       onClick={() => setSelectedSize(size)}
                       className={`h-11 rounded-xl text-xs font-bold transition-all border ${
                         selectedSize === size
-                          ? "bg-[#EAA838] text-black border-[#EAA838] shadow-[0_0_15px_rgba(234,168,56,0.5)]"
+                          ? "bg-[#EAA838] text-black border-[#EAA838] shadow-[0_0_15px_rgba(234,168,56,0.5)] font-extrabold"
                           : "bg-white/5 text-gray-200 border-white/15 hover:border-white/40 hover:bg-white/10"
                       }`}
                     >
@@ -373,6 +413,7 @@ function SingleDressContent({ dressId }: { dressId: string }) {
 
                 {/* Add to Cart */}
                 <motion.button
+                  whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={handleAddToCart}
                   className="flex-1 h-12 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold text-sm flex items-center justify-center gap-2 transition-all shadow-md"
@@ -383,6 +424,7 @@ function SingleDressContent({ dressId }: { dressId: string }) {
 
                 {/* Instant Buy Now */}
                 <motion.button
+                  whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={handleBuyNow}
                   className="flex-1 h-12 rounded-xl bg-gradient-to-r from-[#F4C463] via-[#EAA838] to-[#D79728] text-black font-extrabold text-sm tracking-wide flex items-center justify-center gap-2 shadow-[0_0_25px_rgba(234,168,56,0.4)] hover:shadow-[0_0_35px_rgba(234,168,56,0.6)] transition-all"
@@ -446,14 +488,14 @@ function SingleDressContent({ dressId }: { dressId: string }) {
                   {activeTab === "care" && (
                     <div className="space-y-1.5">
                       <p><strong className="text-white">Washing Instructions:</strong> Dry Clean Only to preserve hand zari threadwork.</p>
-                      <p><strong className="text-white">Dispatch:</strong> Ships within 24 hours with premium gift packaging.</p>
+                      <p><strong className="text-white">Dispatch:</strong> Ships within 24 hours with premium velvet-lined gift packaging.</p>
                     </div>
                   )}
                 </div>
               </div>
 
-              {/* Guarantees */}
-              <div className="grid grid-cols-3 gap-2 py-3 px-3 rounded-2xl bg-white/[0.04] border border-white/10 mt-6 text-[10px] text-gray-300 text-center">
+              {/* Guarantees / Trust Badges */}
+              <div className="grid grid-cols-3 gap-2 py-3.5 px-3 rounded-2xl bg-white/[0.04] border border-white/10 mt-6 text-[10px] sm:text-xs text-gray-300 text-center">
                 <div className="flex flex-col items-center gap-1">
                   <Truck className="w-4 h-4 text-[#EAA838]" />
                   <span>Free Express Delivery</span>
@@ -501,7 +543,7 @@ function SingleDressContent({ dressId }: { dressId: string }) {
                     alt={rel.name}
                     fill
                     sizes="(max-width: 640px) 50vw, 25vw"
-                    className="object-cover object-top group-hover:scale-106 transition-transform duration-500"
+                    className="object-cover object-top group-hover:scale-105 transition-transform duration-500"
                   />
                   {rel.tag && (
                     <span className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-full bg-black/70 text-[8px] font-bold text-[#F4C463] uppercase">
@@ -555,6 +597,113 @@ function SingleDressContent({ dressId }: { dressId: string }) {
           <span>BUY NOW</span>
         </motion.button>
       </div>
+
+      {/* ================= LUXURY SIZE GUIDE MODAL ================= */}
+      <AnimatePresence>
+        {isSizeGuideOpen && (
+          <div className="fixed inset-0 z-[220] flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsSizeGuideOpen(false)}
+              className="fixed inset-0 bg-black/85 backdrop-blur-md"
+            />
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0, y: 15 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 15 }}
+              className="relative w-full max-w-lg bg-[#0c0e14] border border-[#EAA838]/60 rounded-3xl p-6 shadow-2xl z-10 text-white"
+            >
+              <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
+                <div className="flex items-center gap-2">
+                  <div className="p-1.5 rounded-full bg-[#EAA838]/20 text-[#F4C463]">
+                    <Info className="w-4 h-4" />
+                  </div>
+                  <h3 className="text-base font-bold text-white">Ashren Royal Sizing Chart</h3>
+                </div>
+                <button
+                  onClick={() => setIsSizeGuideOpen(false)}
+                  className="p-1 rounded-full hover:bg-white/10 text-gray-400 hover:text-white"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <p className="text-xs text-gray-300 mb-4">
+                All measurements are in inches. For custom bespoke fitting, contact our Haute Couture concierge.
+              </p>
+
+              <div className="overflow-x-auto">
+                <table className="w-full text-xs text-left border-collapse">
+                  <thead>
+                    <tr className="border-b border-[#EAA838]/40 text-[#F4C463]">
+                      <th className="py-2 px-3">Size</th>
+                      <th className="py-2 px-3">Bust (in)</th>
+                      <th className="py-2 px-3">Waist (in)</th>
+                      <th className="py-2 px-3">Hip (in)</th>
+                      <th className="py-2 px-3">Length (in)</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-white/10 text-gray-200">
+                    <tr className={selectedSize === "XS" ? "bg-[#EAA838]/10 text-white font-bold" : ""}>
+                      <td className="py-2 px-3 font-semibold">XS</td>
+                      <td className="py-2 px-3">32&quot;</td>
+                      <td className="py-2 px-3">26&quot;</td>
+                      <td className="py-2 px-3">36&quot;</td>
+                      <td className="py-2 px-3">54&quot;</td>
+                    </tr>
+                    <tr className={selectedSize === "S" ? "bg-[#EAA838]/10 text-white font-bold" : ""}>
+                      <td className="py-2 px-3 font-semibold">S</td>
+                      <td className="py-2 px-3">34&quot;</td>
+                      <td className="py-2 px-3">28&quot;</td>
+                      <td className="py-2 px-3">38&quot;</td>
+                      <td className="py-2 px-3">54.5&quot;</td>
+                    </tr>
+                    <tr className={selectedSize === "M" ? "bg-[#EAA838]/10 text-white font-bold" : ""}>
+                      <td className="py-2 px-3 font-semibold">M</td>
+                      <td className="py-2 px-3">36&quot;</td>
+                      <td className="py-2 px-3">30&quot;</td>
+                      <td className="py-2 px-3">40&quot;</td>
+                      <td className="py-2 px-3">55&quot;</td>
+                    </tr>
+                    <tr className={selectedSize === "L" ? "bg-[#EAA838]/10 text-white font-bold" : ""}>
+                      <td className="py-2 px-3 font-semibold">L</td>
+                      <td className="py-2 px-3">38&quot;</td>
+                      <td className="py-2 px-3">32&quot;</td>
+                      <td className="py-2 px-3">42&quot;</td>
+                      <td className="py-2 px-3">55.5&quot;</td>
+                    </tr>
+                    <tr className={selectedSize === "XL" ? "bg-[#EAA838]/10 text-white font-bold" : ""}>
+                      <td className="py-2 px-3 font-semibold">XL</td>
+                      <td className="py-2 px-3">40&quot;</td>
+                      <td className="py-2 px-3">34&quot;</td>
+                      <td className="py-2 px-3">44&quot;</td>
+                      <td className="py-2 px-3">56&quot;</td>
+                    </tr>
+                    <tr className={selectedSize === "XXL" ? "bg-[#EAA838]/10 text-white font-bold" : ""}>
+                      <td className="py-2 px-3 font-semibold">XXL</td>
+                      <td className="py-2 px-3">42&quot;</td>
+                      <td className="py-2 px-3">36&quot;</td>
+                      <td className="py-2 px-3">46&quot;</td>
+                      <td className="py-2 px-3">56&quot;</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div className="mt-5 pt-3 border-t border-white/10 flex justify-end">
+                <button
+                  onClick={() => setIsSizeGuideOpen(false)}
+                  className="px-4 py-2 rounded-xl bg-[#EAA838] text-black font-bold text-xs"
+                >
+                  Got It
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
 
       {/* Drawers */}
       <CartDrawer
