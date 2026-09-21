@@ -229,36 +229,23 @@
   }
 }
 
-@keyframes mobileSunCorePulse {
+@keyframes mobileSunGlow {
   0%, 100% {
     transform: scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.1);
     opacity: 0.75;
   }
-  50% {
-    transform: scale(1.08);
-    opacity: 0.95;
-  }
 }
 
-@keyframes mobileSunRayShimmerA {
-  0%, 100% {
-    opacity: 0.55;
-    transform: scale(1) rotate(0deg);
+@keyframes mobileSunRotate {
+  0% {
+    transform: rotate(0deg);
   }
-  50% {
-    opacity: 0.9;
-    transform: scale(1.03) rotate(1deg);
-  }
-}
-
-@keyframes mobileSunRayShimmerB {
-  0%, 100% {
-    opacity: 0.4;
-    transform: scale(1) rotate(0deg);
-  }
-  50% {
-    opacity: 0.78;
-    transform: scale(1.02) rotate(-1.2deg);
+  100% {
+    transform: rotate(360deg);
   }
 }
 

@@ -187,9 +187,9 @@ export default function MobileWeatherEffects({ condition }: MobileWeatherEffects
         )}
 
         {/* ===================================================================
-            3. MORNING / HOT / SUNNY: CINEMATIC VOLUMETRIC SUN RAYS & SOLAR BLOOM
-            Diagonal volumetric light shafts (god rays) streaming across the screen,
-            brilliant radiant sun core, and warm golden motes
+            3. MORNING / HOT / SUNNY: SUN EFFECT
+            Radiant warm sun flare in top-right, subtle rotating sun rays,
+            and gentle rising sun specks
             =================================================================== */}
         {(condition === "morning" || condition === "hot" || condition === "sunny") && (
           <motion.div
@@ -198,102 +198,55 @@ export default function MobileWeatherEffects({ condition }: MobileWeatherEffects
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.8 }}
-            className="absolute inset-0 w-full h-full overflow-hidden"
+            className="absolute inset-0 w-full h-full"
           >
-            {/* Atmospheric warm sunlight wash */}
+            {/* Extra warm atmospheric wash for 'hot' */}
+            {condition === "hot" && (
+              <div className="absolute inset-0 bg-gradient-to-b from-amber-500/15 via-orange-500/5 to-transparent pointer-events-none" />
+            )}
+
+            {/* Top-Right Glowing Celestial Sun Disc */}
             <div
-              className={`absolute inset-0 pointer-events-none transition-opacity duration-1000 ${
-                condition === "hot"
-                  ? "bg-gradient-to-br from-amber-500/20 via-orange-500/10 to-transparent"
-                  : "bg-gradient-to-br from-amber-400/15 via-yellow-500/5 to-transparent"
-              }`}
+              style={{
+                animation: "mobileSunGlow 5s ease-in-out infinite",
+                willChange: "transform, opacity",
+              }}
+              className="absolute -top-12 -right-12 w-64 h-64 rounded-full bg-gradient-to-br from-amber-200/50 via-amber-400/30 to-orange-500/10 blur-3xl pointer-events-none"
             />
 
-            {/* Volumetric Sun Rays (Light Shafts Layer 1 - Primary Beams) */}
+            {/* Subtle Rotating Sun Ray Burst Halo */}
             <div
               style={{
-                transformOrigin: "top right",
-                animation: "mobileSunRayShimmerA 7s ease-in-out infinite",
-                willChange: "transform, opacity",
+                animation: "mobileSunRotate 45s linear infinite",
+                willChange: "transform",
               }}
-              className="absolute inset-0 w-full h-full pointer-events-none mix-blend-screen"
+              className="absolute -top-20 -right-20 w-80 h-80 pointer-events-none opacity-25"
             >
-              <svg
-                viewBox="0 0 400 800"
-                preserveAspectRatio="none"
-                className="w-full h-full"
-              >
+              <svg viewBox="0 0 200 200" className="w-full h-full fill-amber-300">
+                <circle cx="100" cy="100" r="28" fill="url(#sunGradient)" opacity="0.6" />
+                {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg) => (
+                  <rect
+                    key={`sun-ray-${deg}`}
+                    x="98.5"
+                    y="10"
+                    width="3"
+                    height="45"
+                    rx="1.5"
+                    transform={`rotate(${deg} 100 100)`}
+                    opacity="0.35"
+                  />
+                ))}
                 <defs>
-                  <linearGradient id="sunBeamGrad1" x1="100%" y1="0%" x2="0%" y2="75%">
-                    <stop offset="0%" stopColor="#FFF9E5" stopOpacity="0.65" />
-                    <stop offset="20%" stopColor="#FFE082" stopOpacity="0.40" />
-                    <stop offset="55%" stopColor="#F5B84A" stopOpacity="0.15" />
+                  <radialGradient id="sunGradient" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="#FFF2B2" />
+                    <stop offset="70%" stopColor="#F5B84A" />
                     <stop offset="100%" stopColor="#DA9524" stopOpacity="0" />
-                  </linearGradient>
-                  <linearGradient id="sunBeamGrad2" x1="100%" y1="0%" x2="15%" y2="100%">
-                    <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.75" />
-                    <stop offset="25%" stopColor="#FFE58F" stopOpacity="0.45" />
-                    <stop offset="60%" stopColor="#FFA940" stopOpacity="0.18" />
-                    <stop offset="100%" stopColor="#D46B08" stopOpacity="0" />
-                  </linearGradient>
+                  </radialGradient>
                 </defs>
-
-                {/* Wide soft atmosphere ray */}
-                <polygon points="400,0 330,0 0,480 0,660" fill="url(#sunBeamGrad1)" />
-                {/* Central prominent sun shaft */}
-                <polygon points="400,0 375,0 45,800 135,800" fill="url(#sunBeamGrad2)" />
-                {/* Steep secondary sun ray */}
-                <polygon points="400,15 390,0 170,800 245,800" fill="url(#sunBeamGrad1)" />
-                {/* High horizontal angled ray */}
-                <polygon points="380,0 350,0 0,220 0,360" fill="url(#sunBeamGrad2)" />
               </svg>
             </div>
 
-            {/* Volumetric Sun Rays (Light Shafts Layer 2 - Secondary Shimmering Beams) */}
-            <div
-              style={{
-                transformOrigin: "top right",
-                animation: "mobileSunRayShimmerB 9s ease-in-out infinite",
-                willChange: "transform, opacity",
-              }}
-              className="absolute inset-0 w-full h-full pointer-events-none mix-blend-screen"
-            >
-              <svg
-                viewBox="0 0 400 800"
-                preserveAspectRatio="none"
-                className="w-full h-full"
-              >
-                {/* Narrow high-intensity piercing ray */}
-                <polygon points="395,0 382,0 90,800 125,800" fill="url(#sunBeamGrad2)" opacity="0.85" />
-                {/* Soft mid-angle ray */}
-                <polygon points="400,30 385,0 0,400 0,520" fill="url(#sunBeamGrad1)" opacity="0.7" />
-                {/* Vertical flank ray */}
-                <polygon points="400,0 392,0 260,800 320,800" fill="url(#sunBeamGrad1)" opacity="0.6" />
-              </svg>
-            </div>
-
-            {/* Radiant Sun Disc & Multi-Layered Solar Bloom in Top-Right */}
-            <div className="absolute -top-10 -right-10 pointer-events-none">
-              {/* Outer soft ambient halo */}
-              <div className="w-72 h-72 rounded-full bg-gradient-to-br from-amber-300/40 via-yellow-500/25 to-transparent blur-3xl" />
-              
-              {/* Mid-range golden corona */}
-              <div
-                style={{
-                  animation: "mobileSunCorePulse 4.5s ease-in-out infinite",
-                  willChange: "transform, opacity",
-                }}
-                className="absolute top-2 right-2 w-48 h-48 rounded-full bg-gradient-to-br from-white/90 via-amber-200/70 to-orange-400/30 blur-xl"
-              />
-
-              {/* Brilliant blinding white-gold solar core */}
-              <div className="absolute top-6 right-6 w-24 h-24 rounded-full bg-white shadow-[0_0_40px_rgba(255,248,220,1),0_0_80px_rgba(255,200,80,0.8)]" />
-
-              {/* Anamorphic horizontal lens flare streak */}
-              <div className="absolute top-16 -right-20 w-80 h-[2.5px] bg-gradient-to-r from-transparent via-amber-100/90 to-transparent blur-[0.6px] -rotate-12 pointer-events-none" />
-            </div>
-
-            {/* Gentle rising sun dust motes drifting through the rays */}
+            {/* Gentle rising sun dust motes */}
             {SUN_DUST_MOTES.map((mote, i) => (
               <div
                 key={`sun-mote-${i}`}
@@ -306,7 +259,7 @@ export default function MobileWeatherEffects({ condition }: MobileWeatherEffects
                   animationDelay: mote.delay,
                   willChange: "transform, opacity",
                 }}
-                className="absolute rounded-full bg-amber-100/90 shadow-[0_0_8px_rgba(255,230,120,0.95)]"
+                className="absolute rounded-full bg-amber-200/70 shadow-[0_0_8px_rgba(245,184,74,0.8)]"
               />
             ))}
           </motion.div>
