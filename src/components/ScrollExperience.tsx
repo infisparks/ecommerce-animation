@@ -73,61 +73,61 @@ export default function ScrollExperience({
           </p>
         </motion.div>
 
-        {/* 3 Master Glassmorphic Product Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+        {/* 3 Master Glassmorphic Product Cards (2 in 1 Row on Mobile: grid-cols-2 md:grid-cols-3) */}
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6 lg:gap-8">
           {PRODUCTS.map((prod, index) => (
             <motion.div
               key={prod.id}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 25 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
-              transition={{ duration: 0.6, delay: index * 0.12 }}
-              whileHover={{ y: -8 }}
-              className="group relative rounded-3xl p-6 sm:p-7 bg-gradient-to-b from-[#141824]/90 via-[#0d1017]/95 to-[#080a0f]/98 hover:from-[#191e2e]/95 hover:via-[#10141f]/98 hover:to-[#0a0d14]/100 border border-white/15 hover:border-[#EAA838]/70 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.7)] hover:shadow-[0_25px_60px_rgba(234,168,56,0.28)] transition-all duration-500 flex flex-col justify-between overflow-hidden"
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+              whileHover={{ y: -6 }}
+              className="group relative rounded-2xl sm:rounded-3xl p-3.5 sm:p-6 bg-gradient-to-b from-[#141824]/90 via-[#0d1017]/95 to-[#080a0f]/98 hover:from-[#191e2e]/95 hover:via-[#10141f]/98 hover:to-[#0a0d14]/100 border border-white/15 hover:border-[#EAA838]/70 backdrop-blur-2xl shadow-[0_15px_40px_rgba(0,0,0,0.7)] hover:shadow-[0_20px_55px_rgba(234,168,56,0.28)] transition-all duration-500 flex flex-col justify-between overflow-hidden"
             >
               {/* Luxury Top Light Sheen Highlight */}
               <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/30 to-transparent pointer-events-none" />
               
               {/* Subtle Radial Ambient Core Glow */}
-              <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-52 h-52 bg-[#EAA838]/15 group-hover:bg-[#EAA838]/25 blur-[90px] rounded-full transition-all duration-700 pointer-events-none -z-10" />
+              <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-40 sm:w-52 h-40 sm:h-52 bg-[#EAA838]/15 group-hover:bg-[#EAA838]/25 blur-[70px] sm:blur-[90px] rounded-full transition-all duration-700 pointer-events-none -z-10" />
 
               <div>
                 {/* Eyebrow Category & Pricing */}
-                <div className="flex items-center justify-between gap-2 mb-3">
-                  <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.06] border border-[#EAA838]/30 backdrop-blur-md shadow-sm">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#EAA838] animate-pulse" />
-                    <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-[#F4C463]">
+                <div className="flex items-center justify-between gap-1 mb-2">
+                  <div className="inline-flex items-center gap-1 px-2 sm:px-3 py-0.5 sm:py-1 rounded-full bg-white/[0.06] border border-[#EAA838]/30 backdrop-blur-md shadow-sm truncate max-w-[60%] sm:max-w-none">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#EAA838] animate-pulse shrink-0" />
+                    <span className="text-[8.5px] sm:text-[10px] font-bold tracking-[0.15em] uppercase text-[#F4C463] truncate">
                       {prod.category}
                     </span>
                   </div>
-                  <div className="flex items-baseline gap-1.5">
-                    <span className="text-[11px] text-gray-400 font-medium line-through opacity-70">
+                  <div className="flex items-baseline gap-1 shrink-0">
+                    <span className="text-[9px] sm:text-[11px] text-gray-400 font-medium line-through opacity-70 hidden xs:inline">
                       ₹{(prod.price * 1.25).toFixed(0)}
                     </span>
-                    <span className="text-lg sm:text-xl font-extrabold text-white tracking-tight drop-shadow-sm">
+                    <span className="text-xs sm:text-lg lg:text-xl font-extrabold text-[#F4C463] tracking-tight drop-shadow-sm">
                       ₹{prod.price.toLocaleString("en-IN")}
                     </span>
                   </div>
                 </div>
 
                 {/* Product Title & Subtitle */}
-                <h3 className="text-xl sm:text-2xl font-extrabold text-white tracking-tight group-hover:text-[#FFF1C5] transition-colors leading-snug">
+                <h3 className="text-xs sm:text-lg lg:text-xl font-extrabold text-white tracking-tight group-hover:text-[#FFF1C5] transition-colors leading-snug line-clamp-1">
                   {prod.name}
                 </h3>
-                <p className="text-xs text-gray-300/80 mt-2 mb-4 line-clamp-2 leading-relaxed">
+                <p className="text-[9.5px] sm:text-xs text-gray-300/80 mt-0.5 sm:mt-1.5 mb-2 sm:mb-4 line-clamp-1 sm:line-clamp-2 leading-relaxed">
                   {prod.subtitle}
                 </p>
 
                 {/* Hero Product Image Stage */}
-                <div className="relative w-full h-56 sm:h-64 my-4 flex items-center justify-center">
+                <div className="relative w-full h-32 sm:h-48 lg:h-56 my-2 sm:my-4 flex items-center justify-center">
                   {/* Outer Holographic Halo Orbit Ring */}
-                  <div className="absolute w-44 sm:w-52 h-44 sm:h-52 rounded-full border border-dashed border-[#EAA838]/25 group-hover:border-[#EAA838]/60 group-hover:rotate-45 transition-all duration-700 pointer-events-none" />
+                  <div className="absolute w-28 sm:w-44 h-28 sm:h-44 rounded-full border border-dashed border-[#EAA838]/25 group-hover:border-[#EAA838]/60 group-hover:rotate-45 transition-all duration-700 pointer-events-none" />
                   
                   {/* Inner Solid Gold Glow Ring */}
-                  <div className="absolute w-36 sm:w-44 h-36 sm:h-44 rounded-full border border-[#EAA838]/30 group-hover:scale-105 transition-all duration-500 pointer-events-none shadow-[0_0_20px_rgba(234,168,56,0.2)]" />
+                  <div className="absolute w-24 sm:w-36 h-24 sm:h-36 rounded-full border border-[#EAA838]/30 group-hover:scale-105 transition-all duration-500 pointer-events-none shadow-[0_0_15px_rgba(234,168,56,0.2)]" />
                   
                   {/* Bottom Radial Floor Shadow */}
-                  <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-6 bg-black/80 blur-md rounded-full pointer-events-none" />
+                  <div className="absolute bottom-1 left-1/2 -translate-x-1/2 w-20 sm:w-32 h-4 sm:h-6 bg-black/80 blur-md rounded-full pointer-events-none" />
 
                   <motion.div
                     whileHover={{ scale: 1.08, y: -4 }}
@@ -138,44 +138,44 @@ export default function ScrollExperience({
                       src={prod.image}
                       alt={prod.name}
                       fill
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      className="object-contain filter drop-shadow-[0_15px_35px_rgba(0,0,0,0.9)] group-hover:drop-shadow-[0_20px_45px_rgba(234,168,56,0.35)] transition-all duration-500"
+                      sizes="(max-width: 640px) 50vw, 33vw"
+                      className="object-contain filter drop-shadow-[0_10px_25px_rgba(0,0,0,0.9)] group-hover:drop-shadow-[0_15px_35px_rgba(234,168,56,0.35)] transition-all duration-500"
                     />
                   </motion.div>
                 </div>
 
                 {/* Refined Glassmorphic 3-Spec Pods */}
-                <div className="grid grid-cols-3 gap-2.5 my-4">
-                  <div className="p-2.5 sm:p-3 rounded-2xl bg-white/[0.04] group-hover:bg-white/[0.07] border border-white/10 group-hover:border-[#EAA838]/30 transition-all text-center flex flex-col justify-center">
-                    <p className="text-xs sm:text-sm font-extrabold text-white tracking-tight">{prod.badge1.value}</p>
-                    <p className="text-[9px] font-semibold text-[#EAA838] uppercase tracking-wider mt-0.5">{prod.badge1.label}</p>
+                <div className="grid grid-cols-3 gap-1.5 sm:gap-2.5 my-2 sm:my-3.5">
+                  <div className="p-1.5 sm:p-2.5 rounded-xl bg-white/[0.04] group-hover:bg-white/[0.07] border border-white/10 group-hover:border-[#EAA838]/30 transition-all text-center flex flex-col justify-center">
+                    <p className="text-[10px] sm:text-xs lg:text-sm font-extrabold text-white tracking-tight leading-tight">{prod.badge1.value}</p>
+                    <p className="text-[7.5px] sm:text-[9px] font-semibold text-[#EAA838] uppercase tracking-wider mt-0.5 truncate">{prod.badge1.label}</p>
                   </div>
-                  <div className="p-2.5 sm:p-3 rounded-2xl bg-white/[0.04] group-hover:bg-white/[0.07] border border-white/10 group-hover:border-[#EAA838]/30 transition-all text-center flex flex-col justify-center">
-                    <p className="text-xs sm:text-sm font-extrabold text-white tracking-tight">{prod.badge2.value}</p>
-                    <p className="text-[9px] font-semibold text-[#EAA838] uppercase tracking-wider mt-0.5">{prod.badge2.label}</p>
+                  <div className="p-1.5 sm:p-2.5 rounded-xl bg-white/[0.04] group-hover:bg-white/[0.07] border border-white/10 group-hover:border-[#EAA838]/30 transition-all text-center flex flex-col justify-center">
+                    <p className="text-[10px] sm:text-xs lg:text-sm font-extrabold text-white tracking-tight leading-tight">{prod.badge2.value}</p>
+                    <p className="text-[7.5px] sm:text-[9px] font-semibold text-[#EAA838] uppercase tracking-wider mt-0.5 truncate">{prod.badge2.label}</p>
                   </div>
-                  <div className="p-2.5 sm:p-3 rounded-2xl bg-white/[0.04] group-hover:bg-white/[0.07] border border-white/10 group-hover:border-[#EAA838]/30 transition-all text-center flex flex-col justify-center">
-                    <p className="text-xs sm:text-sm font-extrabold text-white tracking-tight">{prod.badge3.value}</p>
-                    <p className="text-[9px] font-semibold text-[#EAA838] uppercase tracking-wider mt-0.5">{prod.badge3.label}</p>
+                  <div className="p-1.5 sm:p-2.5 rounded-xl bg-white/[0.04] group-hover:bg-white/[0.07] border border-white/10 group-hover:border-[#EAA838]/30 transition-all text-center flex flex-col justify-center">
+                    <p className="text-[10px] sm:text-xs lg:text-sm font-extrabold text-white tracking-tight leading-tight">{prod.badge3.value}</p>
+                    <p className="text-[7.5px] sm:text-[9px] font-semibold text-[#EAA838] uppercase tracking-wider mt-0.5 truncate">{prod.badge3.label}</p>
                   </div>
                 </div>
               </div>
 
               {/* Action Buttons */}
-              <div className="flex items-center gap-3 pt-2">
+              <div className="flex items-center gap-1.5 sm:gap-3 pt-1 sm:pt-2">
                 <button
                   onClick={() => onShopNow(prod)}
-                  className="flex-1 py-3.5 px-5 rounded-2xl bg-gradient-to-r from-[#FADB7F] via-[#EAA838] to-[#C98418] hover:from-[#FFF1C5] hover:via-[#F4C463] hover:to-[#EAA838] text-black font-extrabold text-xs sm:text-sm tracking-wide shadow-[0_4px_25px_rgba(234,168,56,0.4)] hover:shadow-[0_6px_35px_rgba(234,168,56,0.65)] flex items-center justify-center gap-2 transition-all active:scale-95 group/btn"
+                  className="flex-1 py-2 sm:py-3 px-2 sm:px-4 rounded-xl sm:rounded-2xl bg-gradient-to-r from-[#FADB7F] via-[#EAA838] to-[#C98418] hover:from-[#FFF1C5] hover:via-[#F4C463] hover:to-[#EAA838] text-black font-extrabold text-[10px] sm:text-xs lg:text-sm tracking-wide shadow-[0_4px_20px_rgba(234,168,56,0.35)] flex items-center justify-center gap-1 sm:gap-2 transition-all active:scale-95 group/btn"
                 >
-                  <ShoppingBag className="w-4 h-4 text-black group-hover/btn:scale-110 transition-transform" />
-                  <span>Add to Cart</span>
+                  <ShoppingBag className="w-3.5 h-3.5 text-black group-hover/btn:scale-110 transition-transform shrink-0" />
+                  <span className="truncate">Add to Cart</span>
                 </button>
                 <button
                   onClick={() => onOpenVideo(`${prod.name} 4K Cinematic Showcase`, prod.category)}
                   aria-label="Play video demo"
-                  className="p-3.5 rounded-2xl bg-white/[0.06] hover:bg-[#EAA838] hover:text-black border border-white/20 hover:border-[#EAA838] text-white flex items-center justify-center transition-all shadow-md active:scale-95 group/play"
+                  className="p-2 sm:p-3 rounded-xl sm:rounded-2xl bg-white/[0.06] hover:bg-[#EAA838] hover:text-black border border-white/20 hover:border-[#EAA838] text-white flex items-center justify-center transition-all shadow-md active:scale-95 group/play shrink-0"
                 >
-                  <Play className="w-4 h-4 fill-current ml-0.5 group-hover/play:scale-110 transition-transform" />
+                  <Play className="w-3 h-3 sm:w-4 sm:h-4 fill-current ml-0.5 group-hover/play:scale-110 transition-transform" />
                 </button>
               </div>
             </motion.div>

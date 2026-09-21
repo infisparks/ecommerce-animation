@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import ScrollExperience from "@/components/ScrollExperience";
@@ -88,8 +89,22 @@ function GadgetsPageContent() {
   };
 
   return (
-    <main className="relative min-h-screen text-white bg-[#050608] flex flex-col justify-between overflow-x-hidden font-sans">
+    <main className="relative min-h-screen text-white flex flex-col justify-between overflow-x-hidden font-sans">
       
+      {/* Gadgets Page Cinematic Background Image */}
+      <div className="fixed inset-0 -z-20 pointer-events-none overflow-hidden">
+        <Image
+          src="/product/gadegetbackground.png"
+          alt="Ashren Creator Tech Cinematic Drone Landscape Background"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center scale-[1.01]"
+        />
+        {/* Cinematic Vignette Overlay for Crisp Contrast and Readability */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/45 to-black/65 pointer-events-none" />
+      </div>
+
       {/* Toast Notification */}
       <AnimatePresence>
         {toastMessage && (
@@ -124,7 +139,7 @@ function GadgetsPageContent() {
         </div>
       </div>
 
-      {/* Flagship Gadgets Experience */}
+      {/* Flagship Gadgets Experience (2 in 1 Row on Mobile) */}
       <div className="flex-1">
         <ScrollExperience
           onShopNow={handleShopNow}
