@@ -47,6 +47,9 @@ export const THEME_LABELS: Record<WeatherTheme, string> = {
 
 // Check if current user device local time is night (6:00 PM to 5:59 AM)
 export function getIsNightTime(): boolean {
+  if (typeof window === "undefined") {
+    return true; // Safe default for evening builds
+  }
   const hour = new Date().getHours();
   // 18 = 6 PM, 0..5 = 12 AM to 5:59 AM
   return hour >= 18 || hour < 6;
@@ -61,7 +64,6 @@ function calculateWeatherTheme(weatherCode: number, temperature: number): {
 
   // If it's night time on the user's phone/device, always prioritize Night wallpaper!
   if (isNight) {
-    // Check if rainy/snowy during night
     const rainCodes = [51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 80, 81, 82, 95, 96, 99];
     if (rainCodes.includes(weatherCode)) {
       return { theme: "rainy", label: "Night • Rainy" };
@@ -84,37 +86,35 @@ function calculateWeatherTheme(weatherCode: number, temperature: number): {
     return { theme: "rainy", label: "Rainy" };
   }
 
-  // Extreme Hot (>= 38°C)
   if (temperature >= 38) {
     return { theme: "hot", label: "Very Hot" };
   }
 
-  // Cold (<= 12°C)
   if (temperature <= 12) {
     return { theme: "cold", label: "Cold" };
   }
 
-  // Morning / Daytime default
   return { theme: "morning", label: "Morning" };
 }
 
 const WeatherContext = createContext<WeatherContextType | undefined>(undefined);
 
 export function WeatherProvider({ children }: { children: ReactNode }) {
-  // Always evaluate real-world device clock
-  const [isNight, setIsNight] = useState<boolean>(getIsNightTime());
+  const [mounted, setMounted] = useState<boolean>(false);
+  const [isNight, setIsNight] = useState<boolean>(true);
   const [temperature, setTemperature] = useState<number | null>(null);
   const [weatherCode, setWeatherCode] = useState<number | null>(null);
-  const [liveTheme, setLiveTheme] = useState<WeatherTheme>(getIsNightTime() ? "night" : "morning");
-  const [liveLabel, setLiveLabel] = useState<string>(getIsNightTime() ? "Night" : "Morning");
+  const [liveTheme, setLiveTheme] = useState<WeatherTheme>("night");
+  const [liveLabel, setLiveLabel] = useState<string>("Night");
   const [city, setCity] = useState<string>("");
   const [country, setCountry] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [manualOverride, setManualOverride] = useState<WeatherTheme | null>(null);
 
-  // Sync state on client mount immediately to avoid any hydration mismatch
+  // Client-side mount sync with actual user device time
   useEffect(() => {
+    setMounted(true);
     const night = getIsNightTime();
     setIsNight(night);
     if (!manualOverride) {
@@ -147,7 +147,7 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
       if (countryName) setCountry(countryName);
       setError(null);
     } catch (err: any) {
-      console.warn("Weather fetch failed, using local time detection:", err);
+      console.warn("Weather fetch notice, using local device time:", err);
       const nightNow = getIsNightTime();
       setTemperature(nightNow ? 24 : 29);
       setIsNight(nightNow);
@@ -163,8 +163,7 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
     setIsLoading(true);
 
     try {
-      // 1. Fetch Location via fast ipwho.is service (no user prompt required)
-      const ipRes = await fetch("https://ipwho.is/", { signal: AbortSignal.timeout(4000) });
+      const ipRes = await fetch("https://ipwho.is/", { signal: AbortSignal.timeout(3000) });
       const ipData = await ipRes.json();
 
       if (ipData && ipData.success && ipData.latitude && ipData.longitude) {
@@ -177,10 +176,10 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
         return;
       }
     } catch (e) {
-      console.log("IP lookup timed out, fallback to local timezone");
+      console.log("IP lookup timed out, using fallback");
     }
 
-    // 2. Geolocation API fallback
+    // Geolocation / local fallback
     if (typeof window !== "undefined" && "geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
@@ -191,10 +190,9 @@ export function WeatherProvider({ children }: { children: ReactNode }) {
           );
         },
         async () => {
-          // Default fallback (New Delhi)
           await fetchWeatherForCoords(28.6139, 77.209, "New Delhi", "India");
         },
-        { timeout: 5000 }
+        { timeout: 4000 }
       );
     } else {
       await fetchWeatherForCoords(28.6139, 77.209, "New Delhi", "India");

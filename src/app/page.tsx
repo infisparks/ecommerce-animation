@@ -125,21 +125,35 @@ function HomePageContent() {
       {/* Luxury Splash Screen on Page Reload */}
       <SplashScreen onComplete={() => setIsLoaded(true)} minDuration={1800} />
 
-      {/* Global Background Images (Responsive: Desktop vs Mobile) */}
+      {/* Global Background Images (Responsive: Desktop vs Mobile, Day vs Night) */}
       <div className="fixed inset-0 -z-30 pointer-events-none overflow-hidden">
-        {/* Desktop Background */}
+        {/* Desktop Background (Adapts to Day vs Night) */}
         <div className="hidden lg:block relative w-full h-full">
-          <Image
-            src="/background.png"
-            alt="Ashren Cinematic Mountain Landscape"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-center scale-[1.01]"
-          />
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={condition === "night" ? "desktop-night" : "desktop-day"}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.6 }}
+              className="absolute inset-0 w-full h-full"
+            >
+              <Image
+                src={condition === "night" ? "/background-night-mobile.png" : "/background.png"}
+                alt="Ashren Cinematic Landscape"
+                fill
+                priority
+                sizes="100vw"
+                className="object-cover object-center scale-[1.01]"
+              />
+              {condition === "night" && (
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/35 to-black/60 pointer-events-none" />
+              )}
+            </motion.div>
+          </AnimatePresence>
         </div>
 
-        {/* Mobile Background (Weather Adaptive: Hot, Sunny, Cold, Rainy, Snow) */}
+        {/* Mobile Background (Weather & Day/Night Adaptive) */}
         <div className="block lg:hidden relative w-full h-full">
           <AnimatePresence mode="wait">
             <motion.div
