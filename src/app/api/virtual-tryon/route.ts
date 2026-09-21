@@ -1,6 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
+import { exec } from "child_process";
+import { promisify } from "util";
 import fs from "fs/promises";
 import path from "path";
+
+const execAsync = promisify(exec);
+
+async function getVertexToken(): Promise<string | null> {
+  if (process.env.VERTEX_AI_TOKEN) return process.env.VERTEX_AI_TOKEN;
+  try {
+    const { stdout } = await execAsync("/opt/homebrew/bin/gcloud auth print-access-token");
+    return stdout.trim();
+  } catch (e) {
+    return null;
+  }
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,8 +26,8 @@ export async function POST(req: NextRequest) {
     console.log("=======================================================");
 
     const geminiKey = process.env.GEMINI_API_KEY || process.env.NEXT_PUBLIC_GEMINI_API_KEY;
-    const vertexToken = process.env.VERTEX_AI_TOKEN || process.env.GOOGLE_CLOUD_ACCESS_TOKEN;
-    const vertexProjectId = process.env.VERTEX_PROJECT_ID || process.env.GOOGLE_CLOUD_PROJECT || "selflance";
+    const vertexToken = await getVertexToken();
+    const vertexProjectId = process.env.VERTEX_PROJECT_ID || process.env.GOOGLE_CLOUD_PROJECT || "selflance-a980d";
     const vertexLocation = process.env.VERTEX_LOCATION || "us-central1";
 
     let stylingAdvice = `• Silhouette & Drape: The ${size} fit gracefully contours with royal flared drape.\n• Color Harmony: Rich ${color} brings out warm undertones with shimmering festive gold zari.\n• Styling Tip: Pair with pearl choker jewelry and traditional juttis for the complete royal look.`;
