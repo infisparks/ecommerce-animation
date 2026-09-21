@@ -9,12 +9,15 @@ import ScrollExperience from "@/components/ScrollExperience";
 import VideoModal from "@/components/VideoModal";
 import CartDrawer from "@/components/CartDrawer";
 import SplashScreen from "@/components/SplashScreen";
+import CategoriesShowcase from "@/components/CategoriesShowcase";
 import { CheckCircle2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { PRODUCTS, ProductItem } from "@/data/products";
+import { WeatherProvider, useWeather } from "@/context/WeatherContext";
 
-export default function HomePage() {
+function HomePageContent() {
+  const { bgMobileImage, condition } = useWeather();
   const [isLoaded, setIsLoaded] = useState(false);
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
   const [videoModalInfo, setVideoModalInfo] = useState({
@@ -93,6 +96,29 @@ export default function HomePage() {
     setCartItems((prev) => prev.filter((item) => item.id !== id));
   };
 
+  const handleAddDressToCart = (item: {
+    id: string;
+    name: string;
+    variant: string;
+    price: number;
+    quantity: number;
+    image: string;
+  }) => {
+    setCartItems((prev) => {
+      const exists = prev.find((p) => p.id === item.id);
+      if (exists) {
+        return prev.map((p) =>
+          p.id === item.id ? { ...p, quantity: p.quantity + item.quantity } : p
+        );
+      }
+      return [...prev, item];
+    });
+
+    setToastMessage(`Added ${item.name} to your cart!`);
+    setTimeout(() => setToastMessage(null), 3500);
+    setIsCartOpen(true);
+  };
+
   return (
     <main className="relative min-h-screen text-white flex flex-col justify-between overflow-x-hidden font-sans">
       
@@ -113,16 +139,27 @@ export default function HomePage() {
           />
         </div>
 
-        {/* Mobile Background */}
+        {/* Mobile Background (Weather Adaptive: Hot, Sunny, Cold, Rainy, Snow) */}
         <div className="block lg:hidden relative w-full h-full">
-          <Image
-            src="/background-mobile.png"
-            alt="Ashren Mobile Cinematic Landscape"
-            fill
-            priority
-            sizes="100vw"
-            className="object-cover object-top scale-[1.01]"
-          />
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={bgMobileImage}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.6 }}
+              className="absolute inset-0 w-full h-full"
+            >
+              <Image
+                src={bgMobileImage}
+                alt={`Ashren Mobile Cinematic Landscape - ${condition}`}
+                fill
+                priority
+                sizes="100vw"
+                className="object-cover object-top scale-[1.01]"
+              />
+            </motion.div>
+          </AnimatePresence>
         </div>
 
         {/* Subtle cinematic ambient vignette for contrast */}
@@ -173,6 +210,9 @@ export default function HomePage() {
         </div>
       </div>
 
+      {/* Curated Luxury Categories Showcase (Dresses vs Gadgets) */}
+      <CategoriesShowcase />
+
       {/* Luxury Animated Scroll Experience */}
       <ScrollExperience
         onShopNow={handleShopNow}
@@ -197,3 +237,12 @@ export default function HomePage() {
     </main>
   );
 }
+
+export default function HomePage() {
+  return (
+    <WeatherProvider>
+      <HomePageContent />
+    </WeatherProvider>
+  );
+}
+

@@ -2,8 +2,11 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Search, Heart, ShoppingBag, User, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import WeatherWidget from "@/components/WeatherWidget";
 
 interface NavbarProps {
   cartCount: number;
@@ -18,11 +21,30 @@ export default function Navbar({
   onOpenVideo,
   isLoaded = true,
 }: NavbarProps) {
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeNav, setActiveNav] = useState("Home");
 
-  const navLinks = ["Home", "Shop", "Categories", "Deals", "About", "Support"];
+  const navLinks = ["Home", "Dresses", "Categories", "Gadgets", "Deals", "Support"];
+
+  const handleNavClick = (item: string) => {
+    setActiveNav(item);
+    if (item === "Dresses") {
+      router.push("/dresses");
+    } else if (item === "Gadgets") {
+      router.push("/gadgets");
+    } else if (item === "Categories") {
+      const el = document.getElementById("categories");
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      } else {
+        router.push("/#categories");
+      }
+    } else if (item === "Home") {
+      router.push("/");
+    }
+  };
 
   return (
     <>
@@ -48,11 +70,9 @@ export default function Navbar({
 
           {/* Brand Logo */}
           <div className="flex items-center justify-center lg:justify-start">
-            <motion.a
-              href="#"
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
-              className="relative block h-10 sm:h-12 w-36 sm:w-48 transition-transform duration-300"
+            <Link
+              href="/"
+              className="relative block h-10 sm:h-12 w-36 sm:w-48 transition-transform duration-300 hover:scale-105 active:scale-95"
             >
               <Image
                 src="/logo/line-logo.png"
@@ -62,7 +82,7 @@ export default function Navbar({
                 className="object-contain filter brightness-125 contrast-110 drop-shadow-[0_0_15px_rgba(244,196,99,0.6)]"
                 priority
               />
-            </motion.a>
+            </Link>
           </div>
 
           {/* Desktop Navigation Links */}
@@ -75,7 +95,7 @@ export default function Navbar({
                   initial={{ opacity: 0, y: -10 }}
                   animate={isLoaded ? { opacity: 1, y: 0 } : { opacity: 0, y: -10 }}
                   transition={{ duration: 0.5, delay: isLoaded ? 0.1 + idx * 0.05 : 0 }}
-                  onClick={() => setActiveNav(item)}
+                  onClick={() => handleNavClick(item)}
                   className={`relative px-3.5 py-1.5 text-sm tracking-wide font-medium transition-colors ${
                     isActive ? "text-white font-semibold" : "text-gray-300 hover:text-white"
                   }`}
@@ -93,9 +113,13 @@ export default function Navbar({
             })}
           </nav>
 
-          {/* Search, Wishlist, Cart & Profile */}
+          {/* Weather Widget, Search, Wishlist, Cart & Profile */}
           <div className="flex items-center gap-2 sm:gap-4">
-            
+            {/* Desktop Weather Widget */}
+            <div className="hidden lg:flex items-center">
+              <WeatherWidget />
+            </div>
+
             {/* Search Input Bar (Desktop) */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -168,6 +192,11 @@ export default function Navbar({
             </div>
           </div>
         </div>
+
+        {/* Mobile Weather Status Bar */}
+        <div className="flex lg:hidden justify-center items-center pt-2 pb-0.5">
+          <WeatherWidget />
+        </div>
       </motion.header>
 
       {/* Mobile Slide-In Drawer */}
@@ -218,13 +247,19 @@ export default function Navbar({
                   </div>
                 </div>
 
+                {/* Mobile Weather Theme Widget in Drawer */}
+                <div className="mt-4 p-3 rounded-xl bg-white/5 border border-white/10 flex flex-col gap-2">
+                  <span className="text-[10px] uppercase font-bold tracking-wider text-[#EAA838]">Live Climate & Theme</span>
+                  <WeatherWidget />
+                </div>
+
                 {/* Nav list */}
                 <div className="mt-6 flex flex-col gap-1">
                   {navLinks.map((item) => (
                     <button
                       key={item}
                       onClick={() => {
-                        setActiveNav(item);
+                        handleNavClick(item);
                         setMobileMenuOpen(false);
                       }}
                       className={`text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${

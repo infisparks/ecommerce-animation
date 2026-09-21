@@ -49,7 +49,7 @@ export default function ScrollExperience({
       {/* =========================================================================
           SECTION 1: 3D FLAGSHIP COLLECTION SHOWCASE
           ========================================================================= */}
-      <section className="relative">
+      <section id="flagship-products" className="relative scroll-mt-20">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
