@@ -45,13 +45,13 @@ export default function CategoriesShowcase() {
   // Smooth spring physics for scroll movement
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 25 });
 
-  const yLeft = useTransform(smoothProgress, [0, 1], [40, -30]);
-  const yCenter = useTransform(smoothProgress, [0, 1], [70, -50]); // Center elevated for 3D royal triptych
-  const yRight = useTransform(smoothProgress, [0, 1], [40, -30]);
+  const yLeft = useTransform(smoothProgress, [0, 1], [35, -25]);
+  const yCenter = useTransform(smoothProgress, [0, 1], [60, -45]); // Center elevated for 3D royal triptych
+  const yRight = useTransform(smoothProgress, [0, 1], [35, -25]);
 
-  const rotateLeft = useTransform(smoothProgress, [0, 0.5, 1], [-4, 0, 4]);
+  const rotateLeft = useTransform(smoothProgress, [0, 0.5, 1], [-3, 0, 3]);
   const rotateCenter = useTransform(smoothProgress, [0, 0.5, 1], [0, 0, 0]);
-  const rotateRight = useTransform(smoothProgress, [0, 0.5, 1], [4, 0, -4]);
+  const rotateRight = useTransform(smoothProgress, [0, 0.5, 1], [3, 0, -3]);
 
   const categories: CategoryPod[] = [
     {
@@ -61,7 +61,7 @@ export default function CategoriesShowcase() {
       subtitle: "Royal Silhouettes",
       itemCount: "17 Designs",
       tag: "Silk & Zari",
-      image: "/category/dress-category.jpg",
+      image: "/category/dress.png",
       href: "/dresses",
       icon: <Crown className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#F4C463]" />,
       accentColor: "#EAA838",
@@ -74,7 +74,7 @@ export default function CategoriesShowcase() {
       subtitle: "Velvet & Banarasi",
       itemCount: "Heritage",
       tag: "Bridal Couture",
-      image: "/product/dress/dress-3.jpeg",
+      image: "/category/dress1.png",
       href: "/dresses",
       icon: <Gem className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#F4C463]" />,
       accentColor: "#F4C463",
@@ -87,7 +87,7 @@ export default function CategoriesShowcase() {
       subtitle: "4K Gimbal & Drone",
       itemCount: "3 Flagships",
       tag: "4K Cinema",
-      image: "/category/gadget-category.jpg",
+      image: "/category/drone.png",
       href: "/gadgets",
       icon: <Camera className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#38BDF8]" />,
       accentColor: "#38BDF8",
@@ -163,30 +163,36 @@ export default function CategoriesShowcase() {
                   }`}
                 >
                   {/* Inner Content Chamber */}
-                  <div className="relative w-full h-full rounded-t-[98px] sm:rounded-t-[138px] rounded-b-[14px] sm:rounded-b-[22px] overflow-hidden bg-[#0a0d14]">
+                  <div className="relative w-full h-full rounded-t-[98px] sm:rounded-t-[138px] rounded-b-[14px] sm:rounded-b-[22px] overflow-hidden bg-gradient-to-b from-[#141722] via-[#0b0e15] to-[#06080d] flex items-center justify-center">
                     
-                    {/* Background Visual Asset with Smooth Zoom */}
+                    {/* Ambient Glow Aura Behind Transparent Cutout */}
+                    <div
+                      className={`absolute w-36 sm:w-48 h-36 sm:h-48 rounded-full blur-2xl pointer-events-none opacity-40 group-hover:opacity-80 transition-opacity duration-500 ${
+                        idx === 2 ? "bg-cyan-500/20" : "bg-[#EAA838]/25"
+                      }`}
+                    />
+
+                    {/* Background Visual Asset (Transparent 3D Cutout with Interactive Hover Zoom) */}
                     <Image
                       src={cat.image}
                       alt={cat.title}
                       fill
                       priority
                       sizes="(max-width: 640px) 33vw, 25vw"
-                      className="object-cover object-top scale-[1.02] group-hover:scale-115 transition-transform duration-700 ease-out"
+                      className="object-contain object-center p-1 sm:p-2 scale-[1.02] group-hover:scale-112 transition-transform duration-700 ease-out filter drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)]"
                     />
 
-                    {/* Multi-Stop Cinematic Vignette Overlays */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/35 to-black/50 pointer-events-none" />
-                    <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80 pointer-events-none" />
+                    {/* Multi-Stop Subtle Vignette Shadows */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/40 pointer-events-none" />
 
-                    {/* Ambient Radial Color Flash on Hover */}
+                    {/* Ambient Color Flare on Hover */}
                     <div
                       className={`absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-b ${cat.glowGradient} pointer-events-none`}
                     />
 
                     {/* Rotating 3D Orbital Light Ring (Arch Top Corona) */}
                     <div className="absolute top-2 sm:top-4 inset-x-0 flex justify-center z-20 pointer-events-none">
-                      <div className="relative p-1.5 sm:p-2.5 rounded-full bg-black/70 border border-[#EAA838]/60 backdrop-blur-md shadow-[0_0_15px_rgba(234,168,56,0.35)] group-hover:scale-110 group-hover:border-[#F4C463] transition-all">
+                      <div className="relative p-1.5 sm:p-2 rounded-full bg-black/70 border border-[#EAA838]/60 backdrop-blur-md shadow-[0_0_15px_rgba(234,168,56,0.35)] group-hover:scale-110 group-hover:border-[#F4C463] transition-all">
                         {cat.icon}
                         
                         {/* Orbit Glow Particle */}
@@ -207,8 +213,8 @@ export default function CategoriesShowcase() {
                     </div>
 
                     {/* Bottom Mini Tag */}
-                    <div className="absolute bottom-2.5 sm:bottom-3.5 left-2 sm:left-3 z-20 pointer-events-none">
-                      <span className="text-[7.5px] sm:text-[10px] font-bold text-[#F4C463] uppercase tracking-wider line-clamp-1">
+                    <div className="absolute bottom-2 sm:bottom-3 left-2 sm:left-3 z-20 pointer-events-none">
+                      <span className="text-[7.5px] sm:text-[9.5px] font-bold text-[#F4C463] uppercase tracking-wider line-clamp-1">
                         {cat.tag}
                       </span>
                     </div>
@@ -216,11 +222,11 @@ export default function CategoriesShowcase() {
                 </motion.div>
 
                 {/* Outer Category Title & Subtitle Beneath the 3D Arch */}
-                <div className="text-center mt-2.5 sm:mt-3.5 px-0.5 space-y-0.5">
-                  <h3 className="text-[11px] sm:text-base font-extrabold text-white tracking-tight leading-tight group-hover:text-[#F4C463] transition-colors line-clamp-1">
+                <div className="text-center mt-2 sm:mt-3 px-0.5 space-y-0.5">
+                  <h3 className="text-[11px] sm:text-sm lg:text-base font-extrabold text-white tracking-tight leading-tight group-hover:text-[#F4C463] transition-colors line-clamp-1">
                     {cat.title}
                   </h3>
-                  <p className="text-[8.5px] sm:text-xs text-gray-400 font-medium line-clamp-1">
+                  <p className="text-[8px] sm:text-xs text-gray-400 font-medium line-clamp-1">
                     {cat.subtitle}
                   </p>
                 </div>
